@@ -1,4 +1,6 @@
-export const AngularIntroduction = {
+import { ITopicContent } from "../interfaces/topic";
+
+export const AngularIntroduction: ITopicContent | any = {
     title: 'Introduction to Angular',
     tags: ['Angular', 'Framework', 'TypeScript', 'Standalone', 'Components', 'Modern Web'],
     paragraphs: [
@@ -273,3 +275,4 @@ export class ProductModule { }`
         'Keep components small and focused on single responsibility'
     ]
 };
+

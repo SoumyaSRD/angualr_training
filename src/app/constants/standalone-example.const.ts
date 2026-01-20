@@ -1,6 +1,4 @@
-import { ICodeExample } from "../interfaces/code-example";
-
-export const IntroAngular: ICodeExample[] = [
+export const StandAloneExample = [
     {
         title: 'Standalone Component Example',
         language: 'TypeScript',
@@ -88,15 +86,4 @@ export class ProductOldComponent { }
 })
 export class ProductModule { }`
     }
-];
-
-
-export const IntroAngularKeyPoints: string[] = [
-    'Angular is a complete framework, not just a library',
-    'Built with TypeScript for type safety and better tooling',
-    'Component-based architecture promotes reusability',
-    'Built-in dependency injection system',
-    'Official solutions for routing, forms, HTTP, and more',
-    'Strong focus on testability and maintainability',
-    'Backed by Google with long-term support (LTS)'
 ];

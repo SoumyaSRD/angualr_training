@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
-import { WhatIsAngularComponent } from './components/topics/fundamentals/what-is-angular.component';
-import { StandaloneComponentsComponent } from './components/topics/core/standalone-components.component';
 import { GenericTopicComponent } from './components/generic-topic/generic-topic.component';
+import { HomeComponent } from './components/home/home.component';
+import { StandaloneComponentsComponent } from './components/topics/core/standalone-components.component';
 import { HowBrowsersWorkComponent } from './components/topics/prerequisites/browser/how-browsers-work.component';
+import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
+import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  ...angularFundamentalRoutes,
 
   { path: 'prerequisites/web-fundamentals/how-browsers-work', component: HowBrowsersWorkComponent },
   { path: 'prerequisites/web-fundamentals/http-https', component: HttpHttpsComponent },
@@ -21,16 +22,7 @@ export const routes: Routes = [
   { path: 'prerequisites/typescript/enums', component: GenericTopicComponent },
   { path: 'prerequisites/typescript/classes', component: GenericTopicComponent },
 
-  { path: 'fundamentals/introduction/what-is-angular', component: WhatIsAngularComponent },
-  { path: 'fundamentals/introduction/angular-vs-react-vue', component: GenericTopicComponent },
-  { path: 'fundamentals/introduction/architecture-overview', component: GenericTopicComponent },
-  { path: 'fundamentals/introduction/cli-overview', component: GenericTopicComponent },
-  { path: 'fundamentals/introduction/versioning-lts', component: GenericTopicComponent },
-  { path: 'fundamentals/setup/nodejs-npm', component: GenericTopicComponent },
-  { path: 'fundamentals/setup/cli-installation', component: GenericTopicComponent },
-  { path: 'fundamentals/setup/first-app', component: GenericTopicComponent },
-  { path: 'fundamentals/setup/folder-structure', component: GenericTopicComponent },
-  { path: 'fundamentals/setup/config-files', component: GenericTopicComponent },
+
 
   { path: 'core/modules/module-types', component: GenericTopicComponent },
   { path: 'core/modules/lazy-loading', component: GenericTopicComponent },

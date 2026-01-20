@@ -20,7 +20,7 @@ export const GENERIC_TOPIC_DATA: { [key: string]: any } = {
 }
 
 
-export const GenerateContent = (title: string): ITopicContent => {
+export const GenerateContent = (title: string): ITopicContent | any => {
     return {
         title: title,
         tags: ['Angular', 'Tutorial'],

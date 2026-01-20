@@ -8,7 +8,6 @@ import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  ...angularFundamentalRoutes,
 
   { path: 'prerequisites/web-fundamentals/how-browsers-work', component: HowBrowsersWorkComponent },
   { path: 'prerequisites/web-fundamentals/http-https', component: HttpHttpsComponent },
@@ -22,6 +21,7 @@ export const routes: Routes = [
   { path: 'prerequisites/typescript/enums', component: GenericTopicComponent },
   { path: 'prerequisites/typescript/classes', component: GenericTopicComponent },
 
+  ...angularFundamentalRoutes,
 
 
   { path: 'core/modules/module-types', component: GenericTopicComponent },

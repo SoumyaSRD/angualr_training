@@ -1,0 +1,42 @@
+<app-topic-template
+  [title]="content.title"
+  [tags]="content.tags"
+  [paragraphs]="content.paragraphs"
+  [sections]="content.sections"
+  [codeExamples]="content.codeExamples"
+  [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints"
+>
+  <p>
+    Angular is a framework for building web applications using components. Think
+    of it like building with LEGO blocks — each piece connects to others to
+    create something bigger.
+  </p>
+
+  <h3>The Main Pieces</h3>
+
+  <h4>1. Components</h4>
+  <p>Building blocks that control parts of your screen.</p>
+
+  <h4>2. Modules</h4>
+  <p>Containers that organize related pieces together.</p>
+
+  <h4>3. Services</h4>
+  <p>Shared helpers that handle data and business logic.</p>
+
+  <h4>4. Templates</h4>
+  <p>HTML files that define how components look.</p>
+
+  <h3>How It Works</h3>
+
+  <h4>Component Tree</h4>
+
+  <h4>Data Flow</h4>
+  <ul>
+    <li>📥 <strong>Parent → Child:</strong> Using <code>@Input()</code></li>
+    <li>📤 <strong>Child → Parent:</strong> Using <code>@Output()</code></li>
+    <li>🔄 <strong>Anywhere:</strong> Using Services</li>
+  </ul>
+
+  <h3>Simple Example</h3>
+</app-topic-template>

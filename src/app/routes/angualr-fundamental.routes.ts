@@ -4,6 +4,7 @@ import { WhatIsAngular } from "../components/topics/angular-fundamentals/introdu
 import { AngularReactVue } from "../components/topics/angular-fundamentals/introductions/angular-vs-react-vue/angular-vs-react-vue";
 import { ArchitectureOverview } from "../components/topics/angular-fundamentals/introductions/architecture-overview/architecture-overview";
 import { NodeVsNpm } from "../components/topics/angular-fundamentals/setup/node-vs-npm";
+import { AngularCliOverview } from "../components/topics/angular-fundamentals/introductions/cli-overview/cli-overview";
 
 export const angularFundamentalRoutes: Routes = [
     {
@@ -30,7 +31,7 @@ export const angularFundamentalRoutes: Routes = [
                 path: 'setup',
                 children: [
                     { path: 'nodejs-npm', component: NodeVsNpm },
-                    { path: 'cli-installation', component: WhatIsAngular },
+                    { path: 'cli-installation', component: AngularCliOverview },
                     { path: 'first-app', component: WhatIsAngular },
                     { path: 'folder-structure', component: WhatIsAngular },
                     { path: 'config-files', component: WhatIsAngular },

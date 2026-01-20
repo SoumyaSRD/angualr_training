@@ -1,0 +1,21 @@
+.content-section {
+  ::ng-deep ul {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+
+      // Use a Material-like bullet or icon
+      &:before {
+        content: "check_circle";
+        font-family: "Material Icons";
+        color: #3f51b5; // Primary color
+        margin-right: 10px;
+        font-size: 18px;
+      }
+    }
+  }
+}

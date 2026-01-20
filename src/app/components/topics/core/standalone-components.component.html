@@ -1,0 +1,57 @@
+<app-topic-template
+  [title]="title"
+  [tags]="tags"
+  [codeExamples]="codeExamples"
+  [keyPoints]="keyPoints"
+>
+  <p>
+    Standalone components, introduced in Angular 14 and becoming the default in
+    Angular 17+, represent a major shift in how Angular applications are
+    structured. Unlike traditional NgModule-based components, standalone
+    components don't require declaration in an NgModule, simplifying the
+    development experience and reducing boilerplate code.
+  </p>
+
+  <p>
+    With standalone components, each component explicitly declares its
+    dependencies through the
+    <code>imports</code> array in the @Component decorator. This makes
+    components more self-contained, easier to understand, and simpler to test.
+    The standalone approach is now the recommended way to build Angular
+    applications.
+  </p>
+
+  <h3>Benefits of Standalone Components</h3>
+  <ul>
+    <li>
+      <strong>Simplified Mental Model:</strong> No need to think about NgModule
+      organization
+    </li>
+    <li>
+      <strong>Less Boilerplate:</strong> Fewer files and less configuration
+    </li>
+    <li>
+      <strong>Better Tree-Shaking:</strong> Unused imports are easier to
+      eliminate
+    </li>
+    <li>
+      <strong>Easier Testing:</strong> Components are self-contained units
+    </li>
+    <li>
+      <strong>Flexible Imports:</strong> Import only what you need, where you
+      need it
+    </li>
+    <li>
+      <strong>Modern Best Practice:</strong> Aligned with Angular's future
+      direction
+    </li>
+  </ul>
+
+  <h3>Migration Path</h3>
+  <p>
+    Existing NgModule-based applications can gradually migrate to standalone
+    components. Angular provides schematics to automate much of the migration
+    process. Both approaches can coexist in the same application during the
+    transition period.
+  </p>
+</app-topic-template>

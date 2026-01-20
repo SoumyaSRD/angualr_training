@@ -1,0 +1,110 @@
+<div class="topic-container">
+  <h1>{{ title }}</h1>
+
+  @if (tags && tags.length > 0) {
+    <div class="tags">
+      <mat-chip-set>
+        @for (tag of tags; track tag) {
+          <mat-chip>{{ tag }}</mat-chip>
+        }
+      </mat-chip-set>
+    </div>
+  }
+
+  <!-- Main introductory paragraphs (projected or bound) -->
+  <div class="content-section">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Detailed Sections (new addition) -->
+  @if (sections && sections.length > 0) {
+    <div class="sections">
+      <h2><mat-icon>menu_book</mat-icon> Detailed Explanation</h2>
+      @for (section of sections; track section.heading) {
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>{{ section.heading }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (section.content) {
+              <p class="section-content">{{ section.content }}</p>
+            }
+
+            @if (section.list && section.list.length > 0) {
+              <ul class="section-list">
+                @for (item of section.list; track item) {
+                  <li [innerHTML]="item"></li>
+                }
+              </ul>
+            }
+
+            @if (section.additionalExplanation) {
+              <p class="additional-explanation">
+                <strong>Note:</strong> {{ section.additionalExplanation }}
+              </p>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+  <!-- Code Examples -->
+  @if (codeExamples && codeExamples.length > 0) {
+    <div class="code-examples">
+      <h2><mat-icon>code</mat-icon> Code Examples</h2>
+      @for (example of codeExamples; track example.title) {
+        <mat-card class="code-card">
+          <mat-card-header>
+            <mat-card-title>{{ example.title }}</mat-card-title>
+            @if (example.description) {
+              <mat-card-subtitle>{{ example.description }}</mat-card-subtitle>
+            }
+          </mat-card-header>
+          <mat-card-content>
+            <div class="code-header">
+              <span class="language-badge">{{
+                example.language || "text"
+              }}</span>
+            </div>
+            <pre><code>{{ example.code }}</code></pre>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+  <!-- Best Practices (new addition) -->
+  @if (bestPractices && bestPractices.length > 0) {
+    <mat-card class="best-practices">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>thumb_up</mat-icon>
+        <mat-card-title>Best Practices</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          @for (practice of bestPractices; track practice) {
+            <li>{{ practice }}</li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Key Takeaways -->
+  @if (keyPoints && keyPoints.length > 0) {
+    <mat-card class="key-points">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>lightbulb</mat-icon>
+        <mat-card-title>Key Takeaways</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          @for (point of keyPoints; track point) {
+            <li>{{ point }}</li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

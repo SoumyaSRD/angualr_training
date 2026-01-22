@@ -41,14 +41,15 @@ export class TopicTemplate {
   // State signals
   expandedCodeIndex = signal<number | null>(null);
   copiedCodeIndex = signal<number | null>(null);
-  scrolled = signal(false);
+  scrolled = signal(true);
   currentSectionIndex = signal(0);
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
+  // REMOVE ['$event'] from here
+
+  onWindowScroll(event: any) {
+    console.log("scroll", event)
     this.scrolled.set(window.scrollY > 300);
 
-    // Update current section based on scroll position
     const sections = this.sections();
     if (sections.length > 0) {
       let currentIndex = 0;
@@ -58,6 +59,7 @@ export class TopicTemplate {
         const element = document.getElementById(this.getSectionId(section, index));
         if (element) {
           const rect = element.getBoundingClientRect();
+          // Calculation of how much of the section is visible in the viewport
           const intersection = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
           if (intersection > maxIntersection) {
             maxIntersection = intersection;
@@ -227,9 +229,7 @@ export class TopicTemplate {
     }
   }
 
-  isScrolled(): boolean {
-    return this.scrolled();
-  }
+
 
   isSectionHighlighted(heading: string): boolean {
     const tagLower = heading.toLowerCase();

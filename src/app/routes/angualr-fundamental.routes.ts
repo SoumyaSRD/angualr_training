@@ -3,8 +3,9 @@ import { AngularFundamentals } from "../components/topics/angular-fundamentals/a
 import { WhatIsAngular } from "../components/topics/angular-fundamentals/introductions/what-is-angular/what-is-angular";
 import { AngularReactVue } from "../components/topics/angular-fundamentals/introductions/angular-vs-react-vue/angular-vs-react-vue";
 import { ArchitectureOverview } from "../components/topics/angular-fundamentals/introductions/architecture-overview/architecture-overview";
-import { NodeVsNpm } from "../components/topics/angular-fundamentals/setup/node-vs-npm";
+import { NodeVsNpm } from "../components/topics/angular-fundamentals/setup/node-vs-npm/node-vs-npm";
 import { AngularCliOverview } from "../components/topics/angular-fundamentals/introductions/cli-overview/cli-overview";
+import { AngularIstApp } from "../components/topics/angular-fundamentals/setup/angular-ist-app/angular-ist-app";
 
 export const angularFundamentalRoutes: Routes = [
     {
@@ -32,7 +33,8 @@ export const angularFundamentalRoutes: Routes = [
                 children: [
                     { path: 'nodejs-npm', component: NodeVsNpm },
                     { path: 'cli-installation', component: AngularCliOverview },
-                    { path: 'first-app', component: WhatIsAngular },
+                    { path: 'first-app', component: AngularIstApp },
+
                     { path: 'folder-structure', component: WhatIsAngular },
                     { path: 'config-files', component: WhatIsAngular },
                 ]

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TopicTemplate } from '../../../topic-template/topic-template';
+import { TopicTemplate } from '../../../../topic-template/topic-template';
 import { NODEJS_VS_NPM } from './node-vs-npm.const';
 
 

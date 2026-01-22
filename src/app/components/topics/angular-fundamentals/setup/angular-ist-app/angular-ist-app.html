@@ -1,0 +1,96 @@
+<app-topic-template
+  [title]="content.title"
+  [tags]="content.tags"
+  [paragraphs]="content.paragraphs"
+  [sections]="content.sections"
+  [codeExamples]="content.codeExamples"
+  [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints"
+>
+  <!-- Custom rich content specific to this topic -->
+  <div class="topic-content">
+    <p>
+      Angular is a comprehensive, TypeScript-based web application framework
+      developed and maintained by Google. Born from the lessons learned with
+      AngularJS, Angular represents a complete reimagining of how to build
+      modern web applications. It provides a robust, scalable solution for
+      crafting dynamic single-page applications (SPAs) that prioritize developer
+      productivity, exceptional performance, and long-term code maintainability.
+    </p>
+
+    <p>
+      What sets Angular apart is its
+      <strong>opinionated, full-stack approach</strong> to frontend development.
+      Unlike minimal libraries that solve one problem, Angular is an
+      enterprise-grade platform delivering an integrated ecosystem: component
+      architecture, powerful dependency injection, sophisticated routing,
+      reactive forms, HTTP client with interceptors, comprehensive testing
+      utilities, internationalization support, and state management patterns.
+      This unified vision eliminates the "framework fatigue" of assembling
+      disparate tools and ensures consistency across teams, projects, and years
+      of development.
+    </p>
+
+    <h3>Core Features That Define Angular</h3>
+
+    <!-- <mat-list class="feature-list">
+      @for(feature of features; track $index){
+      <mat-list-item>
+        <mat-icon matListItemIcon>star</mat-icon>
+        <div matListItemTitle>{{ feature.title }}</div>
+        <div matListItemLine>{{ feature.description }}</div>
+      </mat-list-item>
+      }
+    </mat-list> -->
+
+    <h3>The Angular Philosophy: Opinionated Excellence</h3>
+    <p>
+      Angular embraces a "batteries-included" philosophy that stands in sharp
+      contrast to the fragmented JavaScript ecosystem. Rather than forcing
+      developers to navigate a maze of competing libraries for routing, state
+      management, forms, and HTTP—Angular provides official, battle-tested
+      solutions for every common need. This opinionated approach isn't about
+      limiting choice; it's about eliminating decision paralysis and ensuring
+      your application follows proven patterns that scale.
+    </p>
+
+    <p>
+      The framework champions <strong>testability</strong> as a first-class
+      concern. Dependency injection makes unit testing natural, TestBed provides
+      powerful component testing utilities, and the entire architecture
+      encourages separation of concerns. Angular applications are designed to be
+      maintained for years, not months—with strong typing catching errors before
+      they reach production, consistent patterns making onboarding seamless, and
+      comprehensive tooling supporting large teams working on complex domains.
+    </p>
+
+    <h3>When Angular Shines</h3>
+    <p>
+      Angular excels in enterprise environments where multiple teams collaborate
+      on large-scale applications with demanding requirements. If you're
+      building complex admin dashboards, data-intensive business applications,
+      or systems requiring strict consistency and governance—Angular's structure
+      becomes an asset, not a constraint. The learning curve pays dividends in
+      reduced bugs, faster onboarding, and sustainable long-term development.
+    </p>
+
+    <p>
+      From Fortune 500 companies to innovative startups, Angular powers
+      applications that demand reliability, performance, and maintainability at
+      scale. With Google's continued investment, a vibrant community, and
+      constant evolution incorporating modern web standards like
+      <strong>signals</strong> and
+      <strong>standalone components</strong>—Angular remains a compelling choice
+      for serious web development in 2026 and beyond.
+    </p>
+
+    <div class="highlight-box">
+      <mat-icon>lightbulb</mat-icon>
+      <p>
+        <strong>Key takeaway:</strong> Choose Angular when you want structure,
+        consistency, and long-term maintainability — especially in
+        medium-to-large projects or enterprise settings.
+      </p>
+    </div>
+  </div>
+</app-topic-template>

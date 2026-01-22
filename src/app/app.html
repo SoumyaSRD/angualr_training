@@ -113,14 +113,19 @@
                 (click)="closeDrawerIfMobile()"
                 class="subtopic-item"
               >
-                <mat-icon class="subtopic-icon">chevron_right</mat-icon>
-                <span class="subtopic-title">{{ sub.title }}</span>
-                @if (isCompleted(sub.route)) {
-                <mat-icon class="completed-icon" color="primary"
-                  >check_circle</mat-icon
+                <div
+                  [ngStyle]="{ color: themeService.isDarkTheme() ? '#ffffff' : '#000000' }"
                 >
-                }
+                  <mat-icon class="subtopic-icon">chevron_right</mat-icon>
+                  <span class="subtopic-title">{{ sub.title }}</span>
+                  @if (isCompleted(sub.route)) {
+                  <mat-icon class="completed-icon" color="primary"
+                    >check_circle</mat-icon
+                  >
+                  }
+                </div>
               </a>
+
               }
             </mat-nav-list>
           </mat-expansion-panel>

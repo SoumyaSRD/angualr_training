@@ -4,8 +4,8 @@
 // NODE.JS VS NPM: THE COMPLETE GUIDE
 // ============================================================================
 
-import { ICodeExample } from "../../../../interfaces/code-example";
-import { ISection, ITopicContent } from "../../../../interfaces/topic";
+import { ICodeExample } from "../../../../../interfaces/code-example";
+import { ISection, ITopicContent } from "../../../../../interfaces/topic";
 
 export const NODEJS_VS_NPM: ITopicContent = {
     title: "Node.js vs NPM: Understanding the Difference",

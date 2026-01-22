@@ -236,7 +236,7 @@
       <mat-card-content>
         <ul class="practices-list">
           @for (practice of bestPractices(); track practice; let idx = $index) {
-          <li class="ripple" [@fadeIn]="idx">
+          <li class="ripple">
             <div class="practice-number">{{ idx + 1 }}</div>
             <div class="practice-content">
               <mat-icon class="practice-icon">check_circle</mat-icon>
@@ -306,13 +306,13 @@
   <!-- Progress & Navigation -->
 
   <!-- Back to Top Button -->
-  <button
-    mat-fab
-    class="back-to-top btn-glass"
-    matTooltip="Back to top"
-    (click)="scrollToSection()"
-    [class.visible]="isScrolled()"
-  >
-    <mat-icon>arrow_upward</mat-icon>
-  </button>
 </div>
+<button
+  class="back-to-top"
+  mat-fab
+  matTooltip="Back to top"
+  (click)="scrollToSection()"
+  [class.visible]="true"
+>
+  <mat-icon>arrow_upward</mat-icon>
+</button>

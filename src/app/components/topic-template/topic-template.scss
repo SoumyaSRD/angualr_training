@@ -638,8 +638,8 @@
         .code-block {
           margin: 0;
           padding: var(--spacing-xl);
-          background: #e9e3e3;
-          color: #d4d4d4;
+          // background: #753b3b;
+          // color: #976a6a;
           font-family: var(--font-family-mono);
           font-size: var(--font-size-sm);
           line-height: var(--line-height-relaxed);
@@ -963,7 +963,7 @@
   position: fixed;
   bottom: var(--spacing-xxl);
   right: var(--spacing-xxl);
-  background: var(--glass-bg);
+  background: var(--primary-light);
   backdrop-filter: var(--blur-lg);
   -webkit-backdrop-filter: var(--blur-lg);
   border: 1px solid var(--glass-border);
@@ -978,7 +978,7 @@
   box-shadow: var(--glass-shadow);
 
   &:hover {
-    background: var(--glass-bg-light);
+    background: var(--primary-gradient);
     border-color: var(--glass-border-light);
     transform: translateY(-2px) scale(1.1);
     box-shadow: var(--glass-shadow-hover);

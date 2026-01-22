@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ICodeExample } from '../../../../interfaces/code-example';
-import { TopicTemplateComponent } from '../../../topic-template/topic-template.component';
+import { TopicTemplate } from '../../../topic-template/topic-template';
 import { BrowserPrerequisites } from '../../../../constants/prerequisites.const';
 
 
@@ -8,7 +8,7 @@ import { BrowserPrerequisites } from '../../../../constants/prerequisites.const'
 @Component({
   selector: 'app-how-browsers-work',
   standalone: true,
-  imports: [TopicTemplateComponent],
+  imports: [TopicTemplate],
   templateUrl: './how-browsers-work.component.html',
 })
 export class HowBrowsersWorkComponent {

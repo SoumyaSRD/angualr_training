@@ -5,8 +5,7 @@
 // ============================================================================
 
 import { ICodeExample } from "../../../../interfaces/code-example";
-import { ITopicContent } from "../../../../interfaces/topic";
-import { ISection } from "../../../topic-template/topic-template.component";
+import { ISection, ITopicContent } from "../../../../interfaces/topic";
 
 export const NODEJS_VS_NPM: ITopicContent = {
     title: "Node.js vs NPM: Understanding the Difference",

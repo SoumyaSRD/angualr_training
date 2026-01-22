@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GenerateContent, GENERIC_TOPIC_DATA } from '../../constants/generic-topic.const';
-import { TopicTemplateComponent } from '../topic-template/topic-template.component';
+import { TopicTemplate } from '../topic-template/topic-template';
 import { ICodeExample } from '../../interfaces/code-example';
 
 interface TopicContent {
@@ -21,7 +21,7 @@ interface TopicContent {
 @Component({
   selector: 'app-generic-topic',
   standalone: true,
-  imports: [CommonModule, TopicTemplateComponent],
+  imports: [CommonModule, TopicTemplate],
   templateUrl: './generic-topic.component.html'
 })
 export class GenericTopicComponent implements OnInit {

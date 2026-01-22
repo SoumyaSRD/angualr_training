@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { AngularFundamentalsComponent } from "../components/topics/angular-fundamentals/angular-fundamentals";
+import { AngularFundamentals } from "../components/topics/angular-fundamentals/angular-fundamentals";
 import { WhatIsAngular } from "../components/topics/angular-fundamentals/introductions/what-is-angular/what-is-angular";
 import { AngularReactVue } from "../components/topics/angular-fundamentals/introductions/angular-vs-react-vue/angular-vs-react-vue";
 import { ArchitectureOverview } from "../components/topics/angular-fundamentals/introductions/architecture-overview/architecture-overview";
@@ -9,7 +9,7 @@ import { AngularCliOverview } from "../components/topics/angular-fundamentals/in
 export const angularFundamentalRoutes: Routes = [
     {
         path: 'fundamentals',
-        component: AngularFundamentalsComponent, // This component should have the <router-outlet>
+        component: AngularFundamentals, // This component should have the <router-outlet>
         children: [
             {
                 path: '',

@@ -1,69 +1,121 @@
 <div class="app-container" [class.dark-theme]="themeService.isDarkTheme()">
-  <mat-toolbar class="app-toolbar mat-elevation-z4">
-    <div class="toolbar-left">
-      <button
-        mat-icon-button
-        (click)="drawer.toggle()"
-        class="menu-button"
-        matTooltip="Toggle menu"
-        aria-label="Toggle navigation menu"
-      >
-        <mat-icon>menu</mat-icon>
-      </button>
+  <!-- ┌──────────────────────────────────────────────────────┐ -->
+  <!-- │                      Toolbar                         │ -->
+  <!-- └──────────────────────────────────────────────────────┘ -->
+  <mat-toolbar class="app-toolbar mat-elevation-z3">
+    <div class="toolbar-content">
+      <!-- Left: Menu + Brand -->
+      <div class="toolbar-left">
+        <button
+          mat-icon-button
+          (click)="drawer.toggle()"
+          matTooltip="Toggle menu"
+          aria-label="Toggle navigation drawer"
+        >
+          <mat-icon
+            [ngStyle]="{ color: themeService.isDarkTheme() ? '#ffffff' : '#000000' }"
+            >menu</mat-icon
+          >
+        </button>
 
-      <div class="brand-section" [routerLink]="['/']" style="cursor: pointer">
-        <mat-icon class="brand-icon">code</mat-icon>
-        <div class="brand-text">
-          <h1 class="app-title">Angular Academy</h1>
-          <span class="app-subtitle">Professional Training Program</span>
+        <div class="brand-section" routerLink="/" role="button" tabindex="0">
+          <mat-icon class="brand-icon">code</mat-icon>
+          <div class="brand-text">
+            <span class="app-title">Angular Academy</span>
+            <span class="app-subtitle">Professional Training</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Center: empty / can be used for page title or search later -->
+      <div class="toolbar-center"></div>
+
+      <!-- Right: Theme + User menu -->
+      <div class="toolbar-right">
+        <!-- Theme toggle -->
+        <button
+          mat-icon-button
+          (click)="themeService.toggleTheme()"
+          matTooltip="Toggle theme"
+          aria-label="Toggle light/dark theme"
+        >
+          <mat-icon
+            [ngStyle]="{ color: themeService.isDarkTheme() ? '#ffffff' : '#000000' }"
+            >{{ themeService.isDarkTheme() ? 'dark_mode' : 'light_mode'
+            }}</mat-icon
+          >
+        </button>
+
+        <!-- User menu (placeholder – connect to real auth later) -->
+        <button
+          [ngStyle]="{ color: themeService.isDarkTheme() ? '#ffffff' : '#000000' }"
+          mat-button
+          [matMenuTriggerFor]="userMenu"
+          class="user-menu-button"
+          aria-label="User account menu"
+        >
+          <mat-icon>account_circle</mat-icon>
+          <span class="user-name-label">User</span>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>person</mat-icon>
+            <span>User</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>settings</mat-icon>
+            <span>Profile & Settings</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+          </button>
+        </mat-menu>
       </div>
     </div>
   </mat-toolbar>
 
+  <!-- ┌──────────────────────────────────────────────────────┐ -->
+  <!-- │               Sidenav + Main Content                 │ -->
+  <!-- └──────────────────────────────────────────────────────┘ -->
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav
       #drawer
-      [mode]="isMobile ? 'over' : 'side'"
-      [opened]="!isMobile"
-      class="sidenav mat-elevation-z1"
+      [mode]="isHandset() ? 'over' : 'side'"
+      [opened]="!isHandset()"
+      class="sidenav mat-elevation-z2"
     >
       <div class="sidenav-content">
         <mat-accordion multi class="navigation-accordion">
           @for (topic of navigationService.topics; track topic.title) {
-          <mat-expansion-panel [expanded]="isTopicActive(topic)">
+          <mat-expansion-panel [expanded]="isTopicExpanded(topic)">
             <mat-expansion-panel-header class="panel-header">
               <mat-panel-title class="panel-title">
                 <mat-icon
                   class="topic-icon"
-                  [class.active]="isTopicActive(topic)"
+                  [class.active]="isTopicExpanded(topic)"
                 >
                   {{ topic.icon }}
                 </mat-icon>
                 <span class="topic-title">{{ topic.title }}</span>
-                <!-- @if (getTopicProgress(topic) > 0) {
-                <span
-                  class="topic-progress"
-                  [class.completed]="getTopicProgress(topic) === 100"
-                >
-                  {{ getTopicProgress(topic) }}%
-                </span>
-                } -->
               </mat-panel-title>
             </mat-expansion-panel-header>
 
             <mat-nav-list dense class="subtopic-list">
-              @for (subTopic of topic.subTopics; track subTopic.route) {
+              @for (sub of topic.subTopics; track sub.route) {
               <a
                 mat-list-item
-                [routerLink]="subTopic.route"
-                (click)="onNavClick()"
-                [class.active]="isRouteActive(subTopic.route)"
+                [routerLink]="sub.route"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeDrawerIfMobile()"
                 class="subtopic-item"
               >
                 <mat-icon class="subtopic-icon">chevron_right</mat-icon>
-                <span class="subtopic-title">{{ subTopic.title }}</span>
-                @if (isCompleted(subTopic.route)) {
+                <span class="subtopic-title">{{ sub.title }}</span>
+                @if (isCompleted(sub.route)) {
                 <mat-icon class="completed-icon" color="primary"
                   >check_circle</mat-icon
                 >
@@ -78,31 +130,31 @@
     </mat-sidenav>
 
     <mat-sidenav-content class="main-content">
-      @if (currentRoute){
+      <!-- Breadcrumb -->
       <div class="breadcrumb">
-        <a [routerLink]="['/']" class="breadcrumb-home">
+        <a routerLink="/" class="breadcrumb-home" matTooltip="Home">
           <mat-icon>home</mat-icon>
         </a>
         <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
-        <span class="breadcrumb-item">{{ currentRoute }}</span>
+        <span class="breadcrumb-item">{{ currentPageTitle() }}</span>
       </div>
-      }
 
+      <!-- Page content -->
       <div class="content-wrapper">
         <router-outlet></router-outlet>
       </div>
 
+      <!-- Footer -->
       <footer class="app-footer">
         <div class="footer-content">
-          <div class="footer-section">
+          <div>
             <h3 class="footer-title">Angular Academy</h3>
             <p class="footer-description">
-              Master Angular with our comprehensive professional training
-              program. From fundamentals to advanced concepts.
+              Professional Angular training — January 2026
             </p>
           </div>
 
-          <div class="footer-section">
+          <div>
             <h4 class="footer-subtitle">Resources</h4>
             <div class="footer-links">
               <a
@@ -111,57 +163,38 @@
                 rel="noopener"
                 class="footer-link"
               >
-                <mat-icon>description</mat-icon>
-                Angular Docs
+                <mat-icon>description</mat-icon> angular.dev
               </a>
               <a
-                href="https://github.com/angular/angular"
+                href="https://github.com/angular"
                 target="_blank"
                 rel="noopener"
                 class="footer-link"
               >
-                <mat-icon>code</mat-icon>
-                GitHub
-              </a>
-              <a
-                href="https://angular.io/guide/cheatsheet"
-                target="_blank"
-                rel="noopener"
-                class="footer-link"
-              >
-                <mat-icon>school</mat-icon>
-                Cheat Sheet
+                <mat-icon>code</mat-icon> GitHub
               </a>
             </div>
           </div>
 
-          <div class="footer-section">
-            <h4 class="footer-subtitle">Contact</h4>
+          <div>
+            <h4 class="footer-subtitle">Support</h4>
             <div class="footer-links">
               <a href="mailto:support@angularacademy.com" class="footer-link">
-                <mat-icon>mail</mat-icon>
-                support@angularacademy.com
-              </a>
-              <a href="#" class="footer-link">
-                <mat-icon>help</mat-icon>
-                Help Center
+                <mat-icon>mail</mat-icon> support@angularacademy.com
               </a>
             </div>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <p class="copyright">© 2026 Angular Academy. All rights reserved.</p>
+          <p class="copyright">© 2026 Angular Academy</p>
           <div class="social-links">
-            <a href="#" class="social-link" aria-label="Twitter">
-              <mat-icon>twitter</mat-icon>
-            </a>
-            <a href="#" class="social-link" aria-label="GitHub">
-              <mat-icon>code</mat-icon>
-            </a>
-            <a href="#" class="social-link" aria-label="LinkedIn">
-              <mat-icon>linkedin</mat-icon>
-            </a>
+            <a href="#" class="social-link" aria-label="Twitter"
+              ><mat-icon>twitter</mat-icon></a
+            >
+            <a href="#" class="social-link" aria-label="GitHub"
+              ><mat-icon>code</mat-icon></a
+            >
           </div>
         </div>
       </footer>

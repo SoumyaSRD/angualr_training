@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ICodeExample } from '../../../interfaces/code-example';
-import { TopicTemplateComponent } from '../../topic-template/topic-template.component';
+import { TopicTemplate } from '../../topic-template/topic-template';
 
 @Component({
   selector: 'app-standalone-components',
   standalone: true,
-  imports: [TopicTemplateComponent],
+  imports: [TopicTemplate],
   templateUrl: './standalone-components.component.html',
   styleUrl: './standalone-components.component.scss'
 })

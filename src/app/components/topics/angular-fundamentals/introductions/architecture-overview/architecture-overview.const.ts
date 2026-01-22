@@ -4,8 +4,7 @@
 // ANGULAR ARCHITECTURE: THE COMPLETE OVERVIEW
 // ============================================================================
 
-import { ITopicContent } from "../../../../../interfaces/topic";
-import { ISection } from "../../../../topic-template/topic-template.component";
+import { ISection, ITopicContent } from "../../../../../interfaces/topic";
 
 export const ANGULAR_ARCHITECTURE_OVERVIEW: ITopicContent = {
   title: "Angular Architecture: A Complete Guide",

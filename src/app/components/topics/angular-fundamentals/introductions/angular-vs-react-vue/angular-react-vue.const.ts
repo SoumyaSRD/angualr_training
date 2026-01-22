@@ -5,8 +5,8 @@
 // ============================================================================
 
 import { ICodeExample } from "../../../../../interfaces/code-example";
-import { ITopicContent } from "../../../../../interfaces/topic";
-import { ISection } from "../../../../topic-template/topic-template.component";
+import { ISection, ITopicContent } from "../../../../../interfaces/topic";
+
 
 export const FRAMEWORK_COMPARISON: ITopicContent = {
     title: "Angular vs React vs Vue: The Framework Kitchen Showdown",

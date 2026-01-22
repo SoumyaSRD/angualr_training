@@ -69,9 +69,7 @@ export class NavigationService {
       title: 'Templates & UI',
       icon: 'web',
       subTopics: [
-        { title: 'Interpolation', route: '/templates/data-binding/interpolation' },
-        { title: 'Property, Event & Two-Way Binding', route: '/templates/data-binding/binding-types' },
-        { title: 'Template Reference Variables', route: '/templates/data-binding/template-refs' },
+        { title: 'Data Binding', route: '/templates/data-binding' },
         { title: 'Built-in Directives', route: '/templates/directives/built-in' },
         { title: 'Attribute & Structural Directives', route: '/templates/directives/types' },
         { title: 'Custom Directives', route: '/templates/directives/custom' },

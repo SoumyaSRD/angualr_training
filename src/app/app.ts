@@ -1,20 +1,22 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+
 import { NavigationService } from './services/navigation.service';
 import { ThemeService } from './services/theme.service';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDividerModule } from '@angular/material/divider';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -31,119 +33,116 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTooltipModule,
     MatBadgeModule,
     MatDividerModule,
-    MatMenuModule
+    MatMenuModule,
+    RouterLinkActive
   ],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
-export class App implements OnInit, OnDestroy {
+export class App implements OnDestroy {
   @ViewChild('drawer') drawer!: MatSidenav;
-  isMobile = false;
-  currentRoute = '';
-  progress = 0;
-  completedLessons = 12;
-  totalLessons = 36;
 
-  private routerSubscription: Subscription;
+  private destroy$ = new Subject<void>();
 
-  themeService = inject(ThemeService);
+  // Injected services
+  public navigationService = inject(NavigationService);
+  public themeService = inject(ThemeService);
+  private router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
 
-  constructor(
-    public navigationService: NavigationService,
-    private breakpointObserver: BreakpointObserver,
-    private router: Router
-  ) {
-    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
-      .subscribe(result => {
-        this.isMobile = result.matches;
-      });
+  // Signals
+  isHandset = signal(false);
+  currentPageTitle = signal<string>('Dashboard');
 
-    this.routerSubscription = this.router.events.subscribe(() => {
-      this.updateCurrentRoute();
-      this.calculateProgress();
+  constructor() {
+    // Responsive detection
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => this.isHandset.set(result.matches));
+
+    // Route change listener
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.updatePageTitle();
+      }
     });
-  }
-
-  ngOnInit() {
-    this.calculateProgress();
-    this.updateCurrentRoute();
+    this.router.events.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.updatePageTitle();
+        // Smooth scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    // Initial title
+    this.updatePageTitle();
   }
 
   ngOnDestroy() {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
-  onNavClick() {
-    if (this.isMobile) {
+  // ─── Navigation / Drawer ────────────────────────────────────────
+  closeDrawerIfMobile() {
+    if (this.isHandset()) {
       this.drawer.close();
     }
   }
 
-  isTopicActive(topic: any): boolean {
-    return topic.subTopics.some((subTopic: any) =>
-      this.isRouteActive(subTopic.route)
-    );
-  }
 
-  isRouteActive(route: string): boolean {
-    return this.router.url.includes(route);
-  }
-
-  isCompleted(route: string): boolean {
-    // This should be replaced with actual completion tracking logic
-    const completedRoutes = ['/basics', '/components', '/services'];
-    return completedRoutes.some(completedRoute => route.includes(completedRoute));
-  }
-
-  getTopicProgress(topic: any): number {
-    const total = topic.subTopics.length;
-    const completed = topic.subTopics.filter((subTopic: any) =>
-      this.isCompleted(subTopic.route)
-    ).length;
-    return Math.round((completed / total) * 100);
-  }
-
-  calculateProgress() {
-    // Simulate progress calculation
-    const completed = this.completedLessons;
-    const total = this.totalLessons;
-    this.progress = Math.round((completed / total) * 100);
-  }
-
-  updateCurrentRoute() {
+  // ─── Page Title / Breadcrumb ────────────────────────────────────
+  private updatePageTitle() {
     const url = this.router.url;
-    const topic = this.navigationService.topics.find(t =>
-      t.subTopics.some(st => url.includes(st.route))
-    );
 
-    if (topic) {
-      const subTopic = topic.subTopics.find(st => url.includes(st.route));
-      this.currentRoute = subTopic ? subTopic.title : topic.title;
-    } else {
-      this.currentRoute = 'Dashboard';
+    if (url === '/' || url === '/dashboard') {
+      this.currentPageTitle.set('Dashboard');
+      return;
+    }
+
+    for (const topic of this.navigationService.topics) {
+      const sub = topic.subTopics.find((s: any) => url.startsWith(s.route));
+      if (sub) {
+        this.currentPageTitle.set(sub.title);
+        return;
+      }
+      if (topic.subTopics.some((s: any) => url.includes(s.route))) {
+        this.currentPageTitle.set(topic.title);
+        return;
+      }
+    }
+
+    this.currentPageTitle.set('Learning');
+  }
+  isCompleted(route: string): boolean {
+    const completedRoutes = ['/basics', '/components', '/services'];
+    return completedRoutes.some(r => route.includes(r));
+  }
+  logout() {
+    localStorage.clear();
+  }
+  isTopicExpanded(topic: any): boolean {
+    return topic.subTopics.some((sub: any) => {
+      const isActive = this.router.url.includes(sub.route);
+      // Add animation delay for child items
+      if (isActive) {
+        setTimeout(() => {
+          this.updatePageTitle();
+        }, 100);
+      }
+      return isActive;
+    });
+  }
+
+  // Add keyboard navigation support
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Close drawer on Escape key
+    if (event.key === 'Escape' && this.drawer.opened && this.isHandset()) {
+      this.drawer.close();
     }
   }
 
-  continueLearning() {
-    // Navigate to the next incomplete lesson
-    const allLessons = this.navigationService.topics.flatMap(t => t.subTopics);
-    const nextLesson = allLessons.find(lesson => !this.isCompleted(lesson.route));
-
-    if (nextLesson) {
-      this.router.navigate([nextLesson.route]);
-    } else {
-      this.router.navigate(['/']);
-    }
-  }
-
-  showBookmarks() {
-    // Implement bookmark functionality
-    console.log('Show bookmarks');
-  }
 }

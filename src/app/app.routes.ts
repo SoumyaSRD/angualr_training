@@ -5,6 +5,7 @@ import { StandaloneComponentsComponent } from './components/topics/core/standalo
 import { HowBrowsersWorkComponent } from './components/topics/prerequisites/browser/how-browsers-work.component';
 import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
 import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
+import { DataBinding } from './components/topics/templates-ui/data-binding/data-binding';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -35,9 +36,7 @@ export const routes: Routes = [
   { path: 'core/components/change-detection', component: GenericTopicComponent },
   { path: 'core/components/smart-vs-dumb', component: GenericTopicComponent },
 
-  { path: 'templates/data-binding/interpolation', component: GenericTopicComponent },
-  { path: 'templates/data-binding/binding-types', component: GenericTopicComponent },
-  { path: 'templates/data-binding/template-refs', component: GenericTopicComponent },
+  { path: 'templates/data-binding', component: DataBinding },
   { path: 'templates/directives/built-in', component: GenericTopicComponent },
   { path: 'templates/directives/types', component: GenericTopicComponent },
   { path: 'templates/directives/custom', component: GenericTopicComponent },

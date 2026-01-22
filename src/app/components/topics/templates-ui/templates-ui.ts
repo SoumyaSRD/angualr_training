@@ -3,10 +3,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-fundamentals',
+    selector: 'app-template-ui',
     standalone: true,
     imports: [RouterOutlet, CommonModule],
-    templateUrl: './angular-fundamentals.html',
-    styleUrls: ['./angular-fundamentals.scss']
+    templateUrl: './templates-ui.html',
+    // styleUrls: ['./templates-ui.scss']
 })
-export class AngularFundamentals { }
+export class TemplateUi {
+
+}

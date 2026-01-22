@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpPrerequisites } from '../../../../constants/prerequisites.const';
 import { ICodeExample } from '../../../../interfaces/code-example';
-import { TopicTemplateComponent } from '../../../topic-template/topic-template.component';
+import { TopicTemplate } from '../../../topic-template/topic-template';
 
 @Component({
   selector: 'app-http-https',
   standalone: true,
-  imports: [TopicTemplateComponent],
+  imports: [TopicTemplate],
   templateUrl: './http-https.component.html',
 })
 export class HttpHttpsComponent {

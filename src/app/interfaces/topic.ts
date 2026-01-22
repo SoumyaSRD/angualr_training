@@ -18,9 +18,10 @@ export interface ITopicContent {
  * Interface representing a section in the Angular introduction content
  */
 export interface ISection {
-    heading: string;
-    content: string;
-    list: string[];
+    id?: string;
+    heading?: string;
+    content?: string;
+    list?: string[];
     additionalExplanation?: string; // Optional property for extra explanations
 }
 

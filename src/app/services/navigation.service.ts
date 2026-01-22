@@ -44,9 +44,9 @@ export class NavigationService {
         // { title: 'Angular Versioning & LTS', route: '/fundamentals/introduction/versioning-lts' },
         { title: 'Node.js & npm', route: '/fundamentals/setup/nodejs-npm' },
         { title: 'Angular CLI Installation', route: '/fundamentals/setup/cli-installation' },
-        { title: 'First Angular Application', route: '/fundamentals/setup/first-app' },
-        { title: 'Project Folder Structure', route: '/fundamentals/setup/folder-structure' },
-        { title: 'Configuration Files', route: '/fundamentals/setup/config-files' }
+        { title: 'Angular Application', route: '/fundamentals/setup/first-app' },
+        // { title: 'Project Folder Structure', route: '/fundamentals/setup/folder-structure' },
+        // { title: 'Configuration Files', route: '/fundamentals/setup/config-files' }
       ]
     },
     {

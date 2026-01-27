@@ -6,6 +6,7 @@ import { HowBrowsersWorkComponent } from './components/topics/prerequisites/brow
 import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
 import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 import { DataBinding } from './components/topics/templates-ui/data-binding/data-binding';
+import { AllModules } from './components/topics/core_buliding_blocks/all_modules/all_modules';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,7 +26,7 @@ export const routes: Routes = [
   ...angularFundamentalRoutes,
 
 
-  { path: 'core/modules/module-types', component: GenericTopicComponent },
+  { path: 'core/modules/module-types', component: AllModules },
   { path: 'core/modules/lazy-loading', component: GenericTopicComponent },
   { path: 'core/modules/standalone-components', component: StandaloneComponentsComponent },
   { path: 'core/modules/module-vs-standalone', component: GenericTopicComponent },
@@ -70,13 +71,13 @@ export const routes: Routes = [
   { path: 'forms/reactive/dynamic-forms', component: GenericTopicComponent },
   { path: 'forms/reactive/form-builder', component: GenericTopicComponent },
 
-  { path: 'http/basics/methods', component: GenericTopicComponent },
-  { path: 'http/basics/headers-params', component: GenericTopicComponent },
-  { path: 'http/basics/error-handling', component: GenericTopicComponent },
-  { path: 'http/advanced/interceptors', component: GenericTopicComponent },
-  { path: 'http/advanced/auth-tokens', component: GenericTopicComponent },
-  { path: 'http/advanced/file-operations', component: GenericTopicComponent },
-  { path: 'http/advanced/pagination', component: GenericTopicComponent },
+  // { path: 'http/basics/methods', component: GenericTopicComponent },
+  // { path: 'http/basics/headers-params', component: GenericTopicComponent },
+  // { path: 'http/basics/error-handling', component: GenericTopicComponent },
+  // { path: 'http/advanced/interceptors', component: GenericTopicComponent },
+  // { path: 'http/advanced/auth-tokens', component: GenericTopicComponent },
+  // { path: 'http/advanced/file-operations', component: GenericTopicComponent },
+  // { path: 'http/advanced/pagination', component: GenericTopicComponent },
 
   { path: 'rxjs/core/observables-vs-promises', component: GenericTopicComponent },
   { path: 'rxjs/core/cold-vs-hot', component: GenericTopicComponent },
@@ -93,40 +94,40 @@ export const routes: Routes = [
   { path: 'state/signals/signals-vs-rxjs', component: GenericTopicComponent },
   { path: 'state/approaches/ngrx', component: GenericTopicComponent },
 
-  { path: 'advanced/performance/change-detection', component: GenericTopicComponent },
-  { path: 'advanced/performance/onpush', component: GenericTopicComponent },
-  { path: 'advanced/topics/content-projection', component: GenericTopicComponent },
-  { path: 'advanced/topics/view-child', component: GenericTopicComponent },
-  { path: 'advanced/topics/content-child', component: GenericTopicComponent },
-  { path: 'advanced/i18n/angular-i18n', component: GenericTopicComponent },
-  { path: 'advanced/i18n/localization', component: GenericTopicComponent },
-  { path: 'advanced/i18n/multi-language', component: GenericTopicComponent },
+  // { path: 'advanced/performance/change-detection', component: GenericTopicComponent },
+  // { path: 'advanced/performance/onpush', component: GenericTopicComponent },
+  // { path: 'advanced/topics/content-projection', component: GenericTopicComponent },
+  // { path: 'advanced/topics/view-child', component: GenericTopicComponent },
+  // { path: 'advanced/topics/content-child', component: GenericTopicComponent },
+  // { path: 'advanced/i18n/angular-i18n', component: GenericTopicComponent },
+  // { path: 'advanced/i18n/localization', component: GenericTopicComponent },
+  // { path: 'advanced/i18n/multi-language', component: GenericTopicComponent },
 
-  { path: 'security/practices/sanitization', component: GenericTopicComponent },
-  { path: 'security/practices/jwt', component: GenericTopicComponent },
-  { path: 'security/practices/rbac', component: GenericTopicComponent },
+  // { path: 'security/practices/sanitization', component: GenericTopicComponent },
+  // { path: 'security/practices/jwt', component: GenericTopicComponent },
+  // { path: 'security/practices/rbac', component: GenericTopicComponent },
 
-  { path: 'modern/features/standalone-first', component: GenericTopicComponent },
-  { path: 'modern/features/signals-first', component: GenericTopicComponent },
-  { path: 'modern/features/zoneless', component: GenericTopicComponent },
-  { path: 'modern/features/ssr-hydration', component: GenericTopicComponent },
-  { path: 'modern/features/vite', component: GenericTopicComponent },
-  { path: 'modern/features/performance', component: GenericTopicComponent },
+  // { path: 'modern/features/standalone-first', component: GenericTopicComponent },
+  // { path: 'modern/features/signals-first', component: GenericTopicComponent },
+  // { path: 'modern/features/zoneless', component: GenericTopicComponent },
+  // { path: 'modern/features/ssr-hydration', component: GenericTopicComponent },
+  // { path: 'modern/features/vite', component: GenericTopicComponent },
+  // { path: 'modern/features/performance', component: GenericTopicComponent },
 
-  { path: 'capstone/project/auth', component: GenericTopicComponent },
-  { path: 'capstone/project/dashboard', component: GenericTopicComponent },
-  { path: 'capstone/project/api-integration', component: GenericTopicComponent },
-  { path: 'capstone/project/forms', component: GenericTopicComponent },
-  { path: 'capstone/project/state', component: GenericTopicComponent },
-  { path: 'capstone/project/performance', component: GenericTopicComponent },
-  { path: 'capstone/project/routing', component: GenericTopicComponent },
-  { path: 'capstone/project/deployment', component: GenericTopicComponent },
+  // { path: 'capstone/project/auth', component: GenericTopicComponent },
+  // { path: 'capstone/project/dashboard', component: GenericTopicComponent },
+  // { path: 'capstone/project/api-integration', component: GenericTopicComponent },
+  // { path: 'capstone/project/forms', component: GenericTopicComponent },
+  // { path: 'capstone/project/state', component: GenericTopicComponent },
+  // { path: 'capstone/project/performance', component: GenericTopicComponent },
+  // { path: 'capstone/project/routing', component: GenericTopicComponent },
+  // { path: 'capstone/project/deployment', component: GenericTopicComponent },
 
-  { path: 'best-practices/enterprise/folder-structure', component: GenericTopicComponent },
-  { path: 'best-practices/enterprise/reusable-components', component: GenericTopicComponent },
-  { path: 'best-practices/enterprise/shared-libraries', component: GenericTopicComponent },
-  { path: 'best-practices/enterprise/monorepo', component: GenericTopicComponent },
-  { path: 'best-practices/enterprise/code-review', component: GenericTopicComponent },
+  // { path: 'best-practices/enterprise/folder-structure', component: GenericTopicComponent },
+  // { path: 'best-practices/enterprise/reusable-components', component: GenericTopicComponent },
+  // { path: 'best-practices/enterprise/shared-libraries', component: GenericTopicComponent },
+  // { path: 'best-practices/enterprise/monorepo', component: GenericTopicComponent },
+  // { path: 'best-practices/enterprise/code-review', component: GenericTopicComponent },
 
   { path: '**', redirectTo: '' }
 ];

@@ -119,19 +119,19 @@ export class NavigationService {
         { title: 'FormBuilder', route: '/forms/reactive/form-builder' }
       ]
     },
-    {
-      title: 'HTTP & API Communication',
-      icon: 'cloud',
-      subTopics: [
-        { title: 'HTTP Methods', route: '/http/basics/methods' },
-        { title: 'Headers & Parameters', route: '/http/basics/headers-params' },
-        { title: 'Error Handling & Retry Logic', route: '/http/basics/error-handling' },
-        { title: 'HTTP Interceptors', route: '/http/advanced/interceptors' },
-        { title: 'Authentication Tokens', route: '/http/advanced/auth-tokens' },
-        { title: 'File Upload & Download', route: '/http/advanced/file-operations' },
-        { title: 'Pagination & Filtering', route: '/http/advanced/pagination' }
-      ]
-    },
+    // {
+    //   title: 'HTTP & API Communication',
+    //   icon: 'cloud',
+    //   subTopics: [
+    //     { title: 'HTTP Methods', route: '/http/basics/methods' },
+    //     { title: 'Headers & Parameters', route: '/http/basics/headers-params' },
+    //     { title: 'Error Handling & Retry Logic', route: '/http/basics/error-handling' },
+    //     { title: 'HTTP Interceptors', route: '/http/advanced/interceptors' },
+    //     { title: 'Authentication Tokens', route: '/http/advanced/auth-tokens' },
+    //     { title: 'File Upload & Download', route: '/http/advanced/file-operations' },
+    //     { title: 'Pagination & Filtering', route: '/http/advanced/pagination' }
+    //   ]
+    // },
     {
       title: 'RxJS',
       icon: 'stream',
@@ -157,66 +157,66 @@ export class NavigationService {
         { title: 'When to Use NgRx', route: '/state/approaches/ngrx' }
       ]
     },
-    {
-      title: 'Advanced Angular Concepts',
-      icon: 'star',
-      subTopics: [
-        { title: 'Change Detection Strategy', route: '/advanced/performance/change-detection' },
-        { title: 'OnPush Change Detection', route: '/advanced/performance/onpush' },
-        { title: 'Content Projection', route: '/advanced/topics/content-projection' },
-        { title: 'ViewChild & ViewChildren', route: '/advanced/topics/view-child' },
-        { title: 'ContentChild & ContentChildren', route: '/advanced/topics/content-child' },
-        { title: 'Angular i18n', route: '/advanced/i18n/angular-i18n' },
-        { title: 'Localization', route: '/advanced/i18n/localization' },
-        { title: 'Multi-Language Support', route: '/advanced/i18n/multi-language' }
-      ]
-    },
-    {
-      title: 'Security',
-      icon: 'security',
-      subTopics: [
-        { title: 'Sanitization & DomSanitizer', route: '/security/practices/sanitization' },
-        { title: 'JWT Authentication', route: '/security/practices/jwt' },
-        { title: 'Role-Based Authorization', route: '/security/practices/rbac' }
-      ]
-    },
-    {
-      title: 'Angular 21 Modern Features',
-      icon: 'new_releases',
-      subTopics: [
-        { title: 'Standalone-First Architecture', route: '/modern/features/standalone-first' },
-        { title: 'Signals-First Approach', route: '/modern/features/signals-first' },
-        { title: 'Zoneless Angular', route: '/modern/features/zoneless' },
-        { title: 'Improved SSR & Hydration', route: '/modern/features/ssr-hydration' },
-        { title: 'Vite-Based Tooling', route: '/modern/features/vite' },
-        { title: 'Performance Enhancements', route: '/modern/features/performance' }
-      ]
-    },
-    {
-      title: 'Major Capstone Project',
-      icon: 'assignment',
-      subTopics: [
-        { title: 'Authentication & Authorization', route: '/capstone/project/auth' },
-        { title: 'Dashboard Development', route: '/capstone/project/dashboard' },
-        { title: 'API Integration', route: '/capstone/project/api-integration' },
-        { title: 'Reactive Forms', route: '/capstone/project/forms' },
-        { title: 'State Management', route: '/capstone/project/state' },
-        { title: 'Performance Optimization', route: '/capstone/project/performance' },
-        { title: 'Routing & Guards', route: '/capstone/project/routing' },
-        { title: 'Deployment', route: '/capstone/project/deployment' }
-      ]
-    },
-    {
-      title: 'Best Practices & Architecture',
-      icon: 'architecture',
-      subTopics: [
-        { title: 'Folder Structure', route: '/best-practices/enterprise/folder-structure' },
-        { title: 'Reusable Components', route: '/best-practices/enterprise/reusable-components' },
-        { title: 'Shared Libraries', route: '/best-practices/enterprise/shared-libraries' },
-        { title: 'Monorepo Basics', route: '/best-practices/enterprise/monorepo' },
-        { title: 'Code Review Checklist', route: '/best-practices/enterprise/code-review' }
-      ]
-    }
+    // {
+    //   title: 'Advanced Angular Concepts',
+    //   icon: 'star',
+    //   subTopics: [
+    //     { title: 'Change Detection Strategy', route: '/advanced/performance/change-detection' },
+    //     { title: 'OnPush Change Detection', route: '/advanced/performance/onpush' },
+    //     { title: 'Content Projection', route: '/advanced/topics/content-projection' },
+    //     { title: 'ViewChild & ViewChildren', route: '/advanced/topics/view-child' },
+    //     { title: 'ContentChild & ContentChildren', route: '/advanced/topics/content-child' },
+    //     { title: 'Angular i18n', route: '/advanced/i18n/angular-i18n' },
+    //     { title: 'Localization', route: '/advanced/i18n/localization' },
+    //     { title: 'Multi-Language Support', route: '/advanced/i18n/multi-language' }
+    //   ]
+    // },
+    // {
+    //   title: 'Security',
+    //   icon: 'security',
+    //   subTopics: [
+    //     { title: 'Sanitization & DomSanitizer', route: '/security/practices/sanitization' },
+    //     { title: 'JWT Authentication', route: '/security/practices/jwt' },
+    //     { title: 'Role-Based Authorization', route: '/security/practices/rbac' }
+    //   ]
+    // },
+    // {
+    //   title: 'Angular 21 Modern Features',
+    //   icon: 'new_releases',
+    //   subTopics: [
+    //     { title: 'Standalone-First Architecture', route: '/modern/features/standalone-first' },
+    //     { title: 'Signals-First Approach', route: '/modern/features/signals-first' },
+    //     { title: 'Zoneless Angular', route: '/modern/features/zoneless' },
+    //     { title: 'Improved SSR & Hydration', route: '/modern/features/ssr-hydration' },
+    //     { title: 'Vite-Based Tooling', route: '/modern/features/vite' },
+    //     { title: 'Performance Enhancements', route: '/modern/features/performance' }
+    //   ]
+    // },
+    // {
+    //   title: 'Major Capstone Project',
+    //   icon: 'assignment',
+    //   subTopics: [
+    //     { title: 'Authentication & Authorization', route: '/capstone/project/auth' },
+    //     { title: 'Dashboard Development', route: '/capstone/project/dashboard' },
+    //     { title: 'API Integration', route: '/capstone/project/api-integration' },
+    //     { title: 'Reactive Forms', route: '/capstone/project/forms' },
+    //     { title: 'State Management', route: '/capstone/project/state' },
+    //     { title: 'Performance Optimization', route: '/capstone/project/performance' },
+    //     { title: 'Routing & Guards', route: '/capstone/project/routing' },
+    //     { title: 'Deployment', route: '/capstone/project/deployment' }
+    //   ]
+    // },
+    // {
+    //   title: 'Best Practices & Architecture',
+    //   icon: 'architecture',
+    //   subTopics: [
+    //     { title: 'Folder Structure', route: '/best-practices/enterprise/folder-structure' },
+    //     { title: 'Reusable Components', route: '/best-practices/enterprise/reusable-components' },
+    //     { title: 'Shared Libraries', route: '/best-practices/enterprise/shared-libraries' },
+    //     { title: 'Monorepo Basics', route: '/best-practices/enterprise/monorepo' },
+    //     { title: 'Code Review Checklist', route: '/best-practices/enterprise/code-review' }
+    //   ]
+    // }
   ];
 
   getAllRoutes(): string[] {

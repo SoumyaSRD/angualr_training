@@ -1,0 +1,198 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+  [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints">
+  <div class="container">
+    <h3>Angular Directives</h3>
+
+    <p>
+      Directives are one of the core building blocks in Angular that allow
+      developers to extend the behavior of HTML elements. They provide a way to
+      manipulate the DOM, apply dynamic styling, control rendering, and add custom
+      logic to elements without creating new components. Directives help keep
+      templates clean, reusable, and maintainable by encapsulating behavior in a
+      structured and reusable way.
+    </p>
+
+    <p>
+      Angular provides several built-in directives that help developers manage
+      dynamic UI behavior such as conditionally displaying elements, looping
+      through collections, or applying styles. In addition to built-in directives,
+      developers can also create custom directives to implement reusable logic
+      tailored to specific application needs.
+    </p>
+
+    <h3>Types of Angular Directives</h3>
+
+    <p>
+      Angular directives are generally categorized into three main types based on
+      their purpose and functionality.
+    </p>
+
+    <h4>1. Component Directives</h4>
+    <ul>
+      <li>
+        Components are technically directives with a template.
+      </li>
+      <li>
+        They define a custom HTML element with its own view, styles, and behavior.
+      </li>
+      <li>
+        Components encapsulate UI structure and business logic together.
+      </li>
+    </ul>
+
+    <h4>2. Structural Directives</h4>
+    <ul>
+      <li>
+        Structural directives modify the DOM layout by adding, removing, or
+        rearranging elements.
+      </li>
+      <li>
+        They typically use the <code>*</code> syntax.
+      </li>
+      <li>
+        Common examples include:
+        <ul>
+          <li><code>*ngIf</code> — conditionally adds or removes elements.</li>
+          <li><code>*ngFor</code> — repeats elements for each item in a list.</li>
+          <li><code>*ngSwitch</code> — displays elements based on conditions.</li>
+        </ul>
+      </li>
+      <li>
+        Structural directives work by transforming the DOM structure during
+        rendering.
+      </li>
+
+    </ul>
+
+    <h4>3. Attribute Directives</h4>
+    <ul>
+      <li>
+        Attribute directives change the appearance or behavior of existing DOM
+        elements without altering the structure.
+      </li>
+      <li>
+        They are applied as HTML attributes.
+      </li>
+      <li>
+        Examples include:
+        <ul>
+          <li><code>ngClass</code> — dynamically adds or removes CSS classes.</li>
+          <li><code>ngStyle</code> — applies inline styles dynamically.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Custom Directives</h3>
+
+    <p>
+      Custom directives allow developers to create reusable behavior that can be
+      applied across multiple components. Instead of repeating logic in templates,
+      custom directives encapsulate specific interactions or DOM manipulations in a
+      single reusable unit. This improves code reusability, readability, and
+      maintainability.
+    </p>
+
+    <p>
+      Custom directives are especially useful for handling common UI interactions
+      such as highlighting elements, handling permissions, custom animations,
+      tracking user actions, or applying dynamic styling based on conditions.
+    </p>
+
+    <h4>Creating a Custom Attribute Directive</h4>
+
+    <p>
+      To create a custom directive, Angular provides the
+      <code>@Directive</code> decorator. Developers define a selector that is used
+      as an attribute in HTML, and then implement logic inside the directive class.
+    </p>
+
+
+
+    <p>
+      In this example, the directive applies a background color to any element that
+      uses the <code>appHighlight</code> attribute.
+    </p>
+
+    <h4>Using a Custom Directive</h4>
+
+    <pre>
+&lt;p appHighlight&gt;This text is highlighted using a custom directive.&lt;/p&gt;
+</pre>
+
+    <h3>Key Features of Custom Directives</h3>
+    <ul>
+      <li>
+        <strong>Reusability:</strong> Write logic once and apply it across multiple
+        components.
+      </li>
+      <li>
+        <strong>Separation of Concerns:</strong> Keeps templates clean by moving
+        behavior into reusable classes.
+      </li>
+      <li>
+        <strong>DOM Interaction:</strong> Can modify styles, attributes, or respond
+        to events.
+      </li>
+      <li>
+        <strong>Event Handling:</strong> Listen to events like click, hover, focus,
+        etc.
+      </li>
+      <li>
+        <strong>Dynamic Behavior:</strong> Apply logic based on inputs or external
+        data.
+      </li>
+    </ul>
+
+    <h3>Demo of Custom Directives</h3>
+
+    <div class="live-demo">
+      <div *appVisibleIf="true">
+        Always visible
+      </div>
+
+      <div *appVisibleIf="'admin'">
+        Only admin role sees this
+      </div>
+
+      <div *appVisibleIf="visible">
+        Only admin role sees this
+      </div>
+
+      <button (click)="visible = !visible">give me access</button>
+    </div>
+
+
+
+    <h3>Best Practices for Using Directives</h3>
+    <ul>
+      <li>
+        Keep directives focused on a single responsibility.
+      </li>
+      <li>
+        Avoid excessive DOM manipulation; use Angular bindings where possible.
+      </li>
+      <li>
+        Use input properties to make directives configurable and flexible.
+      </li>
+      <li>
+        Prefer directives for behavior reuse instead of duplicating template logic.
+      </li>
+      <li>
+        Combine directives with standalone components for modern Angular
+        architecture.
+      </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+      Directives enhance Angular applications by enabling reusable behaviors and
+      dynamic UI manipulation. Built-in directives simplify common tasks, while
+      custom directives allow developers to extend functionality based on specific
+      application needs. Proper use of directives leads to cleaner templates,
+      improved maintainability, and scalable application architecture.
+    </p>
+
+  </div>
+</app-topic-template>

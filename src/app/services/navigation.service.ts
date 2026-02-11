@@ -57,12 +57,12 @@ export class NavigationService {
         { title: 'Lazy-Loaded Modules', route: '/core/modules/lazy-loading' },
         { title: 'Standalone Components', route: '/core/modules/standalone-components' },
         { title: 'Module vs Standalone Comparison', route: '/core/modules/module-vs-standalone' },
-        { title: 'Component Anatomy & Metadata', route: '/core/components/anatomy' },
-        { title: 'Inline vs External Templates', route: '/core/components/templates' },
-        { title: 'Component Communication', route: '/core/components/communication' },
-        { title: 'Lifecycle Hooks', route: '/core/components/lifecycle-hooks' },
-        { title: 'Change Detection Basics', route: '/core/components/change-detection' },
-        { title: 'Smart vs Dumb Components', route: '/core/components/smart-vs-dumb' }
+        { title: 'Component', route: '/core/components/component' },
+        // { title: 'Inline vs External Templates', route: '/core/components/templates' },
+        // { title: 'Component Communication', route: '/core/components/communication' },
+        // { title: 'Lifecycle Hooks', route: '/core/components/lifecycle-hooks' },
+        // { title: 'Change Detection Basics', route: '/core/components/change-detection' },
+        // { title: 'Smart vs Dumb Components', route: '/core/components/smart-vs-dumb' }
       ]
     },
     {
@@ -70,15 +70,15 @@ export class NavigationService {
       icon: 'web',
       subTopics: [
         { title: 'Data Binding', route: '/templates/data-binding' },
-        { title: 'Built-in Directives', route: '/templates/directives/built-in' },
-        { title: 'Attribute & Structural Directives', route: '/templates/directives/types' },
-        { title: 'Custom Directives', route: '/templates/directives/custom' },
-        { title: 'HostBinding & HostListener', route: '/templates/directives/host-decorators' },
-        { title: 'trackBy Optimization', route: '/templates/directives/trackby' },
-        { title: 'Built-in Pipes', route: '/templates/pipes/built-in' },
-        { title: 'Pure vs Impure Pipes', route: '/templates/pipes/pure-vs-impure' },
-        { title: 'Custom Pipes', route: '/templates/pipes/custom' },
-        { title: 'Async Pipe', route: '/templates/pipes/async' }
+        { title: 'Directives', route: '/templates/directives' },
+        // { title: 'Attribute & Structural Directives', route: '/templates/directives/types' },
+        // { title: 'Custom Directives', route: '/templates/directives/custom' },
+        // { title: 'HostBinding & HostListener', route: '/templates/directives/host-decorators' },
+        // { title: 'trackBy Optimization', route: '/templates/directives/trackby' },
+        { title: 'Pipes', route: '/templates/pipes' },
+        // { title: 'Pure vs Impure Pipes', route: '/templates/pipes/pure-vs-impure' },
+        // { title: 'Custom Pipes', route: '/templates/pipes/custom' },
+        // { title: 'Async Pipe', route: '/templates/pipes/async' }
       ]
     },
     {
@@ -86,11 +86,11 @@ export class NavigationService {
       icon: 'settings',
       subTopics: [
         { title: 'DI Concepts', route: '/services/di/concepts' },
-        { title: '@Injectable & Providers', route: '/services/di/injectable-providers' },
-        { title: 'Service Scopes', route: '/services/di/scopes' },
-        { title: 'Injection Tokens', route: '/services/di/injection-tokens' },
-        { title: 'Multi-Providers', route: '/services/di/multi-providers' },
-        { title: 'Singleton Services', route: '/services/di/singleton' }
+        { title: 'Services', route: '/services/di/injectable-providers' },
+        // { title: 'Service Scopes', route: '/services/di/scopes' },
+        // { title: 'Injection Tokens', route: '/services/di/injection-tokens' },
+        // { title: 'Multi-Providers', route: '/services/di/multi-providers' },
+        // { title: 'Singleton Services', route: '/services/di/singleton' }
       ]
     },
     {

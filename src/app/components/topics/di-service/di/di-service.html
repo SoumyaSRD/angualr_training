@@ -1,0 +1,134 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>Dependency Injection (DI) in Angular</h3>
+
+    <p>
+        Dependency Injection (DI) is a core design pattern in Angular that allows
+        classes to receive their required dependencies from external sources rather
+        than creating them manually. This approach promotes loose coupling between
+        different parts of an application, improves code reusability, and makes
+        testing easier. Instead of instantiating services directly inside a component,
+        Angular provides them automatically through its built-in dependency injection
+        system.
+    </p>
+
+    <p>
+        In Angular, dependencies are typically services that contain shared logic,
+        data access functionality, configuration, or state management. The Angular
+        framework uses an injector to create and manage instances of these services
+        and supply them wherever they are needed.
+    </p>
+
+    <h3>Why Dependency Injection is Important</h3>
+
+    <ul>
+        <li><strong>Loose Coupling:</strong> Components do not need to know how to create their dependencies.</li>
+        <li><strong>Reusability:</strong> Services can be reused across multiple components.</li>
+        <li><strong>Maintainability:</strong> Easier to update or replace services without changing dependent
+            components.</li>
+        <li><strong>Testability:</strong> Dependencies can be mocked or replaced during testing.</li>
+        <li><strong>Centralized Management:</strong> Angular manages lifecycle and instantiation automatically.</li>
+    </ul>
+
+    <h3>How Dependency Injection Works</h3>
+
+    <p>Angular's DI system consists of three main parts:</p>
+
+    <ul>
+        <li><strong>Service:</strong> A class that provides functionality or data.</li>
+        <li><strong>Injector:</strong> Responsible for creating and delivering service instances.</li>
+        <li><strong>Consumer:</strong> A component, directive, pipe, or another service that requires the dependency.
+        </li>
+    </ul>
+
+    <p>
+        When Angular creates a component, it checks the constructor parameters and
+        automatically injects the required dependencies if they are registered with
+        the injector.
+    </p>
+
+    <h3>Creating and Injecting a Service</h3>
+
+    <h4>Step 1: Create a Service</h4>
+
+    <pre>
+{{dataEg}}
+</pre>
+
+    <p>
+        The <code>providedIn: 'root'</code> configuration registers the service in
+        the root injector, making it available throughout the application as a
+        singleton.
+    </p>
+
+    <h4>Step 2: Inject Service into Component</h4>
+
+    <pre>
+{{dataEg2}}
+</pre>
+
+    <p>
+        Angular automatically resolves the dependency and injects the service
+        instance into the component.
+    </p>
+
+    <h3>Types of Providers in Angular</h3>
+
+    <ul>
+        <li><strong>Root Provider:</strong> Registered globally using <code>providedIn: 'root'</code>.</li>
+        <li><strong>Component Provider:</strong> Local instance scoped to component tree.</li>
+        <li><strong>Module Provider:</strong> Used in legacy NgModule-based apps.</li>
+    </ul>
+
+    <h3>Injector Hierarchy</h3>
+
+    <p>
+        Angular uses a hierarchical injector system. Child components can access
+        services from parent injectors or override them locally.
+    </p>
+
+    <ul>
+        <li>Root Injector — global application services.</li>
+        <li>Component Injectors — scoped services.</li>
+    </ul>
+
+    <h3>Modern Dependency Injection (Angular Standalone)</h3>
+
+    <p>
+        With standalone components, DI still works the same way. Angular also
+        introduced the <code>inject()</code> function for functional injection.
+    </p>
+
+    <pre ngNonBindable>
+const dataService = inject(DataService);
+</pre>
+
+    <h3>Advanced DI Concepts</h3>
+
+    <ul>
+        <li><strong>Injection Tokens:</strong> For non-class dependencies.</li>
+        <li><strong>Optional Injection:</strong> Prevent errors if dependency missing.</li>
+        <li><strong>Multi Providers:</strong> Multiple values under one token.</li>
+        <li><strong>Factory Providers:</strong> Dynamic creation logic.</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+
+    <ul>
+        <li>Use services for shared logic.</li>
+        <li>Prefer <code>providedIn: 'root'</code>.</li>
+        <li>Avoid heavy business logic in components.</li>
+        <li>Scope services only when needed.</li>
+        <li>Keep services single-responsibility.</li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        Dependency Injection keeps Angular applications modular, scalable, and easy
+        to maintain by separating dependency creation from usage.
+    </p>
+
+</app-topic-template>

@@ -1,136 +1,79 @@
-<app-topic-template
-  [title]="content.title"
-  [tags]="content.tags"
-  [paragraphs]="content.paragraphs"
-  [sections]="content.sections"
-  [codeExamples]="content.codeExamples"
-  [bestPractices]="content.bestPractices"
-  [keyPoints]="content.keyPoints"
->
-  <!-- <p>
-    Angular is a comprehensive, TypeScript-based web application framework
-    developed and maintained by Google. Born from the lessons learned with
-    AngularJS, Angular represents a complete reimagining of how to build modern
-    web applications. It provides a robust, scalable solution for crafting
-    dynamic single-page applications (SPAs) that prioritize developer
-    productivity, exceptional performance, and long-term code maintainability.
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+  [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints">
+  <p>
+    Angular Modules (NgModules) are a fundamental concept used to organize an
+    application into cohesive blocks of functionality. They help group related
+    components, directives, pipes, and services together, making large
+    applications easier to manage, maintain, and scale. Although standalone
+    components are now recommended in modern Angular, understanding module types
+    remains important, especially when working with existing applications.
   </p>
 
   <p>
-    What sets Angular apart is its opinionated, full-stack approach to frontend
-    development. Unlike minimal libraries that solve one problem, Angular is an
-    enterprise-grade platform delivering an integrated ecosystem: component
-    architecture, powerful dependency injection, sophisticated routing, reactive
-    forms, HTTP client with interceptors, comprehensive testing utilities,
-    internationalization support, and state management patterns. This unified
-    vision eliminates the "framework fatigue" of assembling disparate tools and
-    ensures consistency across teams, projects, and years of development.
+    Angular applications commonly use different types of modules such as Root,
+    Feature, Shared, and Core modules. Each module type serves a specific purpose
+    in structuring the application and promoting separation of concerns and code
+    reusability.
   </p>
 
-  <h3>Core Features That Define Angular</h3>
+  <h3>Types of Angular Modules</h3>
   <ul>
     <li>
-      <strong>Component-Based Architecture:</strong> Build your application as a
-      tree of encapsulated, reusable components with clear data flow. Each
-      component combines template, logic, and styles into cohesive,
-      self-contained units that compose beautifully into complex interfaces.
+      <strong>Root Module (AppModule):</strong> The main entry point of the
+      application. It bootstraps the root component and imports essential modules
+      required to start the app.
     </li>
     <li>
-      <strong>TypeScript First:</strong> Harness the power of static typing for
-      superior IDE intelligence, compile-time error detection, and fearless
-      refactoring. TypeScript transforms JavaScript into a language suitable for
-      large-scale application development.
+      <strong>Feature Modules:</strong> Modules designed for specific features or
+      sections of the application (e.g., user, admin, dashboard). They help keep
+      functionality isolated and support lazy loading.
     </li>
     <li>
-      <strong>Hierarchical Dependency Injection:</strong> A sophisticated DI
-      system that manages service lifecycles, promotes loose coupling, and makes
-      testing trivial. Define dependencies once and let Angular handle
-      instantiation, scope, and disposal.
+      <strong>Shared Module:</strong> Contains reusable components, directives,
+      and pipes that are used across multiple feature modules. It promotes code
+      reuse and reduces duplication.
     </li>
     <li>
-      <strong>Reactive Programming with RxJS:</strong> First-class support for
-      observables and reactive streams enables elegant handling of asynchronous
-      operations, complex event handling, and real-time data flows with
-      operators like map, filter, debounce, and switchMap.
-    </li>
-    <li>
-      <strong>Intelligent Data Binding:</strong> Two-way data binding with
-      <code>[(ngModel)]</code> synchronizes model and view automatically, while
-      one-way binding and change detection strategies give you fine-grained
-      control over performance.
-    </li>
-    <li>
-      <strong>Angular CLI:</strong> A world-class command-line interface that
-      scaffolds projects, generates components and services, manages
-      dependencies, runs development servers with live reload, and optimizes
-      production builds with tree-shaking and lazy loading.
-    </li>
-    <li>
-      <strong>Sophisticated Routing:</strong> Enterprise-ready routing with
-      nested routes, route guards for authorization, lazy loading for code
-      splitting, preloading strategies, and resolver functions for data
-      prefetching.
-    </li>
-    <li>
-      <strong>Comprehensive Forms:</strong> Choose between template-driven forms
-      for simplicity or reactive forms for complex validation logic. Built-in
-      validators, custom validation, async validation, and dynamic form
-      generation come standard.
-    </li>
-    <li>
-      <strong>Progressive Web App Support:</strong> Built-in service worker
-      integration, offline capabilities, and app shell architecture transform
-      your Angular apps into installable, resilient progressive web
-      applications.
-    </li>
-    <li>
-      <strong>Angular Signals:</strong> A modern reactivity system providing
-      fine-grained reactive state management with automatic dependency tracking
-      and optimal re-rendering performance.
-    </li>
-    <li>
-      <strong>Server-Side Rendering:</strong> Angular Universal enables SEO
-      optimization and faster initial page loads by rendering your application
-      on the server before hydrating it on the client.
+      <strong>Core Module:</strong> Holds singleton services, global components,
+      and application-wide functionality such as authentication, interceptors, or
+      configuration services. Typically imported only once in the root module.
     </li>
   </ul>
 
-  <h3>The Angular Philosophy: Opinionated Excellence</h3>
-  <p>
-    Angular embraces a "batteries-included" philosophy that stands in sharp
-    contrast to the fragmented JavaScript ecosystem. Rather than forcing
-    developers to navigate a maze of competing libraries for routing, state
-    management, forms, and HTTP—Angular provides official, battle-tested
-    solutions for every common need. This opinionated approach isn't about
-    limiting choice; it's about eliminating decision paralysis and ensuring your
-    application follows proven patterns that scale.
-  </p>
+  <h3>Benefits of Using Angular Modules</h3>
+  <ul>
+    <li>
+      <strong>Better Organization:</strong> Helps structure large applications
+      into logical units
+    </li>
+    <li>
+      <strong>Code Reusability:</strong> Shared functionality can be reused across
+      modules
+    </li>
+    <li>
+      <strong>Lazy Loading Support:</strong> Feature modules can be loaded on
+      demand
+    </li>
+    <li>
+      <strong>Separation of Concerns:</strong> Clear boundaries between features
+      and shared logic
+    </li>
+    <li>
+      <strong>Maintainability:</strong> Easier to maintain and scale as the
+      application grows
+    </li>
+    <li>
+      <strong>Structured Dependency Management:</strong> Helps manage providers
+      and dependencies effectively
+    </li>
+  </ul>
 
+  <h3>Modern Considerations</h3>
   <p>
-    The framework champions testability as a first-class concern. Dependency
-    injection makes unit testing natural, TestBed provides powerful component
-    testing utilities, and the entire architecture encourages separation of
-    concerns. Angular applications are designed to be maintained for years, not
-    months—with strong typing catching errors before they reach production,
-    consistent patterns making onboarding seamless, and comprehensive tooling
-    supporting large teams working on complex domains.
+    While NgModules remain relevant, modern Angular encourages the use of
+    standalone components and APIs to reduce complexity. However, module-based
+    architecture is still widely used and can coexist with standalone approaches
+    during migration or in legacy applications.
   </p>
-
-  <h3>When Angular Shines</h3>
-  <p>
-    Angular excels in enterprise environments where multiple teams collaborate
-    on large-scale applications with demanding requirements. If you're building
-    complex admin dashboards, data-intensive business applications, or systems
-    requiring strict consistency and governance—Angular's structure becomes an
-    asset, not a constraint. The learning curve pays dividends in reduced bugs,
-    faster onboarding, and sustainable long-term development.
-  </p>
-
-  <p>
-    From Fortune 500 companies to innovative startups, Angular powers
-    applications that demand reliability, performance, and maintainability at
-    scale. With Google's continued investment, a vibrant community, and constant
-    evolution incorporating modern web standards like signals and standalone
-    components—Angular remains a compelling choice for serious web development.
-  </p> -->
 </app-topic-template>

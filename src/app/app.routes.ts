@@ -1,12 +1,20 @@
 import { Routes } from '@angular/router';
 import { GenericTopicComponent } from './components/generic-topic/generic-topic.component';
 import { HomeComponent } from './components/home/home.component';
-import { StandaloneComponentsComponent } from './components/topics/core/standalone-components.component';
+import { AllModules } from './components/topics/core_buliding_blocks/all_modules/all_modules';
+import { ComponentDetails } from './components/topics/core_buliding_blocks/component/component';
+import { LazyModule } from './components/topics/core_buliding_blocks/lazy_module/lazy-module';
+import { ModuleStandalone } from './components/topics/core_buliding_blocks/module-standalone/module-standalone';
+import { Standalone } from './components/topics/core_buliding_blocks/standalone/standalone';
 import { HowBrowsersWorkComponent } from './components/topics/prerequisites/browser/how-browsers-work.component';
 import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
-import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 import { DataBinding } from './components/topics/templates-ui/data-binding/data-binding';
-import { AllModules } from './components/topics/core_buliding_blocks/all_modules/all_modules';
+import { DirectiveExample } from './components/topics/templates-ui/directive/directive-eg';
+import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
+import { PipeExample } from './components/topics/templates-ui/pipe/pipe-eg';
+import { DiServiceExample } from './components/topics/di-service/di/di-service';
+import { ServiceExample } from './components/topics/di-service/service/service-eg';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,29 +35,30 @@ export const routes: Routes = [
 
 
   { path: 'core/modules/module-types', component: AllModules },
-  { path: 'core/modules/lazy-loading', component: GenericTopicComponent },
-  { path: 'core/modules/standalone-components', component: StandaloneComponentsComponent },
-  { path: 'core/modules/module-vs-standalone', component: GenericTopicComponent },
-  { path: 'core/components/anatomy', component: GenericTopicComponent },
-  { path: 'core/components/templates', component: GenericTopicComponent },
-  { path: 'core/components/communication', component: GenericTopicComponent },
-  { path: 'core/components/lifecycle-hooks', component: GenericTopicComponent },
-  { path: 'core/components/change-detection', component: GenericTopicComponent },
-  { path: 'core/components/smart-vs-dumb', component: GenericTopicComponent },
+  { path: 'core/modules/lazy-loading', component: LazyModule },
+
+  { path: 'core/modules/standalone-components', component: Standalone },
+  { path: 'core/modules/module-vs-standalone', component: ModuleStandalone },
+  { path: 'core/components/component', component: ComponentDetails },
+  // { path: 'core/components/templates', component: GenericTopicComponent },
+  // { path: 'core/components/communication', component: GenericTopicComponent },
+  // { path: 'core/components/lifecycle-hooks', component: GenericTopicComponent },
+  // { path: 'core/components/change-detection', component: GenericTopicComponent },
+  // { path: 'core/components/smart-vs-dumb', component: GenericTopicComponent },
 
   { path: 'templates/data-binding', component: DataBinding },
-  { path: 'templates/directives/built-in', component: GenericTopicComponent },
-  { path: 'templates/directives/types', component: GenericTopicComponent },
-  { path: 'templates/directives/custom', component: GenericTopicComponent },
-  { path: 'templates/directives/host-decorators', component: GenericTopicComponent },
-  { path: 'templates/directives/trackby', component: GenericTopicComponent },
-  { path: 'templates/pipes/built-in', component: GenericTopicComponent },
-  { path: 'templates/pipes/pure-vs-impure', component: GenericTopicComponent },
-  { path: 'templates/pipes/custom', component: GenericTopicComponent },
-  { path: 'templates/pipes/async', component: GenericTopicComponent },
+  { path: 'templates/directives', component: DirectiveExample },
+  // { path: 'templates/directives/types', component: GenericTopicComponent },
+  // { path: 'templates/directives/custom', component: GenericTopicComponent },
+  // { path: 'templates/directives/host-decorators', component: GenericTopicComponent },
+  // { path: 'templates/directives/trackby', component: GenericTopicComponent },
+  { path: 'templates/pipes', component: PipeExample },
+  // { path: 'templates/pipes/pure-vs-impure', component: GenericTopicComponent },
+  // { path: 'templates/pipes/custom', component: GenericTopicComponent },
+  // { path: 'templates/pipes/async', component: GenericTopicComponent },
 
-  { path: 'services/di/concepts', component: GenericTopicComponent },
-  { path: 'services/di/injectable-providers', component: GenericTopicComponent },
+  { path: 'services/di/concepts', component: DiServiceExample },
+  { path: 'services/di/injectable-providers', component: ServiceExample },
   { path: 'services/di/scopes', component: GenericTopicComponent },
   { path: 'services/di/injection-tokens', component: GenericTopicComponent },
   { path: 'services/di/multi-providers', component: GenericTopicComponent },

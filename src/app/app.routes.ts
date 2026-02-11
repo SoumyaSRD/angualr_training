@@ -6,14 +6,20 @@ import { ComponentDetails } from './components/topics/core_buliding_blocks/compo
 import { LazyModule } from './components/topics/core_buliding_blocks/lazy_module/lazy-module';
 import { ModuleStandalone } from './components/topics/core_buliding_blocks/module-standalone/module-standalone';
 import { Standalone } from './components/topics/core_buliding_blocks/standalone/standalone';
+import { DiServiceExample } from './components/topics/di-service/di/di-service';
+import { FormValidationComponentEg } from './components/topics/di-service/form-validation/form-validation';
+import { FormExample } from './components/topics/di-service/form/form-eg';
+import { GuardExample } from './components/topics/di-service/guard/guard-eg';
+import { ReactiveFormExample } from './components/topics/di-service/reactive-form/reactive-form-eg';
+import { ServiceExample } from './components/topics/di-service/service/service-eg';
 import { HowBrowsersWorkComponent } from './components/topics/prerequisites/browser/how-browsers-work.component';
 import { HttpHttpsComponent } from './components/topics/prerequisites/http/http-https.component';
+import { DecoratorExample } from './components/topics/routing-decorator/decorator/decorator';
+import { Routing } from './components/topics/routing-decorator/routing/routing';
 import { DataBinding } from './components/topics/templates-ui/data-binding/data-binding';
 import { DirectiveExample } from './components/topics/templates-ui/directive/directive-eg';
-import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 import { PipeExample } from './components/topics/templates-ui/pipe/pipe-eg';
-import { DiServiceExample } from './components/topics/di-service/di/di-service';
-import { ServiceExample } from './components/topics/di-service/service/service-eg';
+import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
 
 
 export const routes: Routes = [
@@ -59,26 +65,27 @@ export const routes: Routes = [
 
   { path: 'services/di/concepts', component: DiServiceExample },
   { path: 'services/di/injectable-providers', component: ServiceExample },
-  { path: 'services/di/scopes', component: GenericTopicComponent },
-  { path: 'services/di/injection-tokens', component: GenericTopicComponent },
-  { path: 'services/di/multi-providers', component: GenericTopicComponent },
-  { path: 'services/di/singleton', component: GenericTopicComponent },
+  // { path: 'services/di/scopes', component: GenericTopicComponent },
+  // { path: 'services/di/injection-tokens', component: GenericTopicComponent },
+  // { path: 'services/di/multi-providers', component: GenericTopicComponent },
+  // { path: 'services/di/singleton', component: GenericTopicComponent },
 
-  { path: 'routing/basics/config', component: GenericTopicComponent },
-  { path: 'routing/basics/navigation', component: GenericTopicComponent },
-  { path: 'routing/basics/parameters', component: GenericTopicComponent },
-  { path: 'routing/advanced/lazy-routes', component: GenericTopicComponent },
-  { path: 'routing/advanced/guards-resolvers', component: GenericTopicComponent },
-  { path: 'routing/advanced/error-handling', component: GenericTopicComponent },
+  { path: 'routing/basics', component: Routing },
+  { path: 'decorators', component: DecoratorExample },
+  { path: 'rourouting/basics/guard', component: GuardExample },
+  // { path: 'routing/advanced/lazy-routes', component: GenericTopicComponent },
+  // { path: 'routing/advanced/guards-resolvers', component: GenericTopicComponent },
+  // { path: 'routing/advanced/error-handling', component: GenericTopicComponent },
 
-  { path: 'forms/template-driven/ngmodel', component: GenericTopicComponent },
-  { path: 'forms/template-driven/validations', component: GenericTopicComponent },
-  { path: 'forms/template-driven/error-handling', component: GenericTopicComponent },
-  { path: 'forms/template-driven/limitations', component: GenericTopicComponent },
-  { path: 'forms/reactive/basics', component: GenericTopicComponent },
-  { path: 'forms/reactive/validators', component: GenericTopicComponent },
-  { path: 'forms/reactive/dynamic-forms', component: GenericTopicComponent },
-  { path: 'forms/reactive/form-builder', component: GenericTopicComponent },
+  { path: 'forms/form-module', component: FormExample },
+  { path: 'forms/reactive-forms', component: ReactiveFormExample },
+  { path: 'forms/form-validation', component: FormValidationComponentEg },
+  // { path: 'forms/template-driven/error-handling', component: GenericTopicComponent },
+  // { path: 'forms/template-driven/limitations', component: GenericTopicComponent },
+  // { path: 'forms/reactive/basics', component: GenericTopicComponent },
+  // { path: 'forms/reactive/validators', component: GenericTopicComponent },
+  // { path: 'forms/reactive/dynamic-forms', component: GenericTopicComponent },
+  // { path: 'forms/reactive/form-builder', component: GenericTopicComponent },
 
   // { path: 'http/basics/methods', component: GenericTopicComponent },
   // { path: 'http/basics/headers-params', component: GenericTopicComponent },

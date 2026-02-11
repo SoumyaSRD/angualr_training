@@ -1,0 +1,44 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <h3>Decorators in Angular</h3>
+
+    <p>
+        Decorators are special annotations in Angular that provide metadata about
+        classes, properties, and methods. Angular uses this metadata to understand
+        how components, services, directives, and pipes should behave.
+    </p>
+
+    <h3>Example: Injectable Decorator (Service)</h3>
+
+    <p>
+        The <strong>@Injectable</strong> decorator marks a class as available for
+        dependency injection.
+    </p>
+
+    <pre>
+<code [textContent]="serviceExample"></code>
+</pre>
+
+    <h3>Example: Injecting Service into Component</h3>
+
+    <pre>
+<code [textContent]="injectionExample"></code>
+</pre>
+
+    <h3>Example: Component Decorator</h3>
+
+    <pre>
+<code [textContent]="componentExample"></code>
+</pre>
+
+    <h3>Key Benefits of Using Decorators</h3>
+
+    <ul>
+        <li><strong>Metadata configuration</strong> for Angular features.</li>
+        <li><strong>Cleaner architecture</strong> separating configuration and logic.</li>
+        <li><strong>Better readability</strong> of component structure.</li>
+        <li><strong>Framework integration</strong> with Angular compiler.</li>
+    </ul>
+
+</app-topic-template>

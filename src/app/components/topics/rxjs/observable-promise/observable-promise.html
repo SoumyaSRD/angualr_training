@@ -1,0 +1,120 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <h3>Observable vs Promise Introduction</h3>
+
+    <p>
+        Observables and Promises are both used in Angular and JavaScript to handle
+        asynchronous operations such as HTTP requests, user events, timers, and data
+        streams. While they may seem similar at first, they serve different purposes
+        and offer different capabilities. Understanding the differences between
+        Observables and Promises is essential for building reactive, scalable, and
+        efficient Angular applications.
+    </p>
+
+    <p>
+        Promises represent a single future value that will eventually be resolved or
+        rejected, whereas Observables represent streams of data that can emit multiple
+        values over time. Angular heavily relies on Observables through the RxJS
+        library, especially for HTTP communication and reactive programming patterns.
+    </p>
+
+    <h3>What is a Promise?</h3>
+
+    <p>
+        A Promise is a JavaScript object that represents the eventual completion or
+        failure of an asynchronous operation. Once resolved, a promise delivers a
+        single value and cannot emit additional values afterward.
+    </p>
+
+    <pre>
+<code [textContent]="promiseExample"></code>
+</pre>
+
+    <h4>Key Characteristics of Promises</h4>
+
+    <ul>
+        <li>Handles a single asynchronous result.</li>
+        <li>Executes immediately once created.</li>
+        <li>Cannot be cancelled once started.</li>
+        <li>Uses <code>then()</code>, <code>catch()</code>, and <code>finally()</code>.</li>
+        <li>Common in plain JavaScript APIs.</li>
+    </ul>
+
+    <h3>What is an Observable?</h3>
+
+    <p>
+        An Observable is a powerful abstraction provided by RxJS that represents a
+        stream of asynchronous data over time. Observables can emit multiple values,
+        support cancellation, and provide advanced operators for transforming and
+        combining data streams.
+    </p>
+
+    <pre>
+<code [textContent]="observableExample"></code>
+</pre>
+
+    <h4>Key Characteristics of Observables</h4>
+
+    <ul>
+        <li>Can emit multiple values over time.</li>
+        <li>Lazy execution (runs only when subscribed).</li>
+        <li>Supports cancellation via unsubscribe.</li>
+        <li>Provides powerful operators like map, filter, debounce, etc.</li>
+        <li>Heavily used in Angular HTTP and reactive programming.</li>
+    </ul>
+
+    <h3>Key Differences Between Observable and Promise</h3>
+
+    <ul>
+        <li>
+            <strong>Execution:</strong> Promises execute immediately; Observables execute
+            only when subscribed.
+        </li>
+        <li>
+            <strong>Values:</strong> Promises resolve once; Observables can emit multiple
+            values.
+        </li>
+        <li>
+            <strong>Cancellation:</strong> Promises cannot be cancelled; Observables can
+            be unsubscribed.
+        </li>
+        <li>
+            <strong>Operators:</strong> Observables provide rich operators for data
+            transformation.
+        </li>
+        <li>
+            <strong>Angular Usage:</strong> Angular commonly uses Observables with HTTP
+            and reactive forms.
+        </li>
+    </ul>
+
+    <h3>When to Use Promise</h3>
+
+    <ul>
+        <li>Simple one-time asynchronous operations.</li>
+        <li>Working with standard JavaScript APIs.</li>
+        <li>When reactive streams are not required.</li>
+    </ul>
+
+    <h3>When to Use Observable</h3>
+
+    <ul>
+        <li>Handling streams of events or data.</li>
+        <li>HTTP requests in Angular.</li>
+        <li>Reactive programming scenarios.</li>
+        <li>Real-time updates or user interactions.</li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        While Promises are useful for handling single asynchronous results,
+        Observables provide a more powerful and flexible approach for managing
+        multiple asynchronous data streams. Angular promotes Observables because they
+        enable reactive patterns, better cancellation control, and advanced data
+        handling capabilities. Understanding both concepts helps developers choose
+        the right tool based on application requirements.
+    </p>
+
+</app-topic-template>

@@ -1,0 +1,170 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <h3>RxJS Operators Introduction</h3>
+
+    <p>
+        RxJS Operators are powerful functions used to transform, filter, combine,
+        and manage data streams in reactive programming. In Angular applications,
+        RxJS operators play a crucial role when working with Observables, enabling
+        developers to manipulate asynchronous data in a clean, declarative, and
+        composable way.
+    </p>
+
+    <p>
+        Operators allow you to build complex asynchronous workflows by chaining
+        multiple operations together using the <code>pipe()</code> method. Instead of
+        writing nested callbacks or complex logic, RxJS operators help create readable
+        and maintainable reactive code.
+    </p>
+
+    <h3>Why Use RxJS Operators?</h3>
+
+    <ul>
+        <li>
+            <strong>Data Transformation:</strong> Modify emitted values easily.
+        </li>
+        <li>
+            <strong>Filtering:</strong> Emit only specific values based on conditions.
+        </li>
+        <li>
+            <strong>Combining Streams:</strong> Merge multiple observables together.
+        </li>
+        <li>
+            <strong>Error Handling:</strong> Manage errors gracefully.
+        </li>
+        <li>
+            <strong>Better Readability:</strong> Avoid nested callbacks.
+        </li>
+        <li>
+            <strong>Reactive Programming:</strong> Build dynamic data pipelines.
+        </li>
+    </ul>
+
+    <h3>Using Operators with pipe()</h3>
+
+    <p>
+        Operators are typically used inside the <code>pipe()</code> method, which
+        allows chaining multiple transformations on an observable.
+    </p>
+
+    <pre>
+<code [textContent]="pipeExample"></code>
+</pre>
+
+    <h3>Common Categories of RxJS Operators</h3>
+
+    <h4>1. Transformation Operators</h4>
+
+    <p>
+        These operators transform emitted values into new values.
+    </p>
+
+    <ul>
+        <li><code>map</code> — Transform each emitted value.</li>
+        <li><code>switchMap</code> — Switch to a new observable.</li>
+        <li><code>mergeMap</code> — Flatten inner observables.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="mapExample"></code>
+</pre>
+
+    <h4>2. Filtering Operators</h4>
+
+    <p>
+        Used to filter emitted values based on conditions.
+    </p>
+
+    <ul>
+        <li><code>filter</code> — Emit only values matching criteria.</li>
+        <li><code>debounceTime</code> — Delay emissions to reduce rapid updates.</li>
+        <li><code>distinctUntilChanged</code> — Ignore duplicate values.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="filterExample"></code>
+</pre>
+
+    <h4>3. Combination Operators</h4>
+
+    <p>
+        Combine multiple observables into one stream.
+    </p>
+
+    <ul>
+        <li><code>combineLatest</code></li>
+        <li><code>forkJoin</code></li>
+        <li><code>merge</code></li>
+    </ul>
+
+    <pre>
+<code [textContent]="combineExample"></code>
+</pre>
+
+    <h4>4. Utility Operators</h4>
+
+    <p>
+        Used for side effects or debugging without modifying data.
+    </p>
+
+    <ul>
+        <li><code>tap</code> — Perform side effects like logging.</li>
+        <li><code>finalize</code> — Execute logic when observable completes.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="tapExample"></code>
+</pre>
+
+    <h3>Common Angular Use Cases</h3>
+
+    <ul>
+        <li>
+            Handling HTTP requests and transforming API responses.
+        </li>
+        <li>
+            Managing form input streams.
+        </li>
+        <li>
+            Implementing search auto-complete with debounce.
+        </li>
+        <li>
+            Combining multiple data sources.
+        </li>
+        <li>
+            Handling complex asynchronous workflows.
+        </li>
+    </ul>
+
+    <h3>Best Practices for Using RxJS Operators</h3>
+
+    <ul>
+        <li>
+            Prefer operator chaining using <code>pipe()</code>.
+        </li>
+        <li>
+            Use <code>switchMap</code> for API calls to cancel previous requests.
+        </li>
+        <li>
+            Avoid deeply nested subscriptions.
+        </li>
+        <li>
+            Keep observable streams clean and readable.
+        </li>
+        <li>
+            Unsubscribe when necessary to avoid memory leaks.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        RxJS operators are essential tools for building reactive Angular applications.
+        They allow developers to manipulate asynchronous data streams efficiently,
+        improve readability, and create scalable reactive pipelines. Mastering RxJS
+        operators enables more advanced control over asynchronous workflows and
+        enhances application performance.
+    </p>
+
+</app-topic-template>

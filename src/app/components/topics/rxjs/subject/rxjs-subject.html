@@ -1,0 +1,157 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>RxJS Subjects Introduction</h3>
+
+    <p>
+        RxJS Subjects are a special type of Observable that allow values to be
+        multicasted to multiple subscribers simultaneously. Unlike regular
+        Observables, which are typically unicast (each subscriber receives its own
+        execution), Subjects act as both an <strong>Observable</strong> and an
+        <strong>Observer</strong>. This means they can emit values as well as allow
+        subscriptions to receive those values.
+    </p>
+
+    <p>
+        Subjects are widely used in Angular applications for event communication,
+        state sharing, and reactive data flow between components or services. They
+        provide a flexible way to manage streams of data where multiple parts of the
+        application need to listen to or emit updates.
+    </p>
+
+    <h3>Key Characteristics of Subjects</h3>
+
+    <ul>
+        <li>
+            <strong>Multicast:</strong> Multiple subscribers receive the same emitted
+            values.
+        </li>
+        <li>
+            <strong>Observer + Observable:</strong> Can both emit and listen to data.
+        </li>
+        <li>
+            <strong>Hot Observable:</strong> Starts emitting values regardless of
+            subscribers.
+        </li>
+        <li>
+            <strong>Real-time Updates:</strong> Useful for event-driven architectures.
+        </li>
+    </ul>
+
+    <h3>Creating and Using a Subject</h3>
+
+    <p>
+        A Subject can be created using the RxJS <code>Subject</code> class. Values
+        are emitted using the <code>next()</code> method, and subscribers receive
+        updates whenever new values are pushed.
+    </p>
+
+    <pre>
+<code [textContent]="subjectExample"></code>
+</pre>
+
+    <h3>Types of RxJS Subjects</h3>
+
+    <h4>1. Subject</h4>
+
+    <p>
+        The basic Subject does not store previous values. Subscribers only receive
+        values emitted after they subscribe.
+    </p>
+
+    <h4>2. BehaviorSubject</h4>
+
+    <p>
+        BehaviorSubject stores the latest value and immediately emits it to new
+        subscribers. It requires an initial value and is commonly used for state
+        management.
+    </p>
+
+    <pre>
+<code [textContent]="behaviorSubjectExample"></code>
+</pre>
+
+    <h4>3. ReplaySubject</h4>
+
+    <p>
+        ReplaySubject stores multiple previous values and replays them to new
+        subscribers. Developers can specify how many values should be replayed.
+    </p>
+
+    <pre>
+<code [textContent]="replaySubjectExample"></code>
+</pre>
+
+    <h4>4. AsyncSubject</h4>
+
+    <p>
+        AsyncSubject emits only the final value when the observable completes. It is
+        useful when only the last result is important.
+    </p>
+
+    <pre>
+<code [textContent]="asyncSubjectExample"></code>
+</pre>
+
+    <h3>Common Angular Use Cases</h3>
+
+    <ul>
+        <li>
+            Component-to-component communication using shared services.
+        </li>
+        <li>
+            Managing application state.
+        </li>
+        <li>
+            Broadcasting events across the application.
+        </li>
+        <li>
+            Handling real-time data updates.
+        </li>
+    </ul>
+
+    <h3>Subject vs Observable</h3>
+
+    <ul>
+        <li>
+            Observables are unicast by default; Subjects are multicast.
+        </li>
+        <li>
+            Observables usually produce values internally; Subjects allow manual
+            emission.
+        </li>
+        <li>
+            Subjects are often used as event emitters.
+        </li>
+    </ul>
+
+    <h3>Best Practices for Using Subjects</h3>
+
+    <ul>
+        <li>
+            Use BehaviorSubject when maintaining application state.
+        </li>
+        <li>
+            Avoid exposing Subject directly; expose as Observable using
+            <code>asObservable()</code>.
+        </li>
+        <li>
+            Unsubscribe when necessary to prevent memory leaks.
+        </li>
+        <li>
+            Use Subjects only when multicasting is required.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        RxJS Subjects provide a powerful way to share and emit data streams across
+        multiple subscribers. By combining observer and observable capabilities,
+        Subjects enable flexible reactive communication patterns in Angular
+        applications. Understanding different Subject types helps developers choose
+        the right tool for state management, event handling, and reactive workflows.
+    </p>
+
+</app-topic-template>

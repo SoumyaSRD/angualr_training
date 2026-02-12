@@ -20,6 +20,10 @@ import { DataBinding } from './components/topics/templates-ui/data-binding/data-
 import { DirectiveExample } from './components/topics/templates-ui/directive/directive-eg';
 import { PipeExample } from './components/topics/templates-ui/pipe/pipe-eg';
 import { angularFundamentalRoutes } from './routes/angualr-fundamental.routes';
+import { ObservablePromise } from './components/topics/rxjs/observable-promise/observable-promise';
+import { RxjsOperator } from './components/topics/rxjs/operator/rxjs-operator';
+import { RxjsSubject } from './components/topics/rxjs/subject/rxjs-subject';
+import { RxjsFlattening } from './components/topics/rxjs/rxjs-flattening/rxjs-flattening';
 
 
 export const routes: Routes = [
@@ -95,20 +99,20 @@ export const routes: Routes = [
   // { path: 'http/advanced/file-operations', component: GenericTopicComponent },
   // { path: 'http/advanced/pagination', component: GenericTopicComponent },
 
-  { path: 'rxjs/core/observables-vs-promises', component: GenericTopicComponent },
-  { path: 'rxjs/core/cold-vs-hot', component: GenericTopicComponent },
-  { path: 'rxjs/core/subjects', component: GenericTopicComponent },
-  { path: 'rxjs/operators/basic', component: GenericTopicComponent },
-  { path: 'rxjs/operators/flattening', component: GenericTopicComponent },
-  { path: 'rxjs/patterns/error-handling', component: GenericTopicComponent },
-  { path: 'rxjs/patterns/unsubscribe', component: GenericTopicComponent },
+  { path: 'rxjs/core/observables-vs-promises', component: ObservablePromise },
+  // { path: 'rxjs/core/cold-vs-hot', component: GenericTopicComponent },
+  { path: 'rxjs/core/subjects', component: RxjsSubject },
+  { path: 'rxjs/operators/basic', component: RxjsOperator },
+  { path: 'rxjs/operators/flattening', component: RxjsFlattening },
+  // { path: 'rxjs/patterns/error-handling', component: GenericTopicComponent },
+  // { path: 'rxjs/patterns/unsubscribe', component: GenericTopicComponent },
 
-  { path: 'state/approaches/component-state', component: GenericTopicComponent },
-  { path: 'state/approaches/service-state', component: GenericTopicComponent },
-  { path: 'state/signals/basics', component: GenericTopicComponent },
-  { path: 'state/signals/computed-effect', component: GenericTopicComponent },
-  { path: 'state/signals/signals-vs-rxjs', component: GenericTopicComponent },
-  { path: 'state/approaches/ngrx', component: GenericTopicComponent },
+  // { path: 'state/approaches/component-state', component: GenericTopicComponent },
+  // { path: 'state/approaches/service-state', component: GenericTopicComponent },
+  // { path: 'state/signals/basics', component: GenericTopicComponent },
+  // { path: 'state/signals/computed-effect', component: GenericTopicComponent },
+  // { path: 'state/signals/signals-vs-rxjs', component: GenericTopicComponent },
+  // { path: 'state/approaches/ngrx', component: GenericTopicComponent },
 
   // { path: 'advanced/performance/change-detection', component: GenericTopicComponent },
   // { path: 'advanced/performance/onpush', component: GenericTopicComponent },

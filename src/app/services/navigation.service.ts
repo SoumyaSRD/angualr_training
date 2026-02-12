@@ -171,41 +171,41 @@ export class NavigationService {
           title: "Observables vs Promises",
           route: "/rxjs/core/observables-vs-promises",
         },
-        { title: "Cold vs Hot Observables", route: "/rxjs/core/cold-vs-hot" },
+        // { title: "Cold vs Hot Observables", route: "/rxjs/core/cold-vs-hot" },
         { title: "Subjects", route: "/rxjs/core/subjects" },
         { title: "map, filter, tap", route: "/rxjs/operators/basic" },
         {
           title: "mergeMap, switchMap, concatMap, exhaustMap",
           route: "/rxjs/operators/flattening",
         },
-        { title: "Error Handling", route: "/rxjs/patterns/error-handling" },
-        {
-          title: "Unsubscribing Strategies",
-          route: "/rxjs/patterns/unsubscribe",
-        },
+        // { title: "Error Handling", route: "/rxjs/patterns/error-handling" },
+        // {
+        //   title: "Unsubscribing Strategies",
+        //   route: "/rxjs/patterns/unsubscribe",
+        // },
       ],
     },
-    {
-      title: "State Management",
-      icon: "storage",
-      subTopics: [
-        {
-          title: "Component State",
-          route: "/state/approaches/component-state",
-        },
-        {
-          title: "Shared Service State",
-          route: "/state/approaches/service-state",
-        },
-        { title: "Signals", route: "/state/signals/basics" },
-        {
-          title: "Computed & Effect Signals",
-          route: "/state/signals/computed-effect",
-        },
-        { title: "Signals vs RxJS", route: "/state/signals/signals-vs-rxjs" },
-        { title: "When to Use NgRx", route: "/state/approaches/ngrx" },
-      ],
-    },
+    // {
+    //   title: "State Management",
+    //   icon: "storage",
+    //   subTopics: [
+    //     {
+    //       title: "Component State",
+    //       route: "/state/approaches/component-state",
+    //     },
+    //     {
+    //       title: "Shared Service State",
+    //       route: "/state/approaches/service-state",
+    //     },
+    //     { title: "Signals", route: "/state/signals/basics" },
+    //     {
+    //       title: "Computed & Effect Signals",
+    //       route: "/state/signals/computed-effect",
+    //     },
+    //     { title: "Signals vs RxJS", route: "/state/signals/signals-vs-rxjs" },
+    //     { title: "When to Use NgRx", route: "/state/approaches/ngrx" },
+    //   ],
+    // },
     // {
     //   title: 'Advanced Angular Concepts',
     //   icon: 'star',

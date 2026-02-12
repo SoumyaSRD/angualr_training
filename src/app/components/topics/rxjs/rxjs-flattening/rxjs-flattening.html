@@ -1,0 +1,166 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>Introduction to RxJS Higher-Order Mapping & Combination Operators</h3>
+
+    <p>
+        RxJS provides powerful operators that help manage complex asynchronous
+        workflows by transforming, combining, and controlling streams of data.
+        Operators such as <code>mergeMap</code>, <code>switchMap</code>,
+        <code>concatMap</code>, <code>exhaustMap</code>, <code>combineLatest</code>,
+        and <code>forkJoin</code> are commonly used in Angular applications,
+        especially when working with HTTP requests, user events, or reactive forms.
+    </p>
+
+    <p>
+        These operators allow developers to work with higher-order Observables
+        (Observables that emit other Observables) and control how multiple streams
+        interact with each other. Understanding when and how to use each operator is
+        essential for writing efficient and predictable reactive code.
+    </p>
+
+    <h3>Higher-Order Mapping Operators</h3>
+
+    <p>
+        Higher-order mapping operators transform emitted values into new Observables
+        and then flatten them into a single stream. Each operator defines a different
+        strategy for handling concurrent emissions.
+    </p>
+
+    <h4>1. mergeMap</h4>
+
+    <p>
+        <code>mergeMap</code> subscribes to all inner Observables simultaneously and
+        merges their results into one output stream. It is useful when multiple
+        asynchronous tasks can run in parallel.
+    </p>
+
+    <ul>
+        <li>Allows multiple concurrent inner subscriptions.</li>
+        <li>Does not cancel previous requests.</li>
+        <li>Ideal for parallel API calls.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="mergeMapExample"></code>
+</pre>
+
+    <h4>2. switchMap</h4>
+
+    <p>
+        <code>switchMap</code> switches to a new inner Observable whenever a new value
+        is emitted and cancels the previous one. This makes it perfect for search
+        inputs or scenarios where only the latest result matters.
+    </p>
+
+    <ul>
+        <li>Cancels previous inner subscriptions.</li>
+        <li>Ensures only the latest emission is processed.</li>
+        <li>Commonly used for live search/autocomplete.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="switchMapExample"></code>
+</pre>
+
+    <h4>3. concatMap</h4>
+
+    <p>
+        <code>concatMap</code> queues inner Observables and executes them one after
+        another in order. It ensures sequential processing and preserves order.
+    </p>
+
+    <ul>
+        <li>Processes tasks sequentially.</li>
+        <li>Maintains execution order.</li>
+        <li>Useful when order matters (e.g., saving data step-by-step).</li>
+    </ul>
+
+    <pre>
+<code [textContent]="concatMapExample"></code>
+</pre>
+
+    <h4>4. exhaustMap</h4>
+
+    <p>
+        <code>exhaustMap</code> ignores new emissions while a current inner Observable
+        is active. It is useful when you want to prevent repeated triggers such as
+        multiple button clicks.
+    </p>
+
+    <ul>
+        <li>Ignores new emissions until current completes.</li>
+        <li>Prevents duplicate requests.</li>
+        <li>Useful for login or form submission actions.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="exhaustMapExample"></code>
+</pre>
+
+    <h3>Combination Operators</h3>
+
+    <p>
+        Combination operators merge multiple Observables into a single stream,
+        allowing developers to coordinate data from different sources.
+    </p>
+
+    <h4>5. combineLatest</h4>
+
+    <p>
+        <code>combineLatest</code> emits values whenever any input Observable emits,
+        but only after all Observables have emitted at least once. It combines the
+        latest values from each stream.
+    </p>
+
+    <ul>
+        <li>Emits whenever any source emits.</li>
+        <li>Uses latest values from all sources.</li>
+        <li>Useful for combining form inputs or UI state.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="combineLatestExample"></code>
+</pre>
+
+    <h4>6. forkJoin</h4>
+
+    <p>
+        <code>forkJoin</code> waits for all Observables to complete and then emits a
+        single combined result. It behaves similarly to <code>Promise.all()</code>.
+    </p>
+
+    <ul>
+        <li>Waits for all observables to complete.</li>
+        <li>Emits once with final values.</li>
+        <li>Ideal for loading multiple API calls together.</li>
+    </ul>
+
+    <pre>
+<code [textContent]="forkJoinExample"></code>
+</pre>
+
+    <h3>When to Use Each Operator</h3>
+
+    <ul>
+        <li><strong>mergeMap:</strong> Parallel requests or independent async tasks.</li>
+        <li><strong>switchMap:</strong> Latest-only operations like search inputs.</li>
+        <li><strong>concatMap:</strong> Sequential processing where order matters.</li>
+        <li><strong>exhaustMap:</strong> Ignore repeated triggers during execution.</li>
+        <li><strong>combineLatest:</strong> Combine latest values from multiple streams.</li>
+        <li><strong>forkJoin:</strong> Wait for all tasks to finish before continuing.</li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        RxJS mapping and combination operators provide powerful tools for handling
+        complex asynchronous workflows in Angular applications. Choosing the right
+        operator depends on how you want to manage concurrency, ordering, and data
+        combination. Mastering these operators helps developers build efficient,
+        scalable, and reactive applications.
+    </p>
+
+
+</app-topic-template>

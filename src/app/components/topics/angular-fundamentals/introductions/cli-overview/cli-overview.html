@@ -1,0 +1,131 @@
+<!-- angular-cli-installation.component.html -->
+<app-topic-template
+  [title]="content.title"
+  [tags]="content.tags"
+  [paragraphs]="content.paragraphs"
+  [sections]="content.sections"
+  [codeExamples]="content.codeExamples"
+  [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints"
+>
+  <p>
+    The Angular CLI (Command Line Interface) is your best friend when building
+    Angular applications. It handles the boring setup work so you can focus on
+    writing code.
+  </p>
+
+  <h3>📦 What You Get</h3>
+  <ul>
+    <li>
+      <strong>Project Generator:</strong> Creates apps with proper structure
+    </li>
+    <li>
+      <strong>File Creator:</strong> Generates components, services, and more
+    </li>
+    <li><strong>Development Server:</strong> Live reload as you code</li>
+    <li><strong>Build Tool:</strong> Optimizes for production</li>
+    <li><strong>Testing Setup:</strong> Ready-to-use testing framework</li>
+  </ul>
+
+  <h3>🚀 Getting Started</h3>
+
+  <h4>Step 1: Install</h4>
+  <pre><code>npm install -g @angular/cli</code></pre>
+
+  <h4>Step 2: Check</h4>
+  <pre><code>ng version</code></pre>
+
+  <h4>Step 3: Create</h4>
+  <pre><code>ng new my-app</code></pre>
+
+  <h4>Step 4: Run</h4>
+  <pre><code>cd my-app
+ng serve --open</code></pre>
+
+  <h3>🎯 Most Used Commands</h3>
+  <table>
+    <tr>
+      <th>Command</th>
+      <th>What It Does</th>
+      <th>Short Version</th>
+    </tr>
+    <tr>
+      <td><code>ng serve</code></td>
+      <td>Start development server</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td><code>ng generate component</code></td>
+      <td>Create new component</td>
+      <td><code>ng g c</code></td>
+    </tr>
+    <tr>
+      <td><code>ng generate service</code></td>
+      <td>Create new service</td>
+      <td><code>ng g s</code></td>
+    </tr>
+    <tr>
+      <td><code>ng build</code></td>
+      <td>Build for production</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td><code>ng test</code></td>
+      <td>Run tests</td>
+      <td>-</td>
+    </tr>
+  </table>
+
+  <h3>💡 Tips & Tricks</h3>
+  <ul>
+    <li>Use <code>--dry-run</code> to see what will be created</li>
+    <li>Use <code>--skip-tests</code> to skip test files</li>
+    <li>Update regularly: <code>npm update -g @angular/cli</code></li>
+    <li>Use <code>ng add</code> to add libraries like PWA or Material</li>
+    <li>Run <code>ng lint</code> before committing code</li>
+  </ul>
+
+  <h3>⚡ Quick Examples</h3>
+
+  <h4>Create a component with routing</h4>
+  <pre><code>ng g c dashboard --module=app</code></pre>
+
+  <h4>Add Angular Material</h4>
+  <pre><code>ng add @angular/material</code></pre>
+
+  <h4>Build for production</h4>
+  <pre><code>ng build --prod</code></pre>
+
+  <h3>🎨 Project Structure Created by CLI</h3>
+  <pre><code>
+my-app/
+├── src/                    # Source code
+│   ├── app/               # Your application
+│   │   ├── app.component.ts
+│   │   ├── app.module.ts
+│   │   └── ...
+│   ├── assets/            # Images, fonts
+│   └── index.html         # Main HTML file
+├── angular.json          # Configuration
+├── package.json          # Dependencies
+└── tsconfig.json         # TypeScript config
+  </code></pre>
+
+  <h3>❓ Common Questions</h3>
+
+  <h4>Q: Do I need to install Angular CLI?</h4>
+  <p><strong>A: Yes!</strong> It's the standard way to work with Angular.</p>
+
+  <h4>Q: Can I use it with existing projects?</h4>
+  <p>
+    <strong>A: Yes!</strong> Just run CLI commands inside your project folder.
+  </p>
+
+  <h4>Q: Is it only for beginners?</h4>
+  <p><strong>A: No!</strong> Even experienced developers use it daily.</p>
+
+  <p>
+    <strong>Remember:</strong> The Angular CLI follows best practices
+    automatically. It ensures your projects are set up correctly from day one.
+  </p>
+</app-topic-template>

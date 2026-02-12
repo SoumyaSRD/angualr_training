@@ -1,0 +1,175 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <h3>Angular Services</h3>
+
+    <p>
+        Services are a fundamental concept in Angular used to organize and share
+        reusable business logic, data access functionality, and application-wide
+        features. Instead of placing complex logic inside components, Angular
+        encourages developers to move such logic into services. This promotes clean
+        architecture, improves maintainability, and allows multiple parts of an
+        application to reuse the same functionality efficiently.
+    </p>
+
+    <p>
+        A service in Angular is typically a class that contains methods and data
+        related to a specific feature or responsibility. Services are often used for
+        tasks such as communicating with APIs, managing state, handling authentication,
+        logging, or providing utility functions. Angular services are usually injected
+        into components or other services using Dependency Injection (DI), ensuring
+        that dependencies are managed automatically by the framework.
+    </p>
+
+    <h3>Why Use Services?</h3>
+
+    <ul>
+        <li>
+            <strong>Separation of Concerns:</strong> Keeps business logic separate from
+            UI components.
+        </li>
+        <li>
+            <strong>Code Reusability:</strong> Logic can be reused across multiple
+            components or modules.
+        </li>
+        <li>
+            <strong>Maintainability:</strong> Easier to update or modify centralized
+            logic.
+        </li>
+        <li>
+            <strong>Testability:</strong> Services can be independently tested or mocked.
+        </li>
+        <li>
+            <strong>State Management:</strong> Allows sharing data between components.
+        </li>
+    </ul>
+
+    <h3>Creating a Service</h3>
+
+    <p>
+        Angular provides a simple way to create services using the
+        <code>@Injectable()</code> decorator. This decorator marks the class as
+        available for dependency injection.
+    </p>
+
+    <pre>
+{{dataEg}}
+</pre>
+
+    <p>
+        The <code>providedIn: 'root'</code> option registers the service in the root
+        injector, meaning Angular creates a single shared instance (singleton) that
+        can be used throughout the application.
+    </p>
+
+    <h3>Using a Service in a Component</h3>
+
+    <p>
+        Services are typically injected into components through the constructor.
+        Angular automatically provides the service instance when the component is
+        created.
+    </p>
+
+    <pre>
+{{dataEg2}}
+</pre>
+
+    <h3>Common Use Cases for Services</h3>
+
+    <ul>
+        <li>
+            API communication using HTTP requests.
+        </li>
+        <li>
+            Authentication and authorization logic.
+        </li>
+        <li>
+            Data sharing between unrelated components.
+        </li>
+        <li>
+            State management and caching.
+        </li>
+        <li>
+            Utility or helper functions.
+        </li>
+        <li>
+            Logging, analytics, and error handling.
+        </li>
+    </ul>
+
+    <h3>Service Scope and Providers</h3>
+
+    <p>
+        Angular allows services to be scoped at different levels depending on how
+        they are provided.
+    </p>
+
+    <ul>
+        <li>
+            <strong>Root Provider:</strong> Registered globally using
+            <code>providedIn: 'root'</code>. Creates a singleton shared across the app.
+        </li>
+        <li>
+            <strong>Component Provider:</strong> Defined in a component's
+            <code>providers</code> array, creating a new instance for that component
+            tree.
+        </li>
+        <li>
+            <strong>Module Provider:</strong> Used in NgModule-based applications.
+        </li>
+    </ul>
+
+    <h3>Service Communication and State Sharing</h3>
+
+    <p>
+        Services are often used as a central place to manage shared state. For example,
+        a service can store data and expose methods or Observables that multiple
+        components subscribe to. This avoids direct component-to-component
+        communication and makes the application architecture more scalable.
+    </p>
+
+    <h3>Modern Angular Services (Standalone Architecture)</h3>
+
+    <p>
+        In modern Angular applications using standalone components, services are still
+        provided through dependency injection. Angular also introduced the
+        <code>inject()</code> function, which allows services to be injected without
+        using constructors, especially useful in signals, functional guards, or
+        factory functions.
+    </p>
+
+    <pre ngNonBindable>
+const dataService = inject(DataService);
+</pre>
+
+    <h3>Best Practices for Services</h3>
+
+    <ul>
+        <li>
+            Keep services focused on a single responsibility.
+        </li>
+        <li>
+            Avoid placing UI logic inside services.
+        </li>
+        <li>
+            Use services to handle API calls instead of components.
+        </li>
+        <li>
+            Prefer root-level services unless scoped instances are required.
+        </li>
+        <li>
+            Make services reusable and loosely coupled.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        Angular services play a crucial role in building scalable and maintainable
+        applications. By separating logic from components and using dependency
+        injection, services help create clean architecture, reusable code, and better
+        testable applications. Understanding how to design and use services effectively
+        is essential for mastering Angular development.
+    </p>
+
+</app-topic-template>

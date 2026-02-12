@@ -1,0 +1,75 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <p>
+        Angular applications can be built using either traditional NgModule-based
+        architecture or the newer standalone component approach. NgModules were
+        originally designed to organize components, directives, pipes, and services
+        into cohesive units. Standalone components, introduced in Angular 14 and
+        becoming the default in Angular 17+, simplify this architecture by allowing
+        components to exist independently without requiring NgModule declarations.
+    </p>
+
+    <p>
+        The module-based approach focuses on grouping related functionality into
+        structured modules, which helps with large-scale organization but often
+        introduces additional boilerplate and complexity. In contrast, standalone
+        components declare their own dependencies directly using the
+        <code>imports</code> property, making them more self-contained and easier to
+        manage. Both approaches can coexist, and developers can choose based on
+        project requirements or gradually migrate toward standalone architecture.
+    </p>
+
+    <h3>Module vs Standalone Components</h3>
+    <ul>
+        <li>
+            <strong>Structure:</strong> NgModules require components to be declared
+            inside a module, while standalone components operate independently.
+        </li>
+        <li>
+            <strong>Boilerplate:</strong> Module-based architecture involves additional
+            configuration files; standalone reduces setup complexity.
+        </li>
+        <li>
+            <strong>Dependency Management:</strong> NgModules manage shared dependencies
+            centrally, whereas standalone components define imports locally.
+        </li>
+        <li>
+            <strong>Lazy Loading:</strong> Modules traditionally handle lazy loading;
+            standalone components enable direct lazy loading via router configuration.
+        </li>
+        <li>
+            <strong>Learning Curve:</strong> NgModules introduce extra concepts for new
+            developers; standalone offers a simpler mental model.
+        </li>
+        <li>
+            <strong>Flexibility:</strong> Standalone promotes modular, reusable, and
+            composable design patterns.
+        </li>
+    </ul>
+
+    <h3>When to Use Each Approach</h3>
+    <ul>
+        <li>
+            <strong>Use NgModules:</strong> When working with legacy applications or
+            large teams already structured around module architecture.
+        </li>
+        <li>
+            <strong>Use Standalone Components:</strong> For new projects, modern Angular
+            best practices, and simpler project setup.
+        </li>
+        <li>
+            <strong>Hybrid Approach:</strong> Angular supports mixing both approaches,
+            allowing gradual migration without rewriting existing features.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+    <p>
+        While NgModules remain a valid organizational tool, standalone components
+        represent Angular's modern direction by reducing complexity and improving
+        developer experience. Understanding both approaches helps developers maintain
+        legacy systems while adopting newer, more efficient patterns.
+    </p>
+
+</app-topic-template>

@@ -1,0 +1,79 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+  [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints">
+  <p>
+    Angular Modules (NgModules) are a fundamental concept used to organize an
+    application into cohesive blocks of functionality. They help group related
+    components, directives, pipes, and services together, making large
+    applications easier to manage, maintain, and scale. Although standalone
+    components are now recommended in modern Angular, understanding module types
+    remains important, especially when working with existing applications.
+  </p>
+
+  <p>
+    Angular applications commonly use different types of modules such as Root,
+    Feature, Shared, and Core modules. Each module type serves a specific purpose
+    in structuring the application and promoting separation of concerns and code
+    reusability.
+  </p>
+
+  <h3>Types of Angular Modules</h3>
+  <ul>
+    <li>
+      <strong>Root Module (AppModule):</strong> The main entry point of the
+      application. It bootstraps the root component and imports essential modules
+      required to start the app.
+    </li>
+    <li>
+      <strong>Feature Modules:</strong> Modules designed for specific features or
+      sections of the application (e.g., user, admin, dashboard). They help keep
+      functionality isolated and support lazy loading.
+    </li>
+    <li>
+      <strong>Shared Module:</strong> Contains reusable components, directives,
+      and pipes that are used across multiple feature modules. It promotes code
+      reuse and reduces duplication.
+    </li>
+    <li>
+      <strong>Core Module:</strong> Holds singleton services, global components,
+      and application-wide functionality such as authentication, interceptors, or
+      configuration services. Typically imported only once in the root module.
+    </li>
+  </ul>
+
+  <h3>Benefits of Using Angular Modules</h3>
+  <ul>
+    <li>
+      <strong>Better Organization:</strong> Helps structure large applications
+      into logical units
+    </li>
+    <li>
+      <strong>Code Reusability:</strong> Shared functionality can be reused across
+      modules
+    </li>
+    <li>
+      <strong>Lazy Loading Support:</strong> Feature modules can be loaded on
+      demand
+    </li>
+    <li>
+      <strong>Separation of Concerns:</strong> Clear boundaries between features
+      and shared logic
+    </li>
+    <li>
+      <strong>Maintainability:</strong> Easier to maintain and scale as the
+      application grows
+    </li>
+    <li>
+      <strong>Structured Dependency Management:</strong> Helps manage providers
+      and dependencies effectively
+    </li>
+  </ul>
+
+  <h3>Modern Considerations</h3>
+  <p>
+    While NgModules remain relevant, modern Angular encourages the use of
+    standalone components and APIs to reduce complexity. However, module-based
+    architecture is still widely used and can coexist with standalone approaches
+    during migration or in legacy applications.
+  </p>
+</app-topic-template>

@@ -1,0 +1,48 @@
+<app-topic-template
+  [title]="title"
+  [tags]="tags"
+  [codeExamples]="codeExamples"
+  [keyPoints]="keyPoints"
+>
+  <p>
+    Understanding how browsers work is fundamental for web developers. Modern
+    browsers are complex applications that parse HTML, CSS, and JavaScript to
+    render web pages. The browser engine performs multiple steps to transform
+    code into the visual pages users interact with.
+  </p>
+
+  <p>
+    The browser's main components include the User Interface, Browser Engine,
+    Rendering Engine, Networking, JavaScript Interpreter, UI Backend, and Data
+    Storage. When you navigate to a URL, the browser initiates a complex process
+    involving DNS lookup, TCP connection, HTTP request/response, and finally
+    rendering the content.
+  </p>
+
+  <h3>The Rendering Process</h3>
+  <p>
+    The rendering engine follows a critical path to display content. First, it
+    parses HTML to construct the DOM (Document Object Model) tree.
+    Simultaneously, it parses CSS to build the CSSOM (CSS Object Model). These
+    two trees are combined to create the Render Tree, which contains only the
+    nodes required to render the page with their computed styles.
+  </p>
+
+  <p>
+    After the Render Tree is constructed, the browser performs Layout (also
+    called Reflow) to calculate the exact position and size of each element.
+    Finally, the Paint step converts the render tree into actual pixels on the
+    screen. Modern browsers also use GPU acceleration for certain operations to
+    improve performance.
+  </p>
+
+  <h3>Critical Rendering Path</h3>
+  <ol>
+    <li><strong>DOM Construction:</strong> Parse HTML into a tree of nodes</li>
+    <li><strong>CSSOM Construction:</strong> Parse CSS into style rules</li>
+    <li><strong>Render Tree:</strong> Combine DOM and CSSOM</li>
+    <li><strong>Layout:</strong> Calculate positions and dimensions</li>
+    <li><strong>Paint:</strong> Convert to pixels on screen</li>
+    <li><strong>Composite:</strong> Layer composition for final display</li>
+  </ol>
+</app-topic-template>

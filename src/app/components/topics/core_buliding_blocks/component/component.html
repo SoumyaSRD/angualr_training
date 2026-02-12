@@ -1,0 +1,135 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>Component Lifecycle</h3>
+
+    <p>
+        The Angular component lifecycle refers to the sequence of events that occur
+        from the creation of a component to its destruction. Angular provides
+        lifecycle hooks that allow developers to tap into specific moments during
+        this process to perform initialization, respond to data changes, manage
+        updates, or clean up resources.
+    </p>
+
+    <p>
+        Lifecycle hooks are implemented as methods inside a component class. They
+        help manage logic such as fetching data, reacting to input changes, updating
+        the view, and releasing resources when the component is destroyed.
+    </p>
+
+    <h4>Common Lifecycle Hooks</h4>
+    <ul>
+        <li>
+            <strong>ngOnChanges:</strong> Called when input properties change.
+        </li>
+        <li>
+            <strong>ngOnInit:</strong> Runs once after component initialization; ideal
+            for fetching initial data.
+        </li>
+        <li>
+            <strong>ngDoCheck:</strong> Custom change detection logic.
+        </li>
+        <li>
+            <strong>ngAfterContentInit:</strong> Called after projected content is
+            initialized.
+        </li>
+        <li>
+            <strong>ngAfterViewInit:</strong> Executes after component view and child
+            views are initialized.
+        </li>
+        <li>
+            <strong>ngOnDestroy:</strong> Used for cleanup such as unsubscribing from
+            observables or removing event listeners.
+        </li>
+    </ul>
+
+    <h3>Change Detection</h3>
+
+    <p>
+        Change detection is Angular's mechanism for keeping the UI synchronized with
+        the application state. Whenever data changes, Angular checks components and
+        updates the DOM automatically to reflect the latest values.
+    </p>
+
+    <p>
+        Angular uses a tree-based change detection system that runs when events such
+        as user interactions, HTTP responses, timers, or asynchronous operations
+        occur. Developers can optimize performance by controlling change detection
+        strategies.
+    </p>
+
+    <h4>Change Detection Strategies</h4>
+    <ul>
+        <li>
+            <strong>Default Strategy:</strong> Angular checks all components whenever
+            change detection runs.
+        </li>
+        <li>
+            <strong>OnPush Strategy:</strong> Angular checks the component only when
+            input references change or specific triggers occur, improving performance.
+        </li>
+    </ul>
+
+    <h3>Smart vs Dumb Components</h3>
+
+    <p>
+        Smart and dumb components (also called container and presentational
+        components) represent a design pattern used to improve maintainability and
+        separation of concerns in Angular applications.
+    </p>
+
+    <h4>Smart Components (Container Components)</h4>
+    <ul>
+        <li>
+            Responsible for business logic, state management, and data fetching.
+        </li>
+        <li>
+            Communicate with services and handle application logic.
+        </li>
+        <li>
+            Pass data down to child components through inputs.
+        </li>
+        <li>
+            Handle events emitted by child components.
+        </li>
+    </ul>
+
+    <h4>Dumb Components (Presentational Components)</h4>
+    <ul>
+        <li>
+            Focus only on displaying data and handling UI interactions.
+        </li>
+        <li>
+            Receive data via <code>@Input()</code> and emit events using
+            <code>@Output()</code>.
+        </li>
+        <li>
+            Contain minimal or no business logic.
+        </li>
+        <li>
+            Highly reusable and easier to test.
+        </li>
+    </ul>
+
+    <h3>Benefits of Using Smart vs Dumb Pattern</h3>
+    <ul>
+        <li>
+            <strong>Separation of Concerns:</strong> Logic and UI responsibilities are
+            clearly divided.
+        </li>
+        <li>
+            <strong>Reusability:</strong> Presentational components can be reused across
+            different contexts.
+        </li>
+        <li>
+            <strong>Better Testing:</strong> Smaller, focused components are easier to
+            test.
+        </li>
+        <li>
+            <strong>Maintainability:</strong> Easier to scale and manage large
+            applications.
+        </li>
+    </ul>
+
+</app-topic-template>

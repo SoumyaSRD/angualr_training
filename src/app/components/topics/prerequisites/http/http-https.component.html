@@ -1,0 +1,46 @@
+<app-topic-template
+  [title]="title"
+  [tags]="tags"
+  [codeExamples]="codeExamples"
+  [keyPoints]="keyPoints"
+>
+  <p>
+    HTTP (HyperText Transfer Protocol) is the foundation of data communication
+    on the web. It's an application-layer protocol that defines how messages are
+    formatted and transmitted between web browsers and servers. HTTP follows a
+    request-response model where clients send requests and servers return
+    responses.
+  </p>
+
+  <p>
+    HTTPS (HTTP Secure) is the secure version of HTTP, using TLS/SSL encryption
+    to protect data in transit. All modern web applications should use HTTPS to
+    prevent man-in-the-middle attacks, protect user privacy, and meet security
+    best practices. Browsers now mark HTTP sites as "Not Secure" to encourage
+    HTTPS adoption.
+  </p>
+
+  <h3>HTTP Methods</h3>
+  <ul>
+    <li>
+      <strong>GET:</strong> Retrieve data from server (idempotent, cacheable)
+    </li>
+    <li><strong>POST:</strong> Submit data to create new resources</li>
+    <li><strong>PUT:</strong> Update existing resources (full replacement)</li>
+    <li><strong>PATCH:</strong> Partial update of resources</li>
+    <li><strong>DELETE:</strong> Remove resources from server</li>
+    <li>
+      <strong>OPTIONS:</strong> Describe communication options (used in CORS)
+    </li>
+  </ul>
+
+  <h3>Status Codes</h3>
+  <p>
+    HTTP responses include status codes indicating the result.
+    <strong>2xx</strong> codes indicate success (200 OK, 201 Created).
+    <strong>3xx</strong> codes are redirects (301 Moved Permanently).
+    <strong>4xx</strong> codes indicate client errors (404 Not Found, 400 Bad
+    Request). <strong>5xx</strong> codes indicate server errors (500 Internal
+    Server Error, 503 Service Unavailable).
+  </p>
+</app-topic-template>

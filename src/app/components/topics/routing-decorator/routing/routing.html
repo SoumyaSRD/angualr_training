@@ -1,0 +1,189 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+    <h3>Routing & Navigation in Angular</h3>
+
+    <p>
+        Routing and navigation are essential features in Angular that enable the
+        creation of Single Page Applications (SPAs). Instead of reloading the entire
+        page when navigating between views, Angular dynamically updates the content
+        within the application using its built-in Router. This provides faster
+        navigation, better performance, and a smoother user experience.
+    </p>
+
+    <p>
+        Angular Router allows developers to map URLs to specific components, manage
+        application states, enable lazy loading, handle route guards for security, and
+        control navigation programmatically. It plays a crucial role in structuring
+        large applications by dividing them into multiple views or pages.
+    </p>
+
+    <h3>Key Concepts of Angular Routing</h3>
+
+    <ul>
+        <li>
+            <strong>Routes:</strong> Define mappings between URL paths and components.
+        </li>
+        <li>
+            <strong>Router Outlet:</strong> Placeholder directive where routed
+            components are displayed.
+        </li>
+        <li>
+            <strong>RouterLink:</strong> Directive used to navigate between routes.
+        </li>
+        <li>
+            <strong>Navigation:</strong> Programmatic or declarative movement between
+            views.
+        </li>
+        <li>
+            <strong>Route Parameters:</strong> Dynamic values passed through URLs.
+        </li>
+    </ul>
+
+    <h3>Basic Routing Setup</h3>
+
+    <p>
+        In modern Angular (standalone architecture), routes are typically defined in
+        a separate routes configuration file. Each route specifies a path and the
+        component that should be displayed when that path is accessed.
+    </p>
+
+    <pre>
+{{dataRoutingEg}}
+</pre>
+
+    <h3>Router Outlet</h3>
+
+    <p>
+        The <code>&lt;router-outlet&gt;</code> directive acts as a dynamic container
+        where Angular renders the component associated with the active route.
+    </p>
+
+    <pre>
+&lt;router-outlet&gt;&lt;/router-outlet&gt;
+</pre>
+
+    <h3>Navigation Using RouterLink</h3>
+
+    <p>
+        Angular provides the <code>routerLink</code> directive for declarative
+        navigation. It allows users to navigate between routes without reloading the
+        page.
+    </p>
+
+    <pre>
+&lt;a routerLink="/about"&gt;Go to About&lt;/a&gt;
+</pre>
+
+    <h3>Programmatic Navigation</h3>
+
+    <p>
+        Developers can navigate using the Router service, which is useful when
+        navigation depends on logic or events such as form submissions.
+    </p>
+
+    <pre>
+{{dataNavEg}}
+</pre>
+
+    <h3>Route Parameters</h3>
+
+    <p>
+        Route parameters allow dynamic data to be passed through URLs. Components can
+        access these parameters using the ActivatedRoute service.
+    </p>
+
+    <pre>
+{{dataParamEg}}
+</pre>
+
+    <h3>Child Routes and Nested Routing</h3>
+
+    <p>
+        Angular supports nested routes, allowing complex layouts with multiple router
+        outlets. Child routes help organize related views under a parent route.
+    </p>
+
+    <pre>
+        {{dataEg}}
+
+</pre>
+
+    <h3>Lazy Loading Routes</h3>
+
+    <p>
+        Lazy loading improves performance by loading feature modules or standalone
+        components only when required. This reduces initial bundle size and speeds up
+        application startup.
+    </p>
+
+    <pre>
+{{dataLazyEg}}
+</pre>
+
+    <h3>Route Guards</h3>
+
+    <p>
+        Route guards control access to routes based on conditions such as
+        authentication or permissions. Angular provides several guard types:
+    </p>
+
+    <ul>
+        <li><strong>CanActivate:</strong> Prevents unauthorized access.</li>
+        <li><strong>CanDeactivate:</strong> Prevents leaving a route.</li>
+        <li><strong>Resolve:</strong> Fetches data before navigation.</li>
+        <li><strong>CanLoad:</strong> Controls lazy-loaded routes.</li>
+    </ul>
+
+    <h3>Navigation Events</h3>
+
+    <p>
+        Angular Router emits events during navigation such as start, end, cancel, or
+        error events. Developers can subscribe to these events for logging, loading
+        indicators, or analytics.
+    </p>
+
+    <h3>Modern Routing (Standalone Angular)</h3>
+
+    <p>
+        Modern Angular applications use <code>provideRouter()</code> during
+        application bootstrap instead of module-based routing. This aligns with the
+        standalone architecture and reduces boilerplate.
+    </p>
+
+    <pre>
+<!-- bootstrapApplication(AppComponent, {
+  providers: [provideRouter(routes)]
+}); -->
+</pre>
+
+    <h3>Best Practices for Routing</h3>
+
+    <ul>
+        <li>
+            Use lazy loading for large feature areas.
+        </li>
+        <li>
+            Organize routes logically to improve maintainability.
+        </li>
+        <li>
+            Protect sensitive routes using guards.
+        </li>
+        <li>
+            Use route parameters instead of global state when possible.
+        </li>
+        <li>
+            Keep route configuration simple and readable.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        Angular Routing enables efficient navigation and dynamic view rendering in
+        single-page applications. By mapping URLs to components, supporting lazy
+        loading, and providing advanced navigation features, Angular Router helps
+        developers build scalable, performant, and user-friendly applications.
+    </p>
+
+</app-topic-template>

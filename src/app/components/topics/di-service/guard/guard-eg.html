@@ -1,0 +1,158 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>Route Guards in Angular</h3>
+
+    <p>
+        Route Guards are a powerful feature of Angular Router that allow developers
+        to control navigation within an application. They help determine whether a
+        user can access a route, leave a route, or load specific modules based on
+        certain conditions such as authentication, permissions, or unsaved changes.
+        Guards act as checkpoints during the routing process and enhance both
+        application security and user experience.
+    </p>
+
+    <p>
+        Angular applications often require restrictions such as allowing only logged-in
+        users to access certain pages or preventing navigation away from a form with
+        unsaved data. Route Guards provide a structured and reusable way to implement
+        such logic.
+    </p>
+
+    <h3>Why Use Route Guards?</h3>
+
+    <ul>
+        <li>
+            <strong>Authentication Control:</strong> Restrict access to authenticated users.
+        </li>
+        <li>
+            <strong>Authorization Management:</strong> Allow access based on user roles or permissions.
+        </li>
+        <li>
+            <strong>Prevent Data Loss:</strong> Stop users from leaving pages with unsaved changes.
+        </li>
+        <li>
+            <strong>Lazy Loading Protection:</strong> Control whether feature modules should load.
+        </li>
+        <li>
+            <strong>Improved Navigation Logic:</strong> Centralize route-related conditions.
+        </li>
+    </ul>
+
+    <h3>Types of Route Guards</h3>
+
+    <p>
+        Angular provides several types of route guards, each designed for specific
+        navigation scenarios.
+    </p>
+
+    <h4>1. CanActivate</h4>
+
+    <p>
+        Determines whether a route can be activated. Commonly used for authentication
+        checks.
+    </p>
+
+    <pre>
+<code [textContent]="canActivateExample"></code>
+</pre>
+
+    <h4>2. CanDeactivate</h4>
+
+    <p>
+        Determines whether a user can leave a route. Often used to warn users about
+        unsaved form changes.
+    </p>
+
+    <pre>
+<code [textContent]="canDeactivateExample"></code>
+</pre>
+
+    <h4>3. CanLoad</h4>
+
+    <p>
+        Prevents lazy-loaded modules from loading unless certain conditions are met.
+        Useful for protecting large feature areas.
+    </p>
+
+    <pre>
+<code [textContent]="canLoadExample"></code>
+</pre>
+
+    <h4>4. Resolve</h4>
+
+    <p>
+        Fetches required data before navigating to a route. This ensures that the
+        component has the data ready when it loads.
+    </p>
+
+    <pre>
+<code [textContent]="resolveExample"></code>
+</pre>
+
+    <h3>Using Guards in Route Configuration</h3>
+
+    <p>
+        Guards are applied in route configuration by referencing the guard class or
+        function inside route definitions.
+    </p>
+
+    <pre>
+<code [textContent]="routeConfigExample"></code>
+</pre>
+
+    <h3>Modern Functional Guards (Angular Standalone)</h3>
+
+    <p>
+        Modern Angular versions introduced functional guards, which provide a simpler
+        and more lightweight alternative to class-based guards. Functional guards use
+        the <code>inject()</code> function to access dependencies directly.
+    </p>
+
+    <pre>
+<code [textContent]="functionalGuardExample"></code>
+</pre>
+
+    <h3>Guard Execution Flow</h3>
+
+    <ul>
+        <li>Angular starts navigation when a route change is triggered.</li>
+        <li>Guards run before loading or activating the route.</li>
+        <li>If a guard returns <code>true</code>, navigation continues.</li>
+        <li>If a guard returns <code>false</code>, navigation is cancelled.</li>
+        <li>Guards can also redirect users to other routes.</li>
+    </ul>
+
+    <h3>Best Practices for Route Guards</h3>
+
+    <ul>
+        <li>
+            Keep guards focused on navigation logic only.
+        </li>
+        <li>
+            Avoid placing heavy business logic inside guards.
+        </li>
+        <li>
+            Use services to handle authentication or permission checks.
+        </li>
+        <li>
+            Prefer functional guards for modern standalone applications.
+        </li>
+        <li>
+            Use Resolve guards to improve loading experience.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        Route Guards provide essential control over navigation in Angular
+        applications. By protecting routes, managing access, and ensuring data
+        readiness before navigation, guards help build secure, user-friendly, and
+        scalable applications. Understanding guard types and modern functional guard
+        patterns is key to building robust routing systems.
+    </p>
+
+
+</app-topic-template>

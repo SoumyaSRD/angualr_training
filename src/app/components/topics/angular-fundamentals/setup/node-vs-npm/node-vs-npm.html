@@ -1,0 +1,86 @@
+<app-topic-template
+  [title]="content.title"
+  [tags]="content.tags"
+  [paragraphs]="content.paragraphs"
+  [sections]="content.sections"
+  [codeExamples]="content.codeExamples"
+  [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints"
+>
+  <p>
+    Think of Node.js as the engine and NPM as the toolbox. Node.js runs
+    JavaScript on your computer, while NPM helps you get tools (packages) for
+    your projects.
+  </p>
+
+  <h3>Quick Comparison</h3>
+  <table>
+    <tr>
+      <th>Node.js</th>
+      <th>NPM</th>
+    </tr>
+    <tr>
+      <td>🚀 JavaScript runtime</td>
+      <td>📦 Package manager</td>
+    </tr>
+    <tr>
+      <td>🔧 Runs server-side code</td>
+      <td>📚 Installs libraries</td>
+    </tr>
+    <tr>
+      <td>💻 Like a car engine</td>
+      <td>🔧 Like a mechanic's toolbox</td>
+    </tr>
+    <tr>
+      <td>🏃‍♂️ Executes JavaScript files</td>
+      <td>📥 Downloads packages</td>
+    </tr>
+  </table>
+
+  <h3>Setup Steps</h3>
+
+  <h4>Step 1: Install Node.js (includes NPM)</h4>
+  <ol>
+    <li>Go to <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+    <li>Download the LTS version (recommended)</li>
+    <li>Install it like any other program</li>
+    <li>Open terminal/command prompt</li>
+  </ol>
+
+  <h4>Step 2: Check Installation</h4>
+  <pre><code>
+# Check Node.js version
+node --version
+
+# Check NPM version
+npm --version
+ 
+</code></pre>
+
+  <h3>Quick Tips</h3>
+  <ul>
+    <li>✅ <strong>Node.js comes with NPM</strong> - Install once, get both</li>
+    <li>✅ <strong>package.json</strong> - Your project's recipe card</li>
+    <li>
+      ✅ <strong>node_modules</strong> - Where packages live (don't upload
+      this!)
+    </li>
+    <li>✅ <strong>npm start</strong> - Common way to run your app</li>
+    <li>❌ <strong>Don't install globally</strong> unless necessary</li>
+    <li>❌ <strong>Don't edit node_modules</strong> directly</li>
+  </ul>
+
+  <h3>When You Need Them</h3>
+  <ul>
+    <li>🌐 <strong>Need a web server?</strong> → Node.js</li>
+    <li>🛠️ <strong>Need a tool/library?</strong> → NPM</li>
+    <li>🚀 <strong>Building APIs?</strong> → Both</li>
+    <li>🔧 <strong>Frontend build tools?</strong> → Both</li>
+  </ul>
+
+  <p>
+    <strong>Remember:</strong> Node.js lets JavaScript run outside the browser.
+    NPM helps you manage the tools you need. Together, they power modern web
+    development!
+  </p>
+</app-topic-template>

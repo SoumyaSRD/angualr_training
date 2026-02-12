@@ -1,0 +1,318 @@
+<div class="topic-container glass" #scrollTopRef>
+  <!-- Header Section -->
+  <header class="topic-header">
+    <div class="header-content">
+      <h1 class="topic-title gradient-text">{{ title() }}</h1>
+
+      @if (tags() && tags().length > 0) {
+      <nav class="tags-navigation" aria-label="Topic tags">
+        <mat-chip-set aria-label="Topic tags">
+          @for (tag of tags(); track tag) {
+          <mat-chip
+            class="topic-tag ripple"
+            [matTooltip]="'Jump to ' + tag + ' section'"
+            [class.clickable]="getTagLink(tag)"
+            (click)="scrollToTag(tag)"
+          >
+            <mat-icon>local_offer</mat-icon>
+            {{ tag }}
+          </mat-chip>
+          }
+        </mat-chip-set>
+      </nav>
+      }
+
+      <div class="topic-meta">
+        <span class="meta-item">
+          <mat-icon class="meta-icon">schedule</mat-icon>
+          <span>Read time: {{ calculateReadTime() }} min</span>
+        </span>
+        <span class="meta-item">
+          <mat-icon class="meta-icon">menu_book</mat-icon>
+          <span>{{ sections().length }} sections</span>
+        </span>
+        @if (codeExamples().length > 0) {
+        <span class="meta-item">
+          <mat-icon class="meta-icon">code</mat-icon>
+          <span>{{ codeExamples().length }} examples</span>
+        </span>
+        }
+      </div>
+    </div>
+  </header>
+
+  <mat-divider class="glass-divider"></mat-divider>
+
+  <!-- Introduction Section -->
+  <section class="introduction-section card-lift glass">
+    <div class="section-header intro-header">
+      <mat-icon class="section-icon">description</mat-icon>
+      <h2 class="gradient-text-primary">Introduction</h2>
+    </div>
+    <div class="intro-content">
+      <ng-content></ng-content>
+    </div>
+  </section>
+
+  <!-- Detailed Sections -->
+  @if (sections() && sections().length > 0) {
+  <section class="detailed-sections">
+    <div class="section-header">
+      <mat-icon class="section-icon">library_books</mat-icon>
+      <h2 class="gradient-text-primary">Detailed Explanation</h2>
+      <span class="section-count">{{ sections().length }} sections</span>
+    </div>
+
+    <div class="sections-grid">
+      @for (section of sections(); track section.heading; let idx = $index) {
+      <article
+        class="section-card-wrapper"
+        [id]="getSectionId(section, idx)"
+        [class.section-highlight]="isSectionHighlighted($any(section).heading)"
+      >
+        <mat-card class="section-card card-lift glass">
+          <div class="card-corner">
+            <span class="corner-number">{{ idx + 1 }}</span>
+          </div>
+
+          <mat-card-header>
+            <div class="section-number" mat-card-avatar>{{ idx + 1 }}</div>
+            <mat-card-title>{{ section.heading }}</mat-card-title>
+            <mat-card-subtitle>
+              Section {{ idx + 1 }} of {{ sections().length }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            @if (section.content) {
+            <div class="section-content">
+              <p>{{ section.content }}</p>
+            </div>
+            } @if (section.list && section.list.length > 0) {
+            <ul class="section-list">
+              @for (item of section.list; track item) {
+              <li>
+                <mat-icon class="list-icon">arrow_right_alt</mat-icon>
+                <span [innerHTML]="item"></span>
+              </li>
+              }
+            </ul>
+            } @if (section.additionalExplanation) {
+            <div class="additional-note glass">
+              <div class="note-header">
+                <mat-icon>info</mat-icon>
+                <span>Important Note</span>
+              </div>
+              <p>{{ section.additionalExplanation }}</p>
+            </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button class="btn-outline" (click)="scrollToSection()">
+              <mat-icon>arrow_upward</mat-icon>
+              Back to Top
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </article>
+      }
+    </div>
+  </section>
+  }
+
+  <!-- Code Examples -->
+  @if (codeExamples() && codeExamples().length > 0) {
+  <section class="code-examples-section">
+    <div class="section-header">
+      <mat-icon class="section-icon">terminal</mat-icon>
+      <h2 class="gradient-text-primary">Code Examples</h2>
+      <span class="section-count">{{ codeExamples().length }} examples</span>
+    </div>
+
+    <div class="code-examples-grid">
+      @for (example of codeExamples(); track example.title; let idx = $index) {
+      <mat-card class="code-card card-lift">
+        <div class="card-corner">
+          <mat-icon class="corner-icon">code</mat-icon>
+        </div>
+
+        <mat-card-header>
+          <div class="code-number" mat-card-avatar>
+            <mat-icon>code</mat-icon>
+          </div>
+          <mat-card-title>{{ example.title }}</mat-card-title>
+          @if (example.description) {
+          <mat-card-subtitle>{{ example.description }}</mat-card-subtitle>
+          }
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="code-toolbar glass">
+            <div class="toolbar-left">
+              <span class="language-badge">
+                <mat-icon>code_blocks</mat-icon>
+                {{ example.language || "text" }}
+              </span>
+              <span class="code-lines">
+                <mat-icon>format_list_numbered</mat-icon>
+                {{ countCodeLines(example.code) }} lines
+              </span>
+            </div>
+            <div class="toolbar-right">
+              <button
+                mat-icon-button
+                class="copy-button btn-glass"
+                matTooltip="Copy code"
+                (click)="copyCode(example.code,idx)"
+                [class.copied]="isCopied(idx)"
+              >
+                <mat-icon
+                  >{{ isCopied(idx) ? 'check' : 'content_copy' }}</mat-icon
+                >
+              </button>
+              <button
+                mat-icon-button
+                class="expand-button btn-glass"
+                matTooltip="Expand code"
+                (click)="toggleCodeExpansion(idx)"
+              >
+                <mat-icon
+                  >{{ isExpanded(idx) ? 'unfold_less' : 'unfold_more'
+                  }}</mat-icon
+                >
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="code-wrapper"
+            [class.expanded]="isExpanded(idx)"
+            [class.copied]="isCopied(idx)"
+          >
+            <pre
+              class="code-block"
+            ><code [class]="'language-' + (example.language || 'text')">{{ example.code }}</code></pre>
+          </div>
+
+          <!-- @if (example.notes) {
+          <div class="code-notes glass">
+            <mat-icon>notes</mat-icon>
+            <p>{{ example.notes }}</p>
+          </div>
+          } -->
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button class="btn-outline" (click)="executeCode(example)">
+            <mat-icon>play_arrow</mat-icon>
+            Try it
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      }
+    </div>
+  </section>
+  }
+
+  <!-- Best Practices -->
+  @if (bestPractices() && bestPractices().length > 0) {
+  <section class="best-practices-section">
+    <mat-card class="info-card best-practices-card card-lift glass">
+      <div class="card-corner success-corner">
+        <mat-icon class="corner-icon">verified</mat-icon>
+      </div>
+
+      <mat-card-header>
+        <div class="card-icon success-icon" mat-card-avatar>
+          <mat-icon>verified</mat-icon>
+        </div>
+        <mat-card-title class="gradient-text-success"
+          >Best Practices</mat-card-title
+        >
+        <mat-card-subtitle>Industry-recommended approaches</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <ul class="practices-list">
+          @for (practice of bestPractices(); track practice; let idx = $index) {
+          <li class="ripple">
+            <div class="practice-number">{{ idx + 1 }}</div>
+            <div class="practice-content">
+              <mat-icon class="practice-icon">check_circle</mat-icon>
+              <span>{{ practice }}</span>
+            </div>
+          </li>
+          }
+        </ul>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button
+          mat-button
+          class="btn-primary"
+          (click)="showBestPracticesTips()"
+        >
+          <mat-icon>tips_and_updates</mat-icon>
+          Learn More
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+  }
+
+  <!-- Key Takeaways -->
+  @if (keyPoints() && keyPoints().length > 0) {
+  <section class="key-points-section">
+    <mat-card class="info-card key-points-card card-lift glass">
+      <div class="card-corner primary-corner">
+        <mat-icon class="corner-icon">lightbulb</mat-icon>
+      </div>
+
+      <mat-card-header>
+        <div class="card-icon primary-icon" mat-card-avatar>
+          <mat-icon>lightbulb</mat-icon>
+        </div>
+        <mat-card-title class="gradient-text-primary"
+          >Key Takeaways</mat-card-title
+        >
+        <mat-card-subtitle>Essential points to remember</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <ul class="takeaways-list">
+          @for (point of keyPoints(); track point; let idx = $index) {
+          <li class="ripple">
+            <div class="takeaway-number">{{ idx + 1 }}</div>
+            <div class="takeaway-content">
+              <mat-icon class="takeaway-icon">star</mat-icon>
+              <span>{{ point }}</span>
+            </div>
+          </li>
+          }
+        </ul>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button class="btn-outline" (click)="downloadKeyPoints()">
+          <mat-icon>download</mat-icon>
+          Download Summary
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+  }
+
+  <!-- Progress & Navigation -->
+
+  <!-- Back to Top Button -->
+</div>
+<button
+  class="back-to-top"
+  mat-fab
+  matTooltip="Back to top"
+  (click)="scrollToSection()"
+  [class.visible]="true"
+>
+  <mat-icon>arrow_upward</mat-icon>
+</button>

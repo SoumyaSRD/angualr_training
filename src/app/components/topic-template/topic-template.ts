@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, inject, input, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -45,9 +45,17 @@ export class TopicTemplate {
   currentSectionIndex = signal(0);
 
   // REMOVE ['$event'] from here
+  constructor() {
+    effect(() => {
+      // This side effect runs whenever `this.count()` changes
+      console.log(`The current count is: ${this.title()}`);
+      if (this.title()) {
+        this.scrollToSection();
+      }
+    });
+  }
 
   onWindowScroll(event: any) {
-    console.log("scroll", event)
     this.scrolled.set(window.scrollY > 300);
 
     const sections = this.sections();

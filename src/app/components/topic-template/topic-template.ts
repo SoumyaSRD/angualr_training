@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ICodeExample } from '../../interfaces/code-example';
 import { ISection } from '../../interfaces/topic';
+import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-topic-template',
   standalone: true,
@@ -34,7 +35,7 @@ export class TopicTemplate {
   codeExamples = input<ICodeExample[]>([]);
   bestPractices = input<string[]>([]);
   keyPoints = input<string[]>([]);
-
+  themeService = inject(ThemeService);
   readonly targetElement = viewChild<ElementRef<HTMLDivElement>>('scrollTopRef');
   private snackBar = inject(MatSnackBar);
 

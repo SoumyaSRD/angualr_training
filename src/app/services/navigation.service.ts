@@ -182,6 +182,10 @@ export class NavigationService {
           title: "Interceptors",
           route: "/interceptor",
         },
+        {
+          title: "Http Client",
+          route: "/http-client",
+        },
         // { title: "Error Handling", route: "/rxjs/patterns/error-handling" },
         // {
         //   title: "Unsubscribing Strategies",

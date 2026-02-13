@@ -10,8 +10,11 @@
           @for (tag of tags(); track tag) {
           <mat-chip class="topic-tag ripple" [matTooltip]="'Jump to ' + tag + ' section'"
             [class.clickable]="getTagLink(tag)" (click)="scrollToTag(tag)">
-            <mat-icon>local_offer</mat-icon>
-            {{ tag }}
+            <a>
+              <mat-icon>local_offer</mat-icon>
+
+              {{ tag }}
+            </a>
           </mat-chip>
           }
         </mat-chip-set>
@@ -259,12 +262,15 @@
           }
         </ul>
       </mat-card-content>
-
       <mat-card-actions>
-        <button mat-button class="btn-outline" (click)="downloadKeyPoints()">
-          <mat-icon>download</mat-icon>
-          Download Summary
-        </button>
+        <a mat-button (click)="downloadKeyPoints()">
+          <p>
+            <mat-icon>
+              download
+            </mat-icon>
+            Download Summary
+          </p>
+        </a>
       </mat-card-actions>
     </mat-card>
   </section>

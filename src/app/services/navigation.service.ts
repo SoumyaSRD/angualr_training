@@ -178,6 +178,10 @@ export class NavigationService {
           title: "mergeMap, switchMap, concatMap, exhaustMap",
           route: "/rxjs/operators/flattening",
         },
+        {
+          title: "Interceptors",
+          route: "/interceptor",
+        },
         // { title: "Error Handling", route: "/rxjs/patterns/error-handling" },
         // {
         //   title: "Unsubscribing Strategies",

@@ -1,0 +1,124 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+    <h3>HTTP Interceptors in Angular</h3>
+
+    <p>
+        HTTP Interceptors are a powerful feature in Angular that allow developers to
+        intercept and modify HTTP requests and responses globally before they are
+        handled by the application. They act as middleware between the Angular
+        application and the backend server, making it possible to implement
+        cross-cutting concerns such as authentication, logging, error handling,
+        caching, and request transformation in a centralized way.
+    </p>
+
+    <p>
+        Instead of adding repetitive logic inside every HTTP request, interceptors
+        provide a clean and scalable approach by processing requests automatically.
+        This helps keep components and services clean while ensuring consistent
+        behavior across all API calls.
+    </p>
+
+    <h3>Why Use HTTP Interceptors?</h3>
+
+    <ul>
+        <li>
+            <strong>Authentication:</strong> Automatically attach tokens or headers to
+            outgoing requests.
+        </li>
+        <li>
+            <strong>Error Handling:</strong> Handle HTTP errors globally.
+        </li>
+        <li>
+            <strong>Logging:</strong> Monitor API requests and responses.
+        </li>
+        <li>
+            <strong>Request Transformation:</strong> Modify headers or request payloads.
+        </li>
+        <li>
+            <strong>Response Transformation:</strong> Process server responses centrally.
+        </li>
+        <li>
+            <strong>Loading Indicators:</strong> Show loaders during API calls.
+        </li>
+    </ul>
+
+    <h3>How HTTP Interceptors Work</h3>
+
+    <p>
+        Angular interceptors implement the <code>HttpInterceptor</code> interface.
+        Each interceptor receives the outgoing request and a handler that forwards
+        the request to the next interceptor or the backend server. Interceptors can
+        modify the request, handle the response, or even cancel the request.
+    </p>
+
+    <pre>
+<code [textContent]="interceptorExample"></code>
+</pre>
+
+    <h3>Registering an Interceptor (Standalone Angular)</h3>
+
+    <p>
+        In modern Angular applications using standalone APIs, interceptors are
+        registered using <code>provideHttpClient()</code> along with
+        <code>withInterceptors()</code>.
+    </p>
+
+    <pre>
+<code [textContent]="registerInterceptorExample"></code>
+</pre>
+
+    <h3>Interceptor Execution Flow</h3>
+
+    <ul>
+        <li>HTTP request is initiated.</li>
+        <li>Request passes through interceptors in order.</li>
+        <li>Interceptor modifies request or adds logic.</li>
+        <li>Request reaches backend server.</li>
+        <li>Response returns through interceptors in reverse order.</li>
+        <li>Application receives final response.</li>
+    </ul>
+
+    <h3>Common Use Cases</h3>
+
+    <ul>
+        <li>Adding Authorization tokens automatically.</li>
+        <li>Handling 401 unauthorized responses globally.</li>
+        <li>Retrying failed requests.</li>
+        <li>Global error notification handling.</li>
+        <li>Measuring API performance.</li>
+    </ul>
+
+    <h3>Best Practices for Using Interceptors</h3>
+
+    <ul>
+        <li>
+            Keep interceptors focused on a single responsibility.
+        </li>
+        <li>
+            Avoid placing business logic inside interceptors.
+        </li>
+        <li>
+            Clone requests before modifying since HTTP requests are immutable.
+        </li>
+        <li>
+            Use multiple small interceptors instead of one large interceptor.
+        </li>
+        <li>
+            Handle errors carefully using RxJS operators like <code>catchError</code>.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        HTTP Interceptors provide a centralized way to handle HTTP communication in
+        Angular applications. By allowing developers to modify requests and responses
+        globally, interceptors improve maintainability, reduce code duplication, and
+        simplify handling of cross-cutting concerns such as authentication and error
+        handling.
+    </p>
+
+
+</app-topic-template>

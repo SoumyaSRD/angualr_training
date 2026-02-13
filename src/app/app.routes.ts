@@ -24,6 +24,8 @@ import { ObservablePromise } from './components/topics/rxjs/observable-promise/o
 import { RxjsOperator } from './components/topics/rxjs/operator/rxjs-operator';
 import { RxjsSubject } from './components/topics/rxjs/subject/rxjs-subject';
 import { RxjsFlattening } from './components/topics/rxjs/rxjs-flattening/rxjs-flattening';
+import { NgInterceptor } from './components/topics/rxjs/interceptor/ng-interceptor';
+import { NgHttpClient } from './components/topics/rxjs/http-client/ng-httpclient';
 
 
 export const routes: Routes = [
@@ -104,6 +106,8 @@ export const routes: Routes = [
   { path: 'rxjs/core/subjects', component: RxjsSubject },
   { path: 'rxjs/operators/basic', component: RxjsOperator },
   { path: 'rxjs/operators/flattening', component: RxjsFlattening },
+  { path: 'interceptor', component: NgInterceptor },
+  { path: 'http-client', component: NgHttpClient },
   // { path: 'rxjs/patterns/error-handling', component: GenericTopicComponent },
   // { path: 'rxjs/patterns/unsubscribe', component: GenericTopicComponent },
 

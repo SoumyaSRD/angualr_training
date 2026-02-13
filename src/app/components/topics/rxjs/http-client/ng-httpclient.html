@@ -1,0 +1,145 @@
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+    [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+    [keyPoints]="content.keyPoints">
+
+
+    <h3>API Calls Using HttpClient in Angular</h3>
+
+    <p>
+        Angular provides the <code>HttpClient</code> module to handle communication
+        with backend servers through HTTP requests. It is part of the
+        <code>@angular/common/http</code> package and offers a modern, easy-to-use API
+        for performing CRUD operations such as GET, POST, PUT, PATCH, and DELETE.
+        HttpClient works seamlessly with RxJS Observables, enabling reactive data
+        handling and powerful asynchronous workflows.
+    </p>
+
+    <p>
+        Instead of using traditional browser APIs like <code>fetch()</code> or
+        <code>XMLHttpRequest</code>, Angular developers typically rely on HttpClient
+        because it provides features such as typed responses, interceptors, request
+        cancellation, error handling, and built-in JSON parsing.
+    </p>
+
+    <h3>Why Use HttpClient?</h3>
+
+    <ul>
+        <li>
+            <strong>Observable-Based:</strong> Integrates with RxJS for reactive data
+            handling.
+        </li>
+        <li>
+            <strong>Strong Typing:</strong> Supports TypeScript generics for typed API
+            responses.
+        </li>
+        <li>
+            <strong>Interceptors Support:</strong> Add global request/response logic.
+        </li>
+        <li>
+            <strong>Automatic JSON Parsing:</strong> Simplifies data handling.
+        </li>
+        <li>
+            <strong>Error Handling:</strong> Easily manage API errors using RxJS.
+        </li>
+    </ul>
+
+    <h3>Importing HttpClient (Standalone Angular)</h3>
+
+    <p>
+        In modern Angular applications using standalone APIs, HttpClient is registered
+        during application bootstrap.
+    </p>
+
+    <pre>
+<code [textContent]="httpImportExample"></code>
+</pre>
+
+    <h3>Injecting HttpClient into a Service</h3>
+
+    <p>
+        API calls are typically placed inside services instead of components to keep
+        business logic separated from UI logic.
+    </p>
+
+    <pre>
+<code [textContent]="serviceInjectionExample"></code>
+</pre>
+
+    <h3>Common HTTP Methods</h3>
+
+    <h4>GET Request (Fetch Data)</h4>
+
+    <pre>
+<code [textContent]="getExample"></code>
+</pre>
+
+    <h4>POST Request (Create Data)</h4>
+
+    <pre>
+<code [textContent]="postExample"></code>
+</pre>
+
+    <h4>PUT/PATCH Request (Update Data)</h4>
+
+    <pre>
+<code [textContent]="putExample"></code>
+</pre>
+
+    <h4>DELETE Request (Remove Data)</h4>
+
+    <pre>
+<code [textContent]="deleteExample"></code>
+</pre>
+
+    <h3>Handling Responses with Observables</h3>
+
+    <p>
+        HttpClient methods return Observables, allowing developers to subscribe to
+        responses and handle asynchronous data streams.
+    </p>
+
+    <pre>
+<code [textContent]="subscribeExample"></code>
+</pre>
+
+    <h3>Error Handling</h3>
+
+    <p>
+        Errors can be handled using RxJS operators such as
+        <code>catchError</code>, allowing centralized and structured error management.
+    </p>
+
+    <pre>
+<code [textContent]="errorHandlingExample"></code>
+</pre>
+
+    <h3>Best Practices for API Calls</h3>
+
+    <ul>
+        <li>
+            Use services to manage API logic instead of components.
+        </li>
+        <li>
+            Use TypeScript interfaces for strong typing.
+        </li>
+        <li>
+            Handle errors globally using interceptors.
+        </li>
+        <li>
+            Use RxJS operators to transform responses.
+        </li>
+        <li>
+            Avoid multiple subscriptions; prefer async pipe when possible.
+        </li>
+    </ul>
+
+    <h3>Summary</h3>
+
+    <p>
+        HttpClient provides a powerful and structured way to perform API calls in
+        Angular applications. By leveraging Observables, interceptors, and strong
+        typing, Angular developers can build scalable, maintainable, and reactive
+        data communication layers.
+    </p>
+
+</app-topic-template>

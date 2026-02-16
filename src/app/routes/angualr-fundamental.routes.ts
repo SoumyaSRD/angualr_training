@@ -6,11 +6,13 @@ import { ArchitectureOverview } from "../components/topics/angular-fundamentals/
 import { NodeVsNpm } from "../components/topics/angular-fundamentals/setup/node-vs-npm/node-vs-npm";
 import { AngularCliOverview } from "../components/topics/angular-fundamentals/introductions/cli-overview/cli-overview";
 import { AngularIstApp } from "../components/topics/angular-fundamentals/setup/angular-ist-app/angular-ist-app";
+import { authGuard } from "../guard/auth.guard";
 
 export const angularFundamentalRoutes: Routes = [
     {
         path: 'fundamentals',
         component: AngularFundamentals, // This component should have the <router-outlet>
+        canActivate: [authGuard],
         children: [
             {
                 path: '',

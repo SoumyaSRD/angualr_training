@@ -1,6 +1,6 @@
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { Component, HostListener, OnDestroy, ViewChild, computed, inject, signal } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -11,18 +11,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 import { NavigationService } from './services/navigation.service';
 import { ThemeService } from './services/theme.service';
+import { AuthService } from './services/auth.service';
+import { Login } from './components/auth/login/login';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     RouterLink,
     MatToolbarModule,
     MatSidenavModule,
@@ -34,7 +36,7 @@ import { ThemeService } from './services/theme.service';
     MatBadgeModule,
     MatDividerModule,
     MatMenuModule,
-    RouterLinkActive
+    RouterModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -43,12 +45,14 @@ export class App implements OnDestroy {
   @ViewChild('drawer') drawer!: MatSidenav;
 
   private destroy$ = new Subject<void>();
+  dialog = inject(MatDialog);
 
   // Injected services
   public navigationService = inject(NavigationService);
   public themeService = inject(ThemeService);
   private router = inject(Router);
   private breakpointObserver = inject(BreakpointObserver);
+  authService = inject(AuthService);
 
   // Signals
   isHandset = signal(false);
@@ -121,7 +125,7 @@ export class App implements OnDestroy {
     return completedRoutes.some(r => route.includes(r));
   }
   logout() {
-    localStorage.clear();
+    this.authService.logout();
   }
   isTopicExpanded(topic: any): boolean {
     return topic.subTopics.some((sub: any) => {
@@ -145,4 +149,14 @@ export class App implements OnDestroy {
     }
   }
 
+  login() {
+    const dialogRef = this.dialog.open(Login, {
+      width: '420px',
+      maxWidth: '90vw',
+      disableClose: false, // allows cancel (will redirect to home)
+      autoFocus: false,
+      // Optional: restore focus after close
+      restoreFocus: true,
+    });
+  }
 }

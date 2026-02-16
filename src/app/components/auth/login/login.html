@@ -1,0 +1,72 @@
+<!-- login-dialog.component.html (Updated) -->
+<mat-dialog-content class="login-dialog-content">
+    <div class="dialog-header">
+        <mat-icon class="header-icon">login</mat-icon>
+        <h2 mat-dialog-title class="dialog-title gradient-text-primary">Sign In</h2>
+        <p class="dialog-subtitle">Welcome back to Angular Professional Training</p>
+    </div>
+
+    <div class="form-container">
+        <div class="field-wrapper">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Username</mat-label>
+                <input matInput [value]="email()" (input)="onEmailInput($event)" (blur)="emailTouched.set(true)"
+                    placeholder="Enter your username" autocomplete="username" />
+            </mat-form-field>
+            @if (emailError() && emailTouched()) {
+            <div class="field-error">{{ emailError() }}</div>
+            }
+        </div>
+
+        <div class="field-wrapper">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword() ? 'password' : 'text'" [value]="password()"
+                    (input)="onPasswordInput($event)" (blur)="passwordTouched.set(true)"
+                    placeholder="Enter your password" autocomplete="current-password" />
+                <button mat-icon-button matSuffix (click)="onHidePasswordToggle()"
+                    [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="!hidePassword()"
+                    type="button">
+                    <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+            </mat-form-field>
+            @if (passwordError() && passwordTouched()) {
+            <div class="field-error">
+                <span>{{ passwordError() }}</span>
+            </div>
+            }
+        </div>
+
+        <div class="options-row">
+            <mat-checkbox [checked]="rememberMe()" (change)="rememberMe.set($event.checked)" color="primary">
+                Remember me
+            </mat-checkbox>
+
+            <a href="#" class="forgot-link" mat-dialog-close>Forgot password?</a>
+        </div>
+
+        @if (loginError()) {
+        <div class="global-error">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <span>{{ loginError() }}</span>
+        </div>
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-stroked-button (click)="cancel()" class="cancel-btn">
+        Cancel
+    </button>
+    <button mat-raised-button color="primary" [disabled]="!isFormValid() || isSubmitting()" (click)="login()"
+        class="login-btn">
+        <div class="login-btn-content">
+            @if (isSubmitting()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Signing in...</span>
+            } @else {
+            <span>Sign In</span>
+            }
+        </div>
+    </button>
+</mat-dialog-actions>

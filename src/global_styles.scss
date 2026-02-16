@@ -2378,3 +2378,28 @@ pre code {
     background: var(--text-disabled);
   }
 }
+
+/* Dark theme - Option 2: manual class toggle (replace .dark-theme with your actual class) */
+.dark-theme .mat-mdc-input-element,
+.dark-theme .mdc-text-field__input {
+  color: white !important;
+  caret-color: white !important;
+}
+
+.dark-theme .mat-mdc-input-element::placeholder,
+.dark-theme .mdc-text-field__input::placeholder {
+  color: white !important;
+  opacity: 0.5 !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-floating-label,
+.dark-theme .mat-mdc-form-field .mat-mdc-floating-label,
+.dark-theme .mat-mdc-form-field .mdc-floating-label--float-above {
+  color: white !important;
+  top: 25% !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-floating-label--focused {
+  color: white !important;
+  top: 0 !important;
+}

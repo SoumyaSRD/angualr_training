@@ -1,9 +1,16 @@
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnDestroy, ViewChild, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  ViewChild,
+  computed,
+  inject,
+} from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -11,14 +18,21 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, map, startWith } from 'rxjs';
 
-import { NavigationService } from './services/navigation.service';
-import { ThemeService } from './services/theme.service';
-import { AuthService } from './services/auth.service';
+import { AuthService, NavigationService, ThemeService } from '@app/core';
+import type { SubTopic, Topic } from '@app/core';
 import { Login } from './components/auth/login/login';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +40,8 @@ import { MatDialog } from '@angular/material/dialog';
   imports: [
     CommonModule,
     RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
@@ -36,118 +52,100 @@ import { MatDialog } from '@angular/material/dialog';
     MatBadgeModule,
     MatDividerModule,
     MatMenuModule,
-    RouterModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnDestroy {
+export class App {
   @ViewChild('drawer') drawer!: MatSidenav;
 
-  private destroy$ = new Subject<void>();
-  dialog = inject(MatDialog);
+  private readonly router = inject(Router);
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
-  // Injected services
-  public navigationService = inject(NavigationService);
-  public themeService = inject(ThemeService);
-  private router = inject(Router);
-  private breakpointObserver = inject(BreakpointObserver);
-  authService = inject(AuthService);
+  readonly navigationService = inject(NavigationService);
+  readonly themeService = inject(ThemeService);
+  readonly authService = inject(AuthService);
 
-  // Signals
-  isHandset = signal(false);
-  currentPageTitle = signal<string>('Dashboard');
+  /** Responsive: true when handset/tablet portrait. */
+  readonly isHandset = toSignal(
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait]).pipe(
+      map((result) => result.matches)
+    ),
+    { initialValue: false }
+  );
+
+  /** Current page title for breadcrumb. */
+  readonly currentPageTitle = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      startWith(null),
+      map(() => this.resolvePageTitle())
+    ),
+    { initialValue: this.resolvePageTitle() }
+  );
+
+  /** Icon color for toolbar (theme-aware). */
+  readonly toolbarIconColor = computed(() =>
+    this.themeService.isDarkTheme() ? '#ffffff' : '#000000'
+  );
 
   constructor() {
-    // Responsive detection
-    this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(result => this.isHandset.set(result.matches));
-
-    // Route change listener: update title and scroll to top
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updatePageTitle();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-    this.updatePageTitle();
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private resolvePageTitle(): string {
+    const url = this.router.url;
+    if (url === '/' || url === '/dashboard') return 'Dashboard';
+    for (const topic of this.navigationService.topics) {
+      const sub = topic.subTopics.find((s) => url.startsWith(s.route));
+      if (sub) return sub.title;
+      if (topic.subTopics.some((s) => url.includes(s.route))) return topic.title;
+    }
+    return 'Learning';
   }
 
-  // ─── Navigation / Drawer ────────────────────────────────────────
-  closeDrawerIfMobile() {
-    if (this.isHandset()) {
+  closeDrawerIfMobile(): void {
+    if (this.isHandset() && this.drawer?.opened) {
       this.drawer.close();
     }
   }
 
-
-  // ─── Page Title / Breadcrumb ────────────────────────────────────
-  private updatePageTitle() {
-    const url = this.router.url;
-
-    if (url === '/' || url === '/dashboard') {
-      this.currentPageTitle.set('Dashboard');
-      return;
-    }
-
-    for (const topic of this.navigationService.topics) {
-      const sub = topic.subTopics.find((s: any) => url.startsWith(s.route));
-      if (sub) {
-        this.currentPageTitle.set(sub.title);
-        return;
-      }
-      if (topic.subTopics.some((s: any) => url.includes(s.route))) {
-        this.currentPageTitle.set(topic.title);
-        return;
-      }
-    }
-
-    this.currentPageTitle.set('Learning');
-  }
   isCompleted(route: string): boolean {
     const completedRoutes = ['/basics', '/components', '/services'];
-    return completedRoutes.some(r => route.includes(r));
+    return completedRoutes.some((r) => route.includes(r));
   }
-  logout() {
+
+  isTopicExpanded(topic: Topic): boolean {
+    return topic.subTopics.some((sub: SubTopic) =>
+      this.router.url.includes(sub.route)
+    );
+  }
+
+  logout(): void {
     this.authService.logout();
   }
-  isTopicExpanded(topic: any): boolean {
-    return topic.subTopics.some((sub: any) => {
-      const isActive = this.router.url.includes(sub.route);
-      // Add animation delay for child items
-      if (isActive) {
-        setTimeout(() => {
-          this.updatePageTitle();
-        }, 100);
-      }
-      return isActive;
-    });
-  }
 
-  // Add keyboard navigation support
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    // Close drawer on Escape key
-    if (event.key === 'Escape' && this.drawer.opened && this.isHandset()) {
-      this.drawer.close();
-    }
-  }
-
-  login() {
-    const dialogRef = this.dialog.open(Login, {
+  login(): void {
+    this.dialog.open(Login, {
       width: '420px',
       maxWidth: '90vw',
-      disableClose: false, // allows cancel (will redirect to home)
+      disableClose: false,
       autoFocus: false,
-      // Optional: restore focus after close
       restoreFocus: true,
     });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.drawer?.opened && this.isHandset()) {
+      this.drawer.close();
+    }
   }
 }

@@ -45,11 +45,8 @@ export class TopicTemplate {
   scrolled = signal(true);
   currentSectionIndex = signal(0);
 
-  // REMOVE ['$event'] from here
   constructor() {
     effect(() => {
-      // This side effect runs whenever `this.count()` changes
-      console.log(`The current count is: ${this.title()}`);
       if (this.title()) {
         this.scrollToSection();
       }
@@ -250,9 +247,7 @@ export class TopicTemplate {
       duration: 2000,
       panelClass: ['info-snackbar']
     });
-    // In a real application, you would execute the code here
-    // This is a placeholder for actual code execution logic
-    console.log('Executing code:', example.code);
+    // Placeholder for actual code execution (e.g. StackBlitz, sandbox)
   }
 
   showBestPracticesTips(): void {

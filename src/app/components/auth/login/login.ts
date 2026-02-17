@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog'; // Required for directives
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '@app/core';
 
 @Component({
     selector: 'app-login-dialog',

@@ -8,8 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { NavigationService } from '../../services/navigation.service';
-import { ThemeService } from '../../services/theme.service';
+import { NavigationService, ThemeService } from '@app/core';
 
 @Component({
   selector: 'app-home',
@@ -42,5 +41,5 @@ export class HomeComponent {
     );
   });
 
-  constructor(public navigationService: NavigationService) { }
+  readonly navigationService = inject(NavigationService);
 }

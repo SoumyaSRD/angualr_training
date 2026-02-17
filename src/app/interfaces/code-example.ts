@@ -1,7 +1,1 @@
-export interface ICodeExample {
-    title: string;
-    language: string;
-    code: string;
-    description?: string;
-}
-
+export type { ICodeExample } from '../shared/models/code-example';

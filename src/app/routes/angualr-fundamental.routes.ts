@@ -8,10 +8,11 @@ import { AngularCliOverview } from "../components/topics/angular-fundamentals/in
 import { AngularIstApp } from "../components/topics/angular-fundamentals/setup/angular-ist-app/angular-ist-app";
 import { authGuard } from "../guard/auth.guard";
 
+/** Used as loadChildren for path 'fundamentals' – empty path so parent defines segment */
 export const angularFundamentalRoutes: Routes = [
     {
-        path: 'fundamentals',
-        component: AngularFundamentals, // This component should have the <router-outlet>
+        path: '',
+        component: AngularFundamentals,
         canActivate: [authGuard],
         children: [
             {

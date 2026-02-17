@@ -38,7 +38,11 @@
             "polyfills": ["zone.js"],
             "scripts": [],
             "styles": ["src/global_styles.scss"],
-            "tsConfig": "tsconfig.app.json"
+            "tsConfig": "tsconfig.app.json",
+            "budgets": [
+              { "type": "initial", "maximumWarning": "1mb", "maximumError": "2mb" },
+              { "type": "anyComponentStyle", "maximumWarning": "50kb", "maximumError": "100kb" }
+            ]
           }
         },
         "serve": {

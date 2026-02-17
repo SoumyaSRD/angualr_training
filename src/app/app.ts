@@ -65,22 +65,13 @@ export class App implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => this.isHandset.set(result.matches));
 
-    // Route change listener
+    // Route change listener: update title and scroll to top
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updatePageTitle();
-      }
-    });
-    this.router.events.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updatePageTitle();
-        // Smooth scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
-    // Initial title
     this.updatePageTitle();
   }
 

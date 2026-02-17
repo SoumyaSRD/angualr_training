@@ -2,7 +2,10 @@
 // TOPIC TEMPLATE COMPONENT - OPTIMIZED & THEME-AWARE STYLES
 // ============================================================================
 // Features: Dark/Light theme support, Modern animations, Optimized selectors
+// Uses shared mixins from app/styles/_mixins.scss
 // ============================================================================
+
+@use '../../styles/mixins' as m;
 
 // ----------------------------------------------------------------------------
 // CONTAINER
@@ -53,22 +56,7 @@
   padding-bottom: var(--spacing-xl, 2rem);
   border-bottom: 2px solid var(--border-color-light, rgba(0, 0, 0, 0.08));
   position: relative;
-
-  // Gradient accent line
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 120px;
-    height: 4px;
-    background: var(
-      --primary-gradient,
-      linear-gradient(90deg, var(--primary-color), var(--accent-color))
-    );
-    border-radius: 2px;
-    box-shadow: 0 2px 8px var(--primary-color);
-  }
+  @include m.gradient-underline(120px, 4px, -2px);
 
   .header-content {
     position: relative;
@@ -225,22 +213,7 @@
   margin: var(--spacing-xxl, 3rem) 0 var(--spacing-xl, 2rem);
   padding-bottom: var(--spacing-md, 1rem);
   position: relative;
-
-  // Gradient underline
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100px;
-    height: 3px;
-    background: var(
-      --primary-gradient,
-      linear-gradient(90deg, var(--primary-color), var(--accent-color))
-    );
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(var(--primary-color-rgb, 99, 102, 241), 0.4);
-  }
+  @include m.gradient-underline(100px, 3px);
 
   .section-icon {
     font-size: 2.5rem;

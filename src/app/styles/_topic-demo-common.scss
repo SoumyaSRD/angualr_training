@@ -1,0 +1,71 @@
+// =============================================================================
+// Shared styles for topic/demo components (data-binding, directive, pipe, etc.)
+// Use in component SCSS: @use 'path/to/styles/topic-demo-common' as *;
+// Uses CSS variables from global_styles for theme consistency.
+// =============================================================================
+
+.container {
+  padding: var(--spacing-md, 20px);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg, 20px);
+  margin: var(--spacing-xl, 30px) 0;
+}
+
+.method {
+  padding: var(--spacing-md, 20px);
+  border: 2px solid var(--border-color, #ddd);
+  border-radius: var(--border-radius-md, 10px);
+  background: var(--surface-variant, #f9f9f9);
+  transition: border-color var(--transition-fast);
+
+  h3 {
+    margin-top: 0;
+    color: var(--text-primary, #333);
+  }
+}
+
+input {
+  width: 100%;
+  padding: var(--spacing-xs, 8px);
+  margin: var(--spacing-sm, 10px) 0;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: var(--border-radius-xs, 4px);
+  background: var(--surface-color);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+}
+
+button {
+  background: var(--primary-color, #007bff);
+  color: var(--text-on-primary, white);
+  border: none;
+  padding: var(--spacing-xs, 8px) var(--spacing-md, 16px);
+  border-radius: var(--border-radius-xs, 4px);
+  cursor: pointer;
+  margin-top: var(--spacing-sm, 10px);
+  transition: background-color var(--transition-fast);
+
+  &:hover {
+    background: var(--primary-dark, #0056b3);
+  }
+}
+
+.info {
+  background: var(--surface-variant);
+  padding: var(--spacing-md, 15px);
+  border-radius: var(--border-radius-sm, 8px);
+  margin-top: var(--spacing-md, 20px);
+  border-left: 4px solid var(--primary-color);
+  color: var(--text-secondary);
+}

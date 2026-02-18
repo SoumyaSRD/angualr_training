@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '@app/core';
 import { HomeComponent } from '@app/features/home';
 
 export const routes: Routes = [
@@ -79,7 +78,7 @@ export const routes: Routes = [
 
   {
     path: 'fundamentals',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     loadChildren: () =>
       import('./routes/angular-fundamental.routes').then(
         (m) => m.angularFundamentalRoutes

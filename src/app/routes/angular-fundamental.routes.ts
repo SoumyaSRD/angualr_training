@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '@app/core';
 import { AngularFundamentals } from '../components/topics/angular-fundamentals/angular-fundamentals';
 import { AngularReactVue } from '../components/topics/angular-fundamentals/introductions/angular-vs-react-vue/angular-vs-react-vue';
 import { ArchitectureOverview } from '../components/topics/angular-fundamentals/introductions/architecture-overview/architecture-overview';
@@ -13,7 +12,7 @@ export const angularFundamentalRoutes: Routes = [
   {
     path: '',
     component: AngularFundamentals,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'introduction/what-is-angular', pathMatch: 'full' },
       {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class ThemeService {
   private readonly THEME_KEY = 'angular-academy-theme';
   private isDark = false;
+  public isDarkSelected = signal(false);
 
   constructor() {
     this.loadTheme();
@@ -25,12 +26,14 @@ export class ThemeService {
     this.isDark = !this.isDark;
     this.saveTheme();
     this.applyTheme();
+    this.isDarkSelected.set(this.isDark);
   }
 
   setTheme(isDark: boolean): void {
     this.isDark = isDark;
     this.saveTheme();
     this.applyTheme();
+    this.isDarkSelected.set(this.isDark);
   }
 
   isDarkTheme(): boolean {
@@ -43,6 +46,7 @@ export class ThemeService {
     } else {
       document.documentElement.classList.remove('dark-theme');
     }
+    this.isDarkSelected.set(this.isDark);
   }
 
   private saveTheme(): void {
@@ -51,6 +55,7 @@ export class ThemeService {
 
   getThemePreference(): 'light' | 'dark' | 'system' {
     const savedTheme = localStorage.getItem(this.THEME_KEY);
+    this.isDarkSelected.set(savedTheme === 'dark');
     if (!savedTheme) return 'system';
     return savedTheme as 'light' | 'dark';
   }

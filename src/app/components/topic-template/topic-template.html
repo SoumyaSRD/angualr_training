@@ -48,7 +48,7 @@
       <mat-icon class="section-icon">description</mat-icon>
       <h2 class="gradient-text-primary">Introduction</h2>
     </div>
-    <div class="intro-content" [ngStyle]="{ color: themeService.isDarkTheme() ? '#ffffff' : '#000000' }">
+    <div class="intro-content" [ngStyle]="{ color: themeService.isDarkSelected() ? '#ffffff' : '#000000' }">
       <ng-content></ng-content>
     </div>
   </section>

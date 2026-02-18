@@ -1,16 +1,18 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   HostListener,
   ViewChild,
   computed,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -25,13 +27,10 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { DestroyRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 
-import { AuthService, NavigationService, ThemeService } from '@app/core';
 import type { SubTopic, Topic } from '@app/core';
+import { AuthService, NavigationService, ThemeService } from '@app/core';
 import { Login } from './components/auth/login/login';
 
 @Component({
@@ -88,7 +87,7 @@ export class App {
 
   /** Icon color for toolbar (theme-aware). */
   readonly toolbarIconColor = computed(() =>
-    this.themeService.isDarkTheme() ? '#ffffff' : '#000000'
+    this.themeService.isDarkSelected() ? '#ffffff' : '#000000'
   );
 
   constructor() {

@@ -5,7 +5,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "demo": {
+    "angular-training": {
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -34,14 +34,26 @@
             ],
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "outputPath": "dist/demo",
-            "polyfills": ["zone.js"],
+            "outputPath": "dist/angular-training",
+            "polyfills": [
+              "zone.js"
+            ],
             "scripts": [],
-            "styles": ["src/global_styles.scss"],
+            "styles": [
+              "src/global_styles.scss"
+            ],
             "tsConfig": "tsconfig.app.json",
             "budgets": [
-              { "type": "initial", "maximumWarning": "1mb", "maximumError": "2mb" },
-              { "type": "anyComponentStyle", "maximumWarning": "50kb", "maximumError": "100kb" }
+              {
+                "type": "initial",
+                "maximumWarning": "1mb",
+                "maximumError": "2mb"
+              },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "50kb",
+                "maximumError": "100kb"
+              }
             ]
           }
         },
@@ -49,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "development": {
-              "buildTarget": "demo:build:development"
+              "buildTarget": "angular-training:build:development"
             },
             "production": {
-              "buildTarget": "demo:build:production"
+              "buildTarget": "angular-training:build:production"
             }
           },
           "defaultConfiguration": "development"

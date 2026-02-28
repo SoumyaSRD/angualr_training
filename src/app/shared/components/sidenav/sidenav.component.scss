@@ -1,0 +1,9 @@
+.sidenav-content {
+  padding: var(--spacing-md) 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Reuse existing classes from app.scss for accordion + items.
+   This file can be used to add sidenav-specific overrides later. */
+

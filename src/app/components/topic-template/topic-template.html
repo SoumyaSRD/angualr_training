@@ -6,33 +6,29 @@
 
       @if (tags() && tags().length > 0) {
       <nav class="tags-navigation" aria-label="Topic tags">
-        <mat-chip-set aria-label="Topic tags">
+        <div class="d-flex flex-wrap gap-2">
           @for (tag of tags(); track tag) {
-          <mat-chip class="topic-tag ripple" [matTooltip]="'Jump to ' + tag + ' section'"
-            [class.clickable]="getTagLink(tag)" (click)="scrollToTag(tag)">
-            <a>
-              <mat-icon>local_offer</mat-icon>
-
-              {{ tag }}
-            </a>
-          </mat-chip>
+          <span class="badge bg-primary cursor-pointer" (click)="scrollToTag(tag)" [class.clickable]="getTagLink(tag)">
+            <i class="bi bi-tag-fill me-1"></i>
+            {{ tag }}
+          </span>
           }
-        </mat-chip-set>
+        </div>
       </nav>
       }
 
       <div class="topic-meta">
         <span class="meta-item">
-          <mat-icon class="meta-icon">schedule</mat-icon>
+          <i class="bi bi-clock meta-icon"></i>
           <span>Read time: {{ calculateReadTime() }} min</span>
         </span>
         <span class="meta-item">
-          <mat-icon class="meta-icon">menu_book</mat-icon>
+          <i class="bi bi-book meta-icon"></i>
           <span>{{ sections().length }} sections</span>
         </span>
         @if (codeExamples().length > 0) {
         <span class="meta-item">
-          <mat-icon class="meta-icon">code</mat-icon>
+          <i class="bi bi-code-square meta-icon"></i>
           <span>{{ codeExamples().length }} examples</span>
         </span>
         }
@@ -40,15 +36,15 @@
     </div>
   </header>
 
-  <mat-divider class="glass-divider"></mat-divider>
+  <hr class="glass-divider">
 
   <!-- Introduction Section -->
   <section class="introduction-section card-lift glass">
     <div class="section-header intro-header">
-      <mat-icon class="section-icon">description</mat-icon>
+      <i class="bi bi-file-text section-icon"></i>
       <h2 class="gradient-text-primary">Introduction</h2>
     </div>
-    <div class="intro-content" [ngStyle]="{ color: themeService.isDarkSelected() ? '#ffffff' : '#000000' }">
+    <div class="intro-content">
       <ng-content></ng-content>
     </div>
   </section>
@@ -57,7 +53,7 @@
   @if (sections() && sections().length > 0) {
   <section class="detailed-sections">
     <div class="section-header">
-      <mat-icon class="section-icon">library_books</mat-icon>
+      <i class="bi bi-journal-text section-icon"></i>
       <h2 class="gradient-text-primary">Detailed Explanation</h2>
       <span class="section-count">{{ sections().length }} sections</span>
     </div>
@@ -66,20 +62,24 @@
       @for (section of sections(); track section.heading; let idx = $index) {
       <article class="section-card-wrapper" [id]="getSectionId(section, idx)"
         [class.section-highlight]="isSectionHighlighted($any(section).heading)">
-        <mat-card class="section-card card-lift glass">
+        <div class="card section-card card-lift glass">
           <div class="card-corner">
             <span class="corner-number">{{ idx + 1 }}</span>
           </div>
 
-          <mat-card-header>
-            <div class="section-number" mat-card-avatar>{{ idx + 1 }}</div>
-            <mat-card-title>{{ section.heading }}</mat-card-title>
-            <mat-card-subtitle>
-              Section {{ idx + 1 }} of {{ sections().length }}
-            </mat-card-subtitle>
-          </mat-card-header>
+          <div class="card-header bg-transparent border-0">
+            <div class="d-flex align-items-center gap-3">
+              <div class="section-number">{{ idx + 1 }}</div>
+              <div>
+                <h5 class="card-title mb-0">{{ section.heading }}</h5>
+                <p class="card-subtitle text-muted small mb-0">
+                  Section {{ idx + 1 }} of {{ sections().length }}
+                </p>
+              </div>
+            </div>
+          </div>
 
-          <mat-card-content>
+          <div class="card-body">
             @if (section.content) {
             <div class="section-content">
               <p>{{ section.content }}</p>
@@ -88,7 +88,7 @@
             <ul class="section-list">
               @for (item of section.list; track item) {
               <li>
-                <mat-icon class="list-icon">arrow_right_alt</mat-icon>
+                <i class="bi bi-arrow-right-short list-icon"></i>
                 <span [innerHTML]="item"></span>
               </li>
               }
@@ -96,21 +96,14 @@
             } @if (section.additionalExplanation) {
             <div class="additional-note glass">
               <div class="note-header">
-                <mat-icon>info</mat-icon>
+                <i class="bi bi-info-circle"></i>
                 <span>Important Note</span>
               </div>
               <p>{{ section.additionalExplanation }}</p>
             </div>
             }
-          </mat-card-content>
-
-          <!-- <mat-card-actions>
-            <button mat-button class="btn-outline" (click)="scrollToSection()">
-              <mat-icon>arrow_upward</mat-icon>
-              Back to Top
-            </button>
-          </mat-card-actions> -->
-        </mat-card>
+          </div>
+        </div>
       </article>
       }
     </div>
@@ -121,49 +114,52 @@
   @if (codeExamples() && codeExamples().length > 0) {
   <section class="code-examples-section">
     <div class="section-header">
-      <mat-icon class="section-icon">terminal</mat-icon>
+      <i class="bi bi-terminal section-icon"></i>
       <h2 class="gradient-text-primary">Code Examples</h2>
       <span class="section-count">{{ codeExamples().length }} examples</span>
     </div>
 
     <div class="code-examples-grid">
       @for (example of codeExamples(); track example.title; let idx = $index) {
-      <mat-card class="code-card card-lift">
+      <div class="card code-card card-lift">
         <div class="card-corner">
-          <mat-icon class="corner-icon">code</mat-icon>
+          <i class="bi bi-code-slash corner-icon"></i>
         </div>
 
-        <mat-card-header>
-          <div class="code-number" mat-card-avatar>
-            <mat-icon>code</mat-icon>
+        <div class="card-header bg-transparent">
+          <div class="d-flex align-items-center gap-3">
+            <div class="code-number">
+              <i class="bi bi-code"></i>
+            </div>
+            <div>
+              <h5 class="card-title mb-0">{{ example.title }}</h5>
+              @if (example.description) {
+              <p class="card-subtitle text-muted small mb-0">{{ example.description }}</p>
+              }
+            </div>
           </div>
-          <mat-card-title>{{ example.title }}</mat-card-title>
-          @if (example.description) {
-          <mat-card-subtitle>{{ example.description }}</mat-card-subtitle>
-          }
-        </mat-card-header>
+        </div>
 
-        <mat-card-content>
+        <div class="card-body">
           <div class="code-toolbar glass">
             <div class="toolbar-left">
-              <span class="language-badge">
-                <mat-icon>code_blocks</mat-icon>
+              <span class="badge bg-secondary">
+                <i class="bi bi-code-square me-1"></i>
                 {{ example.language || "text" }}
               </span>
-              <span class="code-lines">
-                <mat-icon>format_list_numbered</mat-icon>
+              <span class="badge bg-light text-dark">
+                <i class="bi bi-list-ol me-1"></i>
                 {{ countCodeLines(example.code) }} lines
               </span>
             </div>
             <div class="toolbar-right">
-              <button mat-icon-button class="copy-button btn-glass" matTooltip="Copy code"
-                (click)="copyCode(example.code,idx)" [class.copied]="isCopied(idx)">
-                <mat-icon>{{ isCopied(idx) ? 'check' : 'content_copy' }}</mat-icon>
+              <button class="btn btn-sm btn-outline-secondary" title="Copy code" (click)="copyCode(example.code,idx)"
+                [class.btn-success]="isCopied(idx)">
+                <i class="bi" [class.bi-check-lg]="isCopied(idx)" [class.bi-clipboard]="!isCopied(idx)"></i>
               </button>
-              <button mat-icon-button class="expand-button btn-glass" matTooltip="Expand code"
-                (click)="toggleCodeExpansion(idx)">
-                <mat-icon>{{ isExpanded(idx) ? 'unfold_less' : 'unfold_more'
-                  }}</mat-icon>
+              <button class="btn btn-sm btn-outline-secondary" title="Expand code" (click)="toggleCodeExpansion(idx)">
+                <i class="bi" [class.bi-arrows-angle-contract]="isExpanded(idx)"
+                  [class.bi-arrows-angle-expand]="!isExpanded(idx)"></i>
               </button>
             </div>
           </div>
@@ -172,22 +168,8 @@
             <pre
               class="code-block"><code [class]="'language-' + (example.language || 'text')">{{ example.code }}</code></pre>
           </div>
-
-          <!-- @if (example.notes) {
-          <div class="code-notes glass">
-            <mat-icon>notes</mat-icon>
-            <p>{{ example.notes }}</p>
-          </div>
-          } -->
-        </mat-card-content>
-
-        <!-- <mat-card-actions>
-          <button mat-button class="btn-outline" (click)="executeCode(example)">
-            <mat-icon>play_arrow</mat-icon>
-            Try it
-          </button>
-        </mat-card-actions> -->
-      </mat-card>
+        </div>
+      </div>
       }
     </div>
   </section>
@@ -196,90 +178,93 @@
   <!-- Best Practices -->
   @if (bestPractices() && bestPractices().length > 0) {
   <section class="best-practices-section">
-    <mat-card class="info-card best-practices-card card-lift glass">
+    <div class="card info-card best-practices-card card-lift glass">
       <div class="card-corner success-corner">
-        <mat-icon class="corner-icon">verified</mat-icon>
+        <i class="bi bi-patch-check corner-icon"></i>
       </div>
 
-      <mat-card-header>
-        <div class="card-icon success-icon" mat-card-avatar>
-          <mat-icon>verified</mat-icon>
+      <div class="card-header bg-transparent">
+        <div class="d-flex align-items-center gap-3">
+          <div class="card-icon success-icon">
+            <i class="bi bi-patch-check-fill"></i>
+          </div>
+          <div>
+            <h5 class="card-title mb-0 gradient-text-success">Best Practices</h5>
+            <p class="card-subtitle text-muted small mb-0">Industry-recommended approaches</p>
+          </div>
         </div>
-        <mat-card-title class="gradient-text-success">Best Practices</mat-card-title>
-        <mat-card-subtitle>Industry-recommended approaches</mat-card-subtitle>
-      </mat-card-header>
+      </div>
 
-      <mat-card-content>
+      <div class="card-body">
         <ul class="practices-list">
           @for (practice of bestPractices(); track practice; let idx = $index) {
           <li class="ripple">
             <div class="practice-number">{{ idx + 1 }}</div>
             <div class="practice-content">
-              <mat-icon class="practice-icon">check_circle</mat-icon>
+              <i class="bi bi-check-circle-fill practice-icon text-success"></i>
               <span>{{ practice }}</span>
             </div>
           </li>
           }
         </ul>
-      </mat-card-content>
+      </div>
 
-      <mat-card-actions>
-        <a mat-button class="btn-primary" (click)="showBestPracticesTips()">
-          <p><mat-icon>tips_and_updates</mat-icon>
-            Learn More</p>
-        </a>
-      </mat-card-actions>
-    </mat-card>
+      <div class="card-footer bg-transparent">
+        <button class="btn btn-primary" (click)="showBestPracticesTips()">
+          <i class="bi bi-lightbulb me-2"></i>
+          Learn More
+        </button>
+      </div>
+    </div>
   </section>
   }
 
   <!-- Key Takeaways -->
   @if (keyPoints() && keyPoints().length > 0) {
   <section class="key-points-section">
-    <mat-card class="info-card key-points-card card-lift glass">
+    <div class="card info-card key-points-card card-lift glass">
       <div class="card-corner primary-corner">
-        <mat-icon class="corner-icon">lightbulb</mat-icon>
+        <i class="bi bi-lightbulb corner-icon"></i>
       </div>
 
-      <mat-card-header>
-        <div class="card-icon primary-icon" mat-card-avatar>
-          <mat-icon>lightbulb</mat-icon>
+      <div class="card-header bg-transparent">
+        <div class="d-flex align-items-center gap-3">
+          <div class="card-icon primary-icon">
+            <i class="bi bi-lightbulb-fill"></i>
+          </div>
+          <div>
+            <h5 class="card-title mb-0 gradient-text-primary">Key Takeaways</h5>
+            <p class="card-subtitle text-muted small mb-0">Essential points to remember</p>
+          </div>
         </div>
-        <mat-card-title class="gradient-text-primary">Key Takeaways</mat-card-title>
-        <mat-card-subtitle>Essential points to remember</mat-card-subtitle>
-      </mat-card-header>
+      </div>
 
-      <mat-card-content>
+      <div class="card-body">
         <ul class="takeaways-list">
           @for (point of keyPoints(); track point; let idx = $index) {
           <li class="ripple">
             <div class="takeaway-number">{{ idx + 1 }}</div>
             <div class="takeaway-content">
-              <mat-icon class="takeaway-icon">star</mat-icon>
+              <i class="bi bi-star-fill takeaway-icon text-warning"></i>
               <span>{{ point }}</span>
             </div>
           </li>
           }
         </ul>
-      </mat-card-content>
-      <mat-card-actions>
-        <a mat-button (click)="downloadKeyPoints()">
-          <p>
-            <mat-icon>
-              download
-            </mat-icon>
-            Download Summary
-          </p>
-        </a>
-      </mat-card-actions>
-    </mat-card>
+      </div>
+
+      <div class="card-footer bg-transparent">
+        <button class="btn btn-outline-primary" (click)="downloadKeyPoints()">
+          <i class="bi bi-download me-2"></i>
+          Download Summary
+        </button>
+      </div>
+    </div>
   </section>
   }
 
-  <!-- Progress & Navigation -->
-
   <!-- Back to Top Button -->
 </div>
-<button class="back-to-top" mat-fab matTooltip="Back to top" (click)="scrollToSection()" [class.visible]="true">
-  <mat-icon>arrow_upward</mat-icon>
+<button class="back-to-top btn btn-primary rounded-circle shadow" title="Back to top" (click)="scrollToSection()">
+  <i class="bi bi-arrow-up"></i>
 </button>

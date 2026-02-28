@@ -1,12 +1,6 @@
-<app-topic-template
-  [title]="content.title"
-  [tags]="content.tags"
-  [paragraphs]="content.paragraphs"
-  [sections]="content.sections"
-  [codeExamples]="content.codeExamples"
-  [bestPractices]="content.bestPractices"
-  [keyPoints]="content.keyPoints"
->
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+  [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints">
   <!-- Custom rich content specific to this topic -->
   <div class="topic-content">
     <p>
@@ -85,7 +79,7 @@
     </p>
 
     <div class="highlight-box">
-      <mat-icon>lightbulb</mat-icon>
+      <i class="bi bi-lightbulb"></i>
       <p>
         <strong>Key takeaway:</strong> Choose Angular when you want structure,
         consistency, and long-term maintainability — especially in

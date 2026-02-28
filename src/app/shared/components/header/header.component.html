@@ -1,0 +1,89 @@
+<mat-toolbar class="app-toolbar mat-elevation-z3">
+  <div class="toolbar-content">
+    <!-- Left: Menu + Brand -->
+    <div class="toolbar-left">
+      <button
+        mat-icon-button
+        (click)="onToggleMenu()"
+        matTooltip="Toggle menu"
+        aria-label="Toggle navigation drawer"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="brand-section" routerLink="/" role="button" tabindex="0">
+        <mat-icon class="brand-icon">code</mat-icon>
+        <div class="brand-text">
+          <span class="app-title">Angular Academy</span>
+          <span class="app-subtitle">Professional Training</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: reserved for page title / search -->
+    <div class="toolbar-center"></div>
+
+    <!-- Right: Theme + User menu -->
+    <div class="toolbar-right">
+      <!-- Theme dropdown -->
+      <button
+        mat-button
+        [matMenuTriggerFor]="themeMenu"
+        class="theme-button"
+        aria-label="Select theme"
+      >
+        <mat-icon>color_lens</mat-icon>
+        <span class="theme-label">
+          {{ themeService.currentTheme() | titlecase }}
+        </span>
+      </button>
+      <mat-menu #themeMenu="matMenu">
+        @for (theme of themeService.themes; track theme) {
+          <button mat-menu-item (click)="themeService.setTheme(theme)">
+            <mat-icon *ngIf="themeService.currentTheme() === theme">
+              check
+            </mat-icon>
+            <span>
+              {{ theme | titlecase }}
+            </span>
+          </button>
+        }
+      </mat-menu>
+
+      <!-- User menu -->
+      <button
+        mat-button
+        [matMenuTriggerFor]="userMenu"
+        class="user-menu-button"
+        aria-label="User account menu"
+      >
+        <mat-icon>account_circle</mat-icon>
+        <span class="user-name-label">{{ authService.username() }}</span>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>person</mat-icon>
+          <span>User</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>settings</mat-icon>
+          <span>Profile &amp; Settings</span>
+        </button>
+        @if (authService.isLoggedIn()) {
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+          </button>
+        } @else {
+          <button mat-menu-item (click)="login()">
+            <mat-icon>login</mat-icon>
+            <span>Sign in</span>
+          </button>
+        }
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
+

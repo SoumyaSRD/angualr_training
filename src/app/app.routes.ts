@@ -5,6 +5,22 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
 
   {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
+  },
+  {
+    path: 'users',
+    loadChildren: () =>
+      import('./features/users/users.routes').then((m) => m.usersRoutes),
+  },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('./features/settings/settings.routes').then((m) => m.settingsRoutes),
+  },
+
+  {
     path: 'prerequisites/web-fundamentals/how-browsers-work',
     loadComponent: () =>
       import('./components/topics/prerequisites/browser/how-browsers-work.component').then(

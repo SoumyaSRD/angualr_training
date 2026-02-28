@@ -1,29 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { ICodeExample } from '../../interfaces/code-example';
 import { ISection } from '../../interfaces/topic';
 import { ThemeService } from '../../services/theme.service';
+import { ToastService } from '../../core/services/toast.service';
+
 @Component({
   selector: 'app-topic-template',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatChipsModule,
-    MatIconModule,
-    MatListModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatTooltipModule
-  ],
+  imports: [CommonModule],
   templateUrl: './topic-template.html',
   styleUrl: './topic-template.scss'
 })
@@ -37,7 +22,7 @@ export class TopicTemplate {
   keyPoints = input<string[]>([]);
   themeService = inject(ThemeService);
   readonly targetElement = viewChild<ElementRef<HTMLDivElement>>('scrollTopRef');
-  private snackBar = inject(MatSnackBar);
+  private toastService = inject(ToastService);
 
   // State signals
   expandedCodeIndex = signal<number | null>(null);
@@ -142,20 +127,14 @@ export class TopicTemplate {
   copyCode(code: string, index: number): void {
     navigator.clipboard.writeText(code).then(() => {
       this.copiedCodeIndex.set(index);
-      this.snackBar.open('Code copied to clipboard!', 'Close', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
+      this.toastService.success('Code copied to clipboard!');
 
       setTimeout(() => {
         this.copiedCodeIndex.set(null);
       }, 2000);
     }).catch(err => {
       console.error('Failed to copy code: ', err);
-      this.snackBar.open('Failed to copy code', 'Close', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
+      this.toastService.error('Failed to copy code');
     });
   }
 
@@ -243,17 +222,12 @@ export class TopicTemplate {
   }
 
   executeCode(example: ICodeExample): void {
-    this.snackBar.open(`Running "${example.title}"...`, 'Close', {
-      duration: 2000,
-      panelClass: ['info-snackbar']
-    });
+    this.toastService.info(`Running "${example.title}"...`);
     // Placeholder for actual code execution (e.g. StackBlitz, sandbox)
   }
 
   showBestPracticesTips(): void {
-    this.snackBar.open('Opening best practices guide...', 'Close', {
-      duration: 2000
-    });
+    this.toastService.info('Opening best practices guide...');
   }
 
   downloadKeyPoints(): void {

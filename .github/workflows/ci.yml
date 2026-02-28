@@ -1,34 +1,71 @@
-name: Angular Auto Deploy
+name: CI / CD (Angular)
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build-deploy:
+  ci:
+    name: Build (prod)
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
-      - name: Build Angular project
-        run: npm run build -- --configuration production --base-href "/angualr_training/"
+      - name: Build (production)
+        run: npm run build -- --configuration production
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+  deploy_pages:
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'master')
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/angular-training/browser
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build for Pages
+        run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/angular-training
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

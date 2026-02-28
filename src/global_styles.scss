@@ -1,6 +1,4 @@
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
-
-/* ===== GLOBAL STYLES - styles.css ===== */
+/* ===== GLOBAL STYLES - Bootstrap 5 Custom Theme ===== */
 
 /* CSS Custom Properties for Theming */
 :root {
@@ -172,79 +170,144 @@
   --opacity-active: 0.7;
 }
 
-/* ===== Dark Theme ===== */
-.dark-theme {
-  --primary-color: #90caf9;
-  --primary-light: #c3fdff;
-  --primary-dark: #5d99c6;
-  --secondary-color: #f48fb1;
-  --secondary-light: #ffc1e3;
-  --secondary-dark: #bf5f82;
-  --accent-color: #ff80ab;
-  --success-color: #81c784;
-  --warning-color: #ffb74d;
-  --error-color: #e57373;
-  --info-color: #64b5f6;
+/* ===== Dark Theme (inspired by Figue.io) ===== */
+.dark-theme,
+:root[data-theme="dark"] {
+  /* Deep navy background with subtle gradients */
+  --background-color: #020617; /* almost-black blue */
+  --surface-color: #020617;
+  --surface-variant: #020617;
+  --surface-elevated: #020617;
 
-  /* Gradient Colors */
+  /* Primary / accent similar to Figue-style gradients */
+  --primary-color: #6366f1;      /* indigo */
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary-color: #f97316;    /* warm accent */
+  --secondary-light: #fdba74;
+  --secondary-dark: #ea580c;
+  --accent-color: #22c55e;       /* green accent for highlights */
+
+  --success-color: #22c55e;
+  --warning-color: #eab308;
+  --error-color: #f97373;
+  --info-color: #38bdf8;
+
+  /* Gradients for hero / header / cards */
   --primary-gradient: linear-gradient(
     135deg,
-    var(--primary-color) 0%,
-    var(--primary-dark) 100%
+    #4f46e5 0%,
+    #ec4899 50%,
+    #f97316 100%
   );
   --secondary-gradient: linear-gradient(
     135deg,
-    var(--secondary-color) 0%,
-    var(--secondary-dark) 100%
+    #0f172a 0%,
+    #020617 50%,
+    #111827 100%
   );
   --accent-gradient: linear-gradient(
     135deg,
-    var(--accent-color) 0%,
-    var(--secondary-color) 100%
+    #22c55e 0%,
+    #38bdf8 50%,
+    #6366f1 100%
   );
 
-  /* Glassmorphism Colors */
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-bg-light: rgba(255, 255, 255, 0.08);
-  --glass-bg-dark: rgba(0, 0, 0, 0.2);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-border-light: rgba(255, 255, 255, 0.15);
-  --glass-border-dark: rgba(0, 0, 0, 0.3);
+  /* Glassmorphism overlays */
+  --glass-bg: rgba(15, 23, 42, 0.75);
+  --glass-bg-light: rgba(30, 64, 175, 0.6);
+  --glass-bg-dark: rgba(15, 23, 42, 0.9);
+  --glass-border: rgba(148, 163, 184, 0.7);
+  --glass-border-light: rgba(148, 163, 184, 0.9);
+  --glass-border-dark: rgba(15, 23, 42, 0.9);
 
-  --background-color: #121212;
-  --surface-color: #1e1e1e;
-  --surface-variant: #2d2d2d;
-  --surface-elevated: #252525;
-
-  --text-primary: rgba(255, 255, 255, 0.87);
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-disabled: rgba(255, 255, 255, 0.38);
-  --text-on-primary: rgba(0, 0, 0, 0.87);
-  --text-on-secondary: rgba(0, 0, 0, 0.87);
-  --text-on-surface: rgba(255, 255, 255, 0.87);
+  /* Text */
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-disabled: rgba(148, 163, 184, 0.6);
+  --text-on-primary: #020617;
+  --text-on-secondary: #020617;
+  --text-on-surface: #e5e7eb;
   --text-gradient-primary: linear-gradient(
     135deg,
-    var(--primary-color) 0%,
-    var(--accent-color) 100%
+    #e5e7eb 0%,
+    #a5b4fc 50%,
+    #f97316 100%
   );
 
-  --border-color: rgba(255, 255, 255, 0.12);
-  --border-color-light: rgba(255, 255, 255, 0.08);
-  --border-color-dark: rgba(255, 255, 255, 0.2);
-  --divider-color: rgba(255, 255, 255, 0.08);
+  /* Borders & dividers */
+  --border-color: rgba(148, 163, 184, 0.4);
+  --border-color-light: rgba(148, 163, 184, 0.25);
+  --border-color-dark: rgba(15, 23, 42, 0.9);
+  --divider-color: rgba(15, 23, 42, 0.9);
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.7);
-  --shadow-xxl: 0 16px 48px rgba(0, 0, 0, 0.8);
-  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  /* Shadows tuned for dark glassy surfaces */
+  --shadow-xs: 0 4px 10px rgba(15, 23, 42, 0.6);
+  --shadow-sm: 0 8px 20px rgba(15, 23, 42, 0.7);
+  --shadow-md: 0 16px 40px rgba(15, 23, 42, 0.8);
+  --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.85);
+  --shadow-xl: 0 40px 80px rgba(15, 23, 42, 0.9);
+  --shadow-xxl: 0 60px 120px rgba(15, 23, 42, 0.95);
+  --shadow-inner: inset 0 1px 0 rgba(148, 163, 184, 0.12);
 
   --glass-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 24px 80px rgba(15, 23, 42, 0.95),
+    inset 0 1px 0 rgba(148, 163, 184, 0.1);
   --glass-shadow-hover:
-    0 12px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 32px 120px rgba(15, 23, 42, 1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* ===== Corporate Theme ===== */
+:root[data-theme='corporate'] {
+  --primary-color: #004b8d;
+  --primary-light: #1d72b8;
+  --primary-dark: #00315d;
+  --secondary-color: #ffb300;
+  --secondary-light: #ffcf33;
+  --secondary-dark: #b27f00;
+  --accent-color: #00bcd4;
+
+  --background-color: #f3f4f6;
+  --surface-color: #ffffff;
+  --surface-variant: #e5e7eb;
+  --surface-elevated: #ffffff;
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-disabled: rgba(55, 65, 81, 0.6);
+
+  --border-color: rgba(17, 24, 39, 0.12);
+  --divider-color: rgba(17, 24, 39, 0.08);
+}
+
+/* ===== Glassmorphism Theme ===== */
+:root[data-theme='glass'] {
+  --primary-color: #60a5fa;
+  --primary-light: #93c5fd;
+  --primary-dark: #2563eb;
+  --secondary-color: #f472b6;
+  --accent-color: #22d3ee;
+
+  --background-color: #020617;
+  --surface-color: rgba(15, 23, 42, 0.9);
+  --surface-variant: rgba(30, 64, 175, 0.65);
+  --surface-elevated: rgba(15, 23, 42, 0.95);
+
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-bg-light: rgba(30, 64, 175, 0.55);
+  --glass-border: rgba(148, 163, 184, 0.6);
+
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-disabled: rgba(148, 163, 184, 0.6);
+
+  --border-color: rgba(148, 163, 184, 0.4);
+  --divider-color: rgba(15, 23, 42, 0.7);
+
+  --shadow-md: 0 20px 40px rgba(15, 23, 42, 0.65);
+  --glass-shadow:
+    0 20px 60px rgba(15, 23, 42, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* ===== Base Reset ===== */
@@ -619,49 +682,22 @@ pre code {
   grid-template-columns: repeat(6, 1fr);
 }
 
-/* ===== Angular Material Overrides ===== */
-.mat-mdc-card {
-  border-radius: var(--border-radius) !important;
-  box-shadow: var(--shadow-lg) !important;
-  background: var(--surface-gradient) !important;
-  border: 1px solid var(--border-color) !important;
-  transition: all var(--transition-normal) !important;
+/* ===== Bootstrap Customizations ===== */
 
-  &:hover {
-    box-shadow: var(--shadow-xl) !important;
-    transform: translateY(-2px) !important;
-  }
-}
-
-.mat-expansion-panel {
-  background: var(--surface-gradient) !important;
-  box-shadow: none !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--border-radius-md) !important;
-  margin-bottom: var(--spacing-sm) !important;
-  overflow: hidden;
-  transition: all var(--transition-normal) !important;
-
-  &:hover {
-    border-color: var(--primary-light) !important;
-    box-shadow: var(--shadow-md) !important;
-  }
-}
-
-.mat-expansion-panel:first-of-type,
-.mat-expansion-panel:last-of-type {
-  border-radius: var(--border-radius-md) !important;
-}
-
-.mat-expansion-panel-header {
-  font-weight: 600 !important;
-  color: var(--text-primary) !important;
-  transition: all var(--transition-fast) !important;
-  padding: var(--spacing-lg) var(--spacing-xl) !important;
-
-  &:hover {
-    background: var(--surface-variant) !important;
-  }
+/* Bootstrap variable overrides */
+:root {
+  --bs-primary: var(--primary-color);
+  --bs-secondary: var(--secondary-color);
+  --bs-success: var(--success-color);
+  --bs-info: var(--info-color);
+  --bs-warning: var(--warning-color);
+  --bs-danger: var(--error-color);
+  --bs-light: var(--surface-variant);
+  --bs-dark: var(--text-primary);
+  --bs-body-bg: var(--background-color);
+  --bs-body-color: var(--text-primary);
+  --bs-font-sans-serif: var(--font-family);
+  --bs-border-radius: var(--border-radius-md);
 }
 
 /* ===== Glassmorphism Effects ===== */
@@ -2379,27 +2415,219 @@ pre code {
   }
 }
 
-/* Dark theme - Option 2: manual class toggle (replace .dark-theme with your actual class) */
-.dark-theme .mat-mdc-input-element,
-.dark-theme .mdc-text-field__input {
-  color: white !important;
-  caret-color: white !important;
+/* ===== Bootstrap Toast Container ===== */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: var(--z-index-toast);
 }
 
-.dark-theme .mat-mdc-input-element::placeholder,
-.dark-theme .mdc-text-field__input::placeholder {
-  color: white !important;
-  opacity: 0.5 !important;
+/* ===== Bootstrap Modal Customizations ===== */
+.modal-content {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-xl);
 }
 
-.dark-theme .mat-mdc-form-field .mdc-floating-label,
-.dark-theme .mat-mdc-form-field .mat-mdc-floating-label,
-.dark-theme .mat-mdc-form-field .mdc-floating-label--float-above {
-  color: white !important;
-  top: 25% !important;
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
 }
 
-.dark-theme .mat-mdc-form-field .mdc-floating-label--focused {
-  color: white !important;
-  top: 0 !important;
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+}
+
+/* ===== Bootstrap Form Customizations ===== */
+.form-control {
+  background: var(--surface-color);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  
+  &:focus {
+    background: var(--surface-elevated);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.15);
+    color: var(--text-primary);
+  }
+}
+
+.form-control::placeholder {
+  color: var(--text-disabled);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--primary-color);
+}
+
+/* ===== Bootstrap Button Customizations ===== */
+.btn-primary {
+  background: var(--primary-gradient);
+  border: none;
+  
+  &:hover {
+    background: var(--primary-dark);
+  }
+}
+
+/* ===== Bootstrap Card Customizations ===== */
+.card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+/* ===== Bootstrap Accordion Customizations ===== */
+.accordion-item {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-sm);
+  overflow: hidden;
+}
+
+.accordion-button {
+  background: var(--surface-gradient);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  
+  &:not(.collapsed) {
+    background: var(--surface-variant);
+    color: var(--primary-color);
+    box-shadow: inset 0 -1px 0 var(--border-color);
+  }
+  
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(25, 118, 210, 0.15);
+  }
+}
+
+.accordion-button::after {
+  filter: invert(1);
+}
+
+.dark-theme .accordion-button::after {
+  filter: invert(0);
+}
+
+/* ===== Bootstrap Dropdown Customizations ===== */
+.dropdown-menu {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.dropdown-item {
+  color: var(--text-primary);
+  
+  &:hover,
+  &:focus {
+    background: var(--surface-variant);
+    color: var(--primary-color);
+  }
+}
+
+/* ===== Bootstrap Navbar Customizations ===== */
+.navbar {
+  background: var(--surface-gradient) !important;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+  color: var(--text-primary) !important;
+  font-weight: 700;
+}
+
+.navbar-nav .nav-link {
+  color: var(--text-secondary) !important;
+  
+  &:hover,
+  &.active {
+    color: var(--primary-color) !important;
+  }
+}
+
+/* ===== Bootstrap Spinner Customizations ===== */
+.spinner-border {
+  color: var(--primary-color);
+}
+
+/* ===== Bootstrap Progress Customizations ===== */
+.progress {
+  background: var(--surface-variant);
+  border-radius: var(--border-radius-sm);
+  height: 8px;
+}
+
+.progress-bar {
+  background: var(--primary-gradient);
+}
+
+/* ===== Bootstrap Badge Customizations ===== */
+.badge {
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ===== Bootstrap Alert Customizations ===== */
+.alert {
+  border: none;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===== Bootstrap Table Customizations ===== */
+.table {
+  color: var(--text-primary);
+  
+  thead th {
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+  }
+  
+  td, th {
+    border-color: var(--border-color);
+  }
+}
+
+/* ===== Bootstrap Pagination Customizations ===== */
+.pagination {
+  .page-link {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    
+    &:hover {
+      background: var(--surface-variant);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+  }
+  
+  .page-item.active .page-link {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .page-item.disabled .page-link {
+    background: var(--surface-variant);
+    color: var(--text-disabled);
+  }
 }

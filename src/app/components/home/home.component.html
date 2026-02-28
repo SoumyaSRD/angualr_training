@@ -1,200 +1,114 @@
-<div class="home-container">
+<div class="home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Angular Academy · Enterprise Training</p>
+      <h1 class="hero__title">
+        Master Angular&nbsp;21
+        <span class="hero__title-highlight">from fundamentals to enterprise</span>
+      </h1>
+      <p class="hero__subtitle">
+        A curated learning path with live examples, visuals and hands-on topics.
+        Inspired by modern one-page designs.
+      </p>
 
-  <!-- ================= HERO ================= -->
-  <section class="hero-section mat-elevation-z2">
+      <div class="hero__actions">
+        <a
+          class="btn btn--primary"
+          [routerLink]="navigationService.topics[0].subTopics[0].route"
+        >
+          Start learning
+        </a>
+        <a class="btn btn--ghost" routerLink="/fundamentals">
+          View roadmap
+        </a>
+      </div>
 
-    <h1>Welcome to Angular Professional Training</h1>
-
-    <p class="subtitle">
-      A comprehensive, end-to-end guide to mastering Angular development
-    </p>
-
-    <p class="description">
-      This interactive tutorial covers everything from web fundamentals and
-      TypeScript basics to advanced Angular concepts, state management,
-      and real-world application development. Perfect for beginners and
-      experienced developers looking to level up their Angular skills.
-    </p>
-
-  </section>
-
-
-  <!-- ================= FEATURES ================= -->
-  <section class="features-grid">
-
-    <mat-card class="feature-card" appearance="outlined">
-      <mat-card-header>
-        <mat-icon mat-card-avatar color="primary">school</mat-icon>
-        <mat-card-title>
-          <p>Comprehensive Curriculum</p>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>15+ major topics covering prerequisites, fundamentals, advanced
-          concepts, and best practices for professional Angular development.</p>
-      </mat-card-content>
-    </mat-card>
-
-
-    <mat-card class="feature-card" appearance="outlined">
-      <mat-card-header>
-        <mat-icon mat-card-avatar color="primary">code</mat-icon>
-        <mat-card-title>
-          <p>Real Code Examples</p>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>
-
-          Every topic includes practical, working code examples that you can
-          use in your own projects.
-        </p>
-      </mat-card-content>
-    </mat-card>
-
-
-    <mat-card class="feature-card" appearance="outlined">
-      <mat-card-header>
-        <mat-icon mat-card-avatar color="primary">new_releases</mat-icon>
-        <mat-card-title>
-          <p>Latest Angular Features</p>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>
-          Learn Angular 21 with standalone components, signals, zoneless
-          architecture, and modern best practices.</p>
-      </mat-card-content>
-    </mat-card>
-
-
-    <mat-card class="feature-card" appearance="outlined">
-      <mat-card-header>
-        <mat-icon mat-card-avatar color="primary">assignment</mat-icon>
-        <mat-card-title>
-          <p>Capstone Project</p>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>Build a complete real-world application integrating all concepts
-          learned throughout the course.</p>
-      </mat-card-content>
-    </mat-card>
-
-  </section>
-
-
-  <!-- ================= TOC ================= -->
-  <section class="toc-section">
-
-    <h1>Course Contents</h1>
-
-    <div class="search-container">
-
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>
-          <p>Search topics or lessons</p>
-        </mat-label>
-
-        <input matInput (input)="searchTerm.set($event.target.value)" placeholder="e.g. components, signals, routing" />
-
-        <mat-icon matSuffix>search</mat-icon>
-
-      </mat-form-field>
-
+      <div class="hero__meta">
+        <span>15+ curated topics</span>
+        <span>Hands-on code examples</span>
+        <span>Enterprise-ready patterns</span>
+      </div>
     </div>
 
+    <div class="hero__visual">
+      <img src="assets/images/angular.png" alt="Angular Academy" />
+    </div>
+  </section>
 
-    <div class="topics-list">
+  <!-- Highlights -->
+  <section class="section section--highlights">
+    <app-section-card
+      title="Comprehensive Curriculum"
+      subtitle="From web fundamentals to advanced Angular 21 patterns."
+      icon="school"
+      badge="Start here"
+      variant="accent"
+    ></app-section-card>
 
+    <app-section-card
+      title="Real Code Examples"
+      subtitle="Every topic ships with code you can paste into real apps."
+      icon="code"
+    ></app-section-card>
+
+    <app-section-card
+      title="Modern Angular"
+      subtitle="Standalone components, signals, zoneless workflows and more."
+      icon="auto_awesome"
+    ></app-section-card>
+
+    <app-section-card
+      title="Enterprise Focus"
+      subtitle="Core/shared/features structure for 50+ screens and teams."
+      icon="business_center"
+      variant="glass"
+    ></app-section-card>
+  </section>
+
+  <!-- Topics overview -->
+  <section class="section section--topics">
+    <div class="section__header">
+      <h2 class="section__title">Browse topics</h2>
+      <p class="section__subtitle">
+        Search and jump directly into any part of the training.
+      </p>
+    </div>
+
+    <div class="section__search">
+      <input
+        type="search"
+        class="search-input"
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+        placeholder="Search topics or lessons (e.g. components, signals, routing)"
+      />
+    </div>
+
+    <div class="topics-grid">
       @for (topic of filteredTopics(); track topic.title) {
-
-      <mat-card class="topic-card" appearance="outlined">
-
-        <mat-card-header>
-
-          <mat-icon mat-card-avatar color="primary">
-            {{ topic.icon }}
-          </mat-icon>
-
-          <mat-card-title>
-            {{ topic.title }}
-          </mat-card-title>
-
-          <mat-card-subtitle>
-            <p> {{ topic.subTopics.length }} lessons</p>
-          </mat-card-subtitle>
-
-        </mat-card-header>
-
-
-        <mat-card-content>
-
-          <ul class="subtopics-list">
-
-            @for (subTopic of topic.subTopics; track subTopic.route) {
-
-            <li>
-              <a [routerLink]="subTopic.route">
-                {{ subTopic.title }}
-              </a>
-            </li>
-
+        <app-section-card
+          class="topics-grid__card"
+          [title]="topic.title"
+          [subtitle]="topic.subTopics.length + ' lessons'"
+          [icon]="topic.icon"
+        >
+          <ul class="topics-grid__list">
+            @for (sub of topic.subTopics; track sub.route) {
+              <li>
+                <a [routerLink]="sub.route">{{ sub.title }}</a>
+              </li>
             }
-
           </ul>
-
-        </mat-card-content>
-
-
-        <mat-card-actions align="end">
-
-          <button mat-raised-button color="primary" [routerLink]="topic.subTopics[0].route">
-            Explore Section
-          </button>
-
-        </mat-card-actions>
-
-      </mat-card>
-
+        </app-section-card>
       }
-
 
       @if (filteredTopics().length === 0) {
-
-      <mat-card class="no-results-card" appearance="outlined">
-        <mat-card-content>
-          <p>
-            No matching topics or lessons found.<br />
-            Try a different search term.
-          </p>
-        </mat-card-content>
-      </mat-card>
-
+        <div class="topics-grid__empty">
+          <p>No matching topics or lessons found.</p>
+          <p class="topics-grid__empty-hint">Try a different keyword.</p>
+        </div>
       }
-
     </div>
-
   </section>
-
-
-  <!-- ================= CTA ================= -->
-  <section class="cta-section mat-elevation-z1">
-
-    <h1>Ready to Start Learning?</h1>
-
-    <h6>
-      Choose any topic from the sidebar menu to begin your Angular journey!
-    </h6>
-
-    <button mat-raised-button color="primary" [routerLink]="navigationService.topics[0].subTopics[0].route">
-      Start with Prerequisites
-    </button>
-
-  </section>
-
 </div>

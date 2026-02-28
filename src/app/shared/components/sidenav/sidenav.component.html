@@ -1,0 +1,38 @@
+<mat-accordion multi class="navigation-accordion">
+  @for (topic of navigationService.topics; track topic.title) {
+    <mat-expansion-panel [expanded]="isTopicExpanded(topic)">
+      <mat-expansion-panel-header class="panel-header">
+        <mat-panel-title class="panel-title">
+          <mat-icon class="topic-icon" [class.active]="isTopicExpanded(topic)">
+            {{ topic.icon }}
+          </mat-icon>
+          <span class="topic-title">{{ topic.title }}</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-nav-list dense class="subtopic-list">
+        @for (sub of topic.subTopics; track sub.route) {
+          <a
+            mat-list-item
+            [routerLink]="sub.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="onItemSelected()"
+            class="subtopic-item"
+          >
+            <div class="subtopic-item-content">
+              <mat-icon class="subtopic-icon">chevron_right</mat-icon>
+              <span class="subtopic-title">
+                {{ sub.title }}
+              </span>
+              @if (isCompleted(sub.route)) {
+                <mat-icon class="completed-icon" color="primary">check_circle</mat-icon>
+              }
+            </div>
+          </a>
+        }
+      </mat-nav-list>
+    </mat-expansion-panel>
+  }
+</mat-accordion>
+

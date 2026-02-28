@@ -1,62 +1,73 @@
 import { Injectable, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+export type AppTheme = 'light' | 'dark' | 'corporate' | 'glass';
+
+@Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly THEME_KEY = 'angular-academy-theme';
-  private isDark = false;
-  public isDarkSelected = signal(false);
+
+  /** Single source of truth for the current theme. */
+  private readonly theme = signal<AppTheme>('light');
+
+  /** Available themes for dropdowns / selectors. */
+  readonly themes: AppTheme[] = ['light', 'dark', 'corporate', 'glass'];
+
+  /** Expose current theme as read-only signal. */
+  readonly currentTheme = this.theme.asReadonly();
+
+  /** Back-compat: some components read this signal directly. */
+  readonly isDarkSelected = signal(false);
 
   constructor() {
-    this.loadTheme();
-  }
-
-  private loadTheme(): void {
-    const savedTheme = localStorage.getItem(this.THEME_KEY);
-    if (savedTheme) {
-      this.isDark = savedTheme === 'dark';
-    } else {
-      this.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    this.applyTheme();
+    this.initTheme();
   }
 
   toggleTheme(): void {
-    this.isDark = !this.isDark;
-    this.saveTheme();
-    this.applyTheme();
-    this.isDarkSelected.set(this.isDark);
+    // Convenience toggle between light and dark; dropdown can set others explicitly.
+    this.setTheme(this.theme() === 'dark' ? 'light' : 'dark');
   }
 
-  setTheme(isDark: boolean): void {
-    this.isDark = isDark;
-    this.saveTheme();
-    this.applyTheme();
-    this.isDarkSelected.set(this.isDark);
+  setTheme(theme: AppTheme): void {
+    this.theme.set(theme);
+    this.isDarkSelected.set(theme === 'dark');
+    this.persistTheme(theme);
+    this.applyThemeToDom(theme);
   }
 
+  /** Used in templates. Reads a signal -> updates instantly without reload. */
   isDarkTheme(): boolean {
-    return this.isDark;
+    return this.theme() === 'dark';
   }
 
-  private applyTheme(): void {
-    if (this.isDark) {
-      document.documentElement.classList.add('dark-theme');
-    } else {
-      document.documentElement.classList.remove('dark-theme');
+  getThemePreference(): AppTheme | 'system' {
+    const saved = localStorage.getItem(this.THEME_KEY);
+    if (!saved) return 'system';
+    if (['light', 'dark', 'corporate', 'glass'].includes(saved)) {
+      return saved as AppTheme;
     }
-    this.isDarkSelected.set(this.isDark);
+    return 'system';
   }
 
-  private saveTheme(): void {
-    localStorage.setItem(this.THEME_KEY, this.isDark ? 'dark' : 'light');
+  private initTheme(): void {
+    const saved = this.getThemePreference();
+    const initial: AppTheme =
+      saved === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : saved;
+    this.setTheme(initial);
   }
 
-  getThemePreference(): 'light' | 'dark' | 'system' {
-    const savedTheme = localStorage.getItem(this.THEME_KEY);
-    this.isDarkSelected.set(savedTheme === 'dark');
-    if (!savedTheme) return 'system';
-    return savedTheme as 'light' | 'dark';
+  private persistTheme(theme: AppTheme): void {
+    localStorage.setItem(this.THEME_KEY, theme);
+  }
+
+  private applyThemeToDom(theme: AppTheme): void {
+    const root = document.documentElement;
+    // Scalable hook for multiple themes later
+    root.dataset['theme'] = theme;
+    // Back-compat with existing CSS (.dark-theme)
+    root.classList.toggle('dark-theme', theme === 'dark');
   }
 }

@@ -1,5 +1,4 @@
-import { Injectable, inject } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { Injectable, inject, isDevMode } from '@angular/core';
 
 export enum LogLevel {
     DEBUG = 0,
@@ -27,7 +26,7 @@ export class LoggerService {
 
     constructor() {
         // Set minimum log level based on environment
-        this.minLevel = environment.production ? LogLevel.WARN : LogLevel.DEBUG;
+        this.minLevel = isDevMode() ? LogLevel.DEBUG : LogLevel.WARN;
     }
 
     /**

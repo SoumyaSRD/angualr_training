@@ -14,6 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { HeaderComponent } from './header.component';
 import { SidebarComponent } from './sidebar.component';
 import { FooterComponent } from './footer.component';
+import { ChatbotComponent } from '@app/shared';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { Login } from '../../components/auth/login/login';
@@ -28,6 +29,7 @@ import { Login } from '../../components/auth/login/login';
         HeaderComponent,
         SidebarComponent,
         FooterComponent,
+        ChatbotComponent,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrl: './layout.scss',
@@ -113,6 +115,9 @@ import { Login } from '../../components/auth/login/login';
             </div>
 
         </div>
+
+        <!-- Chatbot -->
+        <app-chatbot></app-chatbot>
     `,
 })
 export class LayoutComponent implements OnInit {

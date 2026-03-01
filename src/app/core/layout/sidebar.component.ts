@@ -77,24 +77,34 @@ import { NavigationService, type Topic } from '@app/core';
                                             routerLinkActive="active"
                                             (click)="onItemClick()"
                                         >
-                                            <span class="submenu-dot"></span>
-                                            <span>{{ sub.title }}</span>
+                                            <div class="submenu-icon">
+                                                <i class="bi bi-chevron-right"></i>
+                                            </div>
+                                            <span class="submenu-text">{{ sub.title }}</span>
+                                            <div class="submenu-arrow">
+                                                <i class="bi bi-arrow-right-short"></i>
+                                            </div>
                                         </a>
                                     }
                                 </div>
                             }
 
                         } @else {
-                            <!-- Collapsed: icon-only + hover tooltip -->
-                            <div
+                            <!-- Collapsed: icon-only with click to navigate + hover tooltip -->
+                            <a
                                 class="nav-link"
+                                [routerLink]="topic.subTopics[0]?.route"
+                                routerLinkActive="active"
                                 (mouseenter)="showTooltip(topic, $event)"
                                 (mouseleave)="hideTooltip()"
+                                (click)="onItemClick()"
                             >
                                 <div class="nav-icon">
                                     <i class="{{ topic.icon }}"></i>
                                 </div>
-                            </div>
+                                <!-- Tooltip title on hover -->
+                                <div class="nav-tooltip-title">{{ topic.title }}</div>
+                            </a>
                         }
 
                     </div>
@@ -127,8 +137,10 @@ import { NavigationService, type Topic } from '@app/core';
                     (mouseleave)="hideTooltip()"
                 >
                     <div class="tooltip-header">
-                        <i class="{{ activeTooltip()!.icon }}"></i>
-                        <span>{{ activeTooltip()!.title }}</span>
+                        <div class="tooltip-icon">
+                            <i class="{{ activeTooltip()!.icon }}"></i>
+                        </div>
+                        <span class="tooltip-title">{{ activeTooltip()!.title }}</span>
                     </div>
                     <div class="tooltip-content">
                         @for (sub of activeTooltip()!.subTopics; track sub.route) {
@@ -137,9 +149,20 @@ import { NavigationService, type Topic } from '@app/core';
                                 [routerLink]="sub.route"
                                 (click)="onTooltipItemClick()"
                             >
-                                {{ sub.title }}
+                                <i class="bi bi-circle-fill tooltip-dot"></i>
+                                <span>{{ sub.title }}</span>
                             </a>
                         }
+                    </div>
+                    <div class="tooltip-footer">
+                        <a
+                            class="tooltip-view-all"
+                            [routerLink]="activeTooltip()!.subTopics[0]?.route"
+                            (click)="onTooltipItemClick()"
+                        >
+                            <span>View Topic</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             }

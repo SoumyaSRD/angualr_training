@@ -3,51 +3,43 @@ name: CI / CD (Angular → GitHub Pages)
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4️⃣ Build Angular for production (IMPORTANT: base-href)
       - name: Build (production)
         run: |
           npm run build -- \
           --configuration production \
           --base-href "/${{ github.event.repository.name }}/"
 
-      # 5️⃣ Copy index.html to 404.html (SPA fix)
+      # ✅ Angular 17+ output fix (browser folder)
       - name: Create 404 fallback
         run: |
-          cp dist/${{ github.event.repository.name }}/browser/index.html \
-             dist/${{ github.event.repository.name }}/browser/404.html
+          cp dist/angular-training/browser/index.html \
+             dist/angular-training/browser/404.html
 
-      # 6️⃣ Deploy to gh-pages branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/${{ github.event.repository.name }}/browser
+          publish_dir: dist/angular-training/browser
           publish_branch: gh-pages

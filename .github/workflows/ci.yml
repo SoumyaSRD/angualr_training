@@ -1,4 +1,4 @@
-name: CI / CD (Angular)
+name: CI / CD (Angular → GitHub Pages)
 
 on:
   push:
@@ -12,51 +12,42 @@ permissions:
   pages: write
 
 jobs:
-  ci:
-    name: Build (prod)
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
         run: npm ci
 
+      # 4️⃣ Build Angular for production (IMPORTANT: base-href)
       - name: Build (production)
-        run: npm run build -- --configuration production
+        run: |
+          npm run build -- \
+          --configuration production \
+          --base-href "/${{ github.event.repository.name }}/"
 
-  deploy_pages:
-    name: Deploy to GitHub Pages
-    if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'master')
-    needs: ci
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # 5️⃣ Copy index.html to 404.html (SPA fix)
+      - name: Create 404 fallback
+        run: |
+          cp dist/${{ github.event.repository.name }}/browser/index.html \
+             dist/${{ github.event.repository.name }}/browser/404.html
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install
-        run: npm ci
-
-      - name: Build for Pages
-        run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
-
+      # 6️⃣ Deploy to gh-pages branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/angular-training
+          publish_dir: dist/${{ github.event.repository.name }}/browser
           publish_branch: gh-pages

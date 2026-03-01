@@ -31,7 +31,6 @@ jobs:
           --configuration production \
           --base-href "/${{ github.event.repository.name }}/"
 
-      # ✅ Angular 17+ output fix (browser folder)
       - name: Create 404 fallback
         run: |
           cp dist/angular-training/browser/index.html \

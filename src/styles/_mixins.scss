@@ -1,159 +1,903 @@
 // ============================================================================
-// GLASS UI DESIGN SYSTEM - MIXINS
+// GLASS UI DESIGN SYSTEM v4.0 — MIXINS
+// Cinematic · Spatial · Luminous · Premium
+//
+// NEW IN v4.0:
+// ▸ glass-refract()         — prismatic surface refraction layer
+// ▸ depth-light()           — adaptive radial light engine
+// ▸ glass-surface()         — multi-layer depth-lit glass base
+// ▸ elevation()             — 3D elevation token composer
+// ▸ edge-glow()             — ambient edge glow system
+// ▸ aura()                  — dynamic 3-layer accent aura
+// ▸ liquid-button()         — wet refractive surface buttons
+// ▸ magnetic-lift()         — spring physics hover lift
+// ▸ scatter()               — advanced light scattering
+// ▸ prism-border()          — frosted rainbow edge shimmer
+// ▸ cinematic-type()        — fluid clamp type scale
+// ▸ spatial-label()         — wide-tracked micro uppercase
+// ▸ gradient-mesh-bg()      — animated gradient mesh backgrounds
+// ▸ noise-grain()           — refined fractalNoise grain overlay
+// ▸ contrast-boost()        — intelligent contrast filter helper
+// ▸ cinema-entrance()       — blur + scale + translate entrance
+// ▸ stagger-children()      — nth-child animation delay stagger
+// ▸ power-aura-pulse()      — DB-style energy aura animation
+// ▸ neon-flicker-text()     — neon-noir flicker text effect
+// ▸ eva-scanline()          — NGE CRT scanline body flicker
+// ▸ aurora-drift()          — aurora/galaxy background drift
 // ============================================================================
 
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:color';
 @use 'variables' as *;
 
-// ----------------------------------------------------------------------------
-// GLASS MORPHISM MIXINS
-// ----------------------------------------------------------------------------
 
-/// Core glass effect mixin
-/// @param {Number} $blur - Blur amount
-/// @param {Color} $bg-color - Background color
-/// @param {Color} $border-color - Border color
-/// @param {Number} $border-width - Border width
+// ============================================================================
+// FOUNDATION: GLASS MORPHISM CORE
+// ============================================================================
+
+/// Core glass surface — backdrop blur + tinted background + border.
+/// All other glass mixins build on top of this.
+///
+/// @param {Length}  $blur         - Backdrop blur radius
+/// @param {*}       $bg           - Background value (color or CSS var)
+/// @param {*}       $border-color - Border color or CSS var
+/// @param {Length}  $border-width - Border width
+///
+/// @example scss
+///   .panel { @include glass(24px, var(--glass-bg), var(--glass-border)); }
 @mixin glass(
-  $blur: map.get($glass, 'blur-md'),
-  $bg-color: var(--glass-bg-primary),
+  $blur:         map.get($glass, 'blur-md'),
+  $bg:           var(--glass-bg),
   $border-color: var(--glass-border),
   $border-width: 1px
 ) {
-  background: $bg-color;
-  backdrop-filter: blur($blur);
-  -webkit-backdrop-filter: blur($blur);
+  background: $bg;
+  backdrop-filter: blur($blur) saturate(1.80) brightness(1.02);
+  -webkit-backdrop-filter: blur($blur) saturate(1.80) brightness(1.02);
   border: $border-width solid $border-color;
 }
 
-/// Floating glass card with lift effect
-@mixin glass-card(
-  $blur: map.get($glass, 'blur-lg'),
-  $bg-color: var(--glass-bg-primary),
-  $border-color: var(--glass-border),
-  $shadow: map.get($shadow, 'xl')
+
+// ============================================================================
+// v4 NEW: DEPTH LIGHTING SYSTEM
+// ============================================================================
+
+/// Prismatic glass refraction layer.
+/// Apply to a ::before pseudo-element for a light-edge shimmer.
+///
+/// @param {Angle}   $angle    - Gradient angle (matches --glass-refract-angle)
+/// @param {*}       $light    - Bright stop (use --glass-refract-light)
+/// @param {*}       $mid      - Mid stop (use --glass-refract-mid)
+/// @param {Number}  $opacity  - Opacity of the refraction layer
+///
+/// @example scss
+///   &::before { @include glass-refract(145deg, rgba(255,255,255,.55), rgba(255,255,255,.08)); }
+@mixin glass-refract(
+  $angle:   var(--glass-refract-angle, 145deg),
+  $light:   var(--glass-refract-light, rgba(255,255,255,.55)),
+  $mid:     var(--glass-refract-mid,   rgba(255,255,255,.08)),
+  $opacity: 1
 ) {
-  @include glass($blur, $bg-color, $border-color);
-  border-radius: map.get($radius, 'lg');
-  box-shadow: #{$shadow};
-  transition: 
-    transform #{map.get($transition, 'normal')},
-    box-shadow #{map.get($transition, 'normal')},
-    border-color #{map.get($transition, 'fast')};
+  background: linear-gradient(
+    #{$angle},
+    #{$light}   0%,
+    #{$mid}     22%,
+    transparent 55%
+  );
+  mix-blend-mode: screen;
+  opacity: $opacity;
+  pointer-events: none;
+}
+
+/// Adaptive radial depth light.
+/// Creates a directional bloom from --light-x / --light-y CSS custom props
+/// (wire to a JS mousemove handler for dynamic tracking).
+///
+/// @param {*} $color   - Light colour (use --light-primary)
+/// @param {*} $scatter - Scatter colour (use --light-scatter)
+/// @param {String} $layer - 'near' | 'far' — near is sharper, far is ambient
+@mixin depth-light($color: var(--light-primary), $scatter: var(--light-scatter), $layer: 'near') {
+  @if $layer == 'near' {
+    background: radial-gradient(
+      ellipse 50% 35% at var(--light-x, 50%) var(--light-y, 30%),
+      #{$color}   0%,
+      #{$scatter} 50%,
+      transparent 100%
+    );
+  } @else {
+    background: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #{$color}   0%,
+      #{$scatter} 40%,
+      transparent 70%
+    );
+  }
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/// Full multi-layer glass surface — refraction + depth light + scatter.
+/// The definitive v4 glass base for cards, panels, modals.
+///
+/// @param {Length} $blur  - Backdrop blur
+/// @param {*}      $bg    - Glass background
+/// @param {*}      $border - Glass border color
+@mixin glass-surface(
+  $blur:   map.get($glass, 'blur-lg'),
+  $bg:     var(--glass-bg),
+  $border: var(--glass-border)
+) {
+  @include glass($blur, $bg, $border);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  // Refraction pseudo-layer
+  &::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    @include glass-refract();
+    z-index: 0;
+    transition: opacity var(--duration-base) var(--ease-smooth);
+  }
+
+  // Depth light ambient bloom
+  &::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    @include depth-light($layer: 'far');
+    z-index: 0;
+    opacity: 0.60;
+    transition: opacity var(--duration-slow) var(--ease-smooth);
+  }
+
+  // Content above pseudo-layers
+  & > * { position: relative; z-index: 1; }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: #{$shadow}, 0 20px 40px rgba(0, 0, 0, 0.15);
-    border-color: var(--glass-border-strong);
+    &::before { opacity: 1; }
+    &::after  { opacity: 1; }
   }
 }
 
-/// Glass button with glow effect
-@mixin glass-button(
-  $blur: map.get($glass, 'blur-sm'),
-  $bg-color: var(--glass-bg-secondary),
-  $border-color: var(--glass-border)
+
+// ============================================================================
+// v4 NEW: 3D ELEVATION SYSTEM
+// ============================================================================
+
+/// Compose a box-shadow elevation level (0–5).
+/// Matches the --elev-* CSS token series defined in :root.
+///
+/// @param {Number} $level - 0 (none) → 5 (max depth)
+/// @param {*} $glow       - Optional glow colour overlay
+///
+/// @example scss
+///   .card { @include elevation(3); }
+///   .modal { @include elevation(5, rgba(139,92,246,.40)); }
+@mixin elevation($level: 2, $glow: null) {
+  $shadow: (
+    0: none,
+    1: (0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04)),
+    2: (0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.05), 0 0 0 1px rgba(255,255,255,.08)),
+    3: (0 8px 24px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06), 0 0 0 1px rgba(255,255,255,.10), inset 0 1px 0 rgba(255,255,255,.12)),
+    4: (0 16px 40px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.07), 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.16)),
+    5: (0 28px 64px rgba(0,0,0,.16), 0 12px 24px rgba(0,0,0,.09), 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.20)),
+  );
+
+  @if $glow {
+    box-shadow: #{map.get($shadow, $level)}, 0 0 24px -4px #{$glow};
+  } @else {
+    box-shadow: #{map.get($shadow, $level)};
+  }
+}
+
+
+// ============================================================================
+// v4 NEW: AMBIENT EDGE GLOW
+// ============================================================================
+
+/// Ambient edge glow — a soft coloured outer-ring that breathes with the
+/// theme's accent hue. Intensity: sm | md | lg.
+///
+/// @param {*}      $color     - Glow colour (defaults to --accent-glow)
+/// @param {String} $intensity - 'sm' | 'md' | 'lg'
+///
+/// @example scss
+///   .card:hover { @include edge-glow(rgba(139,92,246,.45), 'md'); }
+@mixin edge-glow($color: var(--accent-glow), $intensity: 'md') {
+  @if $intensity == 'sm' {
+    box-shadow: 0 0 12px -2px #{$color};
+  } @else if $intensity == 'md' {
+    box-shadow: 0 0 24px -4px #{$color}, 0 0 48px -8px #{$color};
+  } @else if $intensity == 'lg' {
+    box-shadow:
+      0 0 40px -6px  #{$color},
+      0 0 80px -12px #{$color},
+      0 0 120px -20px #{$color};
+  }
+}
+
+/// Add edge glow on top of an existing box-shadow.
+/// Useful for hover states that need to keep elevation shadow.
+@mixin edge-glow-overlay($base-shadow, $color: var(--accent-glow), $intensity: 'md') {
+  @if $intensity == 'sm' {
+    box-shadow: #{$base-shadow}, 0 0 12px -2px #{$color};
+  } @else if $intensity == 'md' {
+    box-shadow: #{$base-shadow}, 0 0 24px -4px #{$color}, 0 0 48px -8px #{$color};
+  } @else if $intensity == 'lg' {
+    box-shadow: #{$base-shadow}, 0 0 40px -6px #{$color}, 0 0 80px -12px #{$color};
+  }
+}
+
+
+// ============================================================================
+// v4 NEW: DYNAMIC ACCENT AURA
+// ============================================================================
+
+/// 3-layer accent aura — near ring, mid bloom, far scatter.
+/// Used on primary buttons and focus states.
+///
+/// @param {*}      $color  - Accent colour base
+/// @param {String} $scale  - 'subtle' | 'normal' | 'intense'
+///
+/// @example scss
+///   .btn--primary { @include aura(var(--accent-primary)); }
+@mixin aura($color: var(--accent-primary), $scale: 'normal') {
+  @if $scale == 'subtle' {
+    box-shadow:
+      0 0 0 1px  color-mix(in srgb, #{$color} 16%, transparent),
+      0 4px 16px color-mix(in srgb, #{$color} 20%, transparent);
+  } @else if $scale == 'normal' {
+    box-shadow:
+      0 0 0 1px  color-mix(in srgb, #{$color} 22%, transparent),
+      0 4px 20px color-mix(in srgb, #{$color} 30%, transparent),
+      0 12px 48px color-mix(in srgb, #{$color} 18%, transparent);
+  } @else if $scale == 'intense' {
+    box-shadow:
+      0 0 0 1px  color-mix(in srgb, #{$color} 35%, transparent),
+      0 4px 24px color-mix(in srgb, #{$color} 50%, transparent),
+      0 16px 60px color-mix(in srgb, #{$color} 28%, transparent),
+      0 32px 96px color-mix(in srgb, #{$color} 16%, transparent);
+  }
+}
+
+
+// ============================================================================
+// v4 NEW: ADVANCED LIGHT SCATTERING
+// ============================================================================
+
+/// 4-directional inset edge scatter simulating light bouncing off glass walls.
+///
+/// @param {String} $mode - 'light' (bright surfaces) | 'dark' (dark surfaces)
+@mixin scatter($mode: 'light') {
+  @if $mode == 'light' {
+    box-shadow:
+      inset  0  1px 0 rgba(255,255,255,.80),
+      inset  0 -1px 0 rgba(0,0,0,.06),
+      inset  1px 0 0 rgba(255,255,255,.30),
+      inset -1px 0 0 rgba(255,255,255,.10);
+  } @else {
+    box-shadow:
+      inset  0  1px 0 rgba(255,255,255,.12),
+      inset  0 -1px 0 rgba(0,0,0,.30),
+      inset  1px 0 0 rgba(255,255,255,.06),
+      inset -1px 0 0 rgba(0,0,0,.06);
+  }
+}
+
+/// Combine elevation + scatter in one declaration.
+@mixin elevation-with-scatter($level: 2, $mode: 'light') {
+  @include elevation($level);
+
+  // Append scatter as additional inset shadows
+  @if $mode == 'light' {
+    box-shadow:
+      var(--elev-#{$level}),
+      inset  0  1px 0 rgba(255,255,255,.80),
+      inset  0 -1px 0 rgba(0,0,0,.06),
+      inset  1px 0 0 rgba(255,255,255,.30),
+      inset -1px 0 0 rgba(255,255,255,.10);
+  } @else {
+    box-shadow:
+      var(--elev-#{$level}),
+      inset  0  1px 0 rgba(255,255,255,.12),
+      inset  0 -1px 0 rgba(0,0,0,.30),
+      inset  1px 0 0 rgba(255,255,255,.06),
+      inset -1px 0 0 rgba(0,0,0,.06);
+  }
+}
+
+
+// ============================================================================
+// v4 NEW: FROSTED PRISM BORDER
+// ============================================================================
+
+/// Rainbow-edge shimmer border via a background-position animated ::before.
+/// Wrap content in position: relative; overflow: hidden.
+///
+/// @param {Length} $radius         - Border radius to match parent
+/// @param {Length} $border-width   - Thickness of the prism border
+/// @param {Number} $opacity        - Resting opacity of the shimmer
+/// @param {Time}   $speed          - Animation cycle duration
+///
+/// @example scss
+///   .card--premium { @include prism-border(var(--radius-xl), 1.5px); }
+@mixin prism-border(
+  $radius:       var(--radius-xl),
+  $border-width: 1.5px,
+  $opacity:      0.55,
+  $speed:        6s
 ) {
-  @include glass($blur, $bg-color, $border-color);
-  border-radius: map.get($radius, 'md');
-  padding: map.get($spacing, 'sm') map.get($spacing, 'md');
-  font-weight: map.get($font-weight, 'medium');
-  cursor: pointer;
-  transition: 
-    all #{map.get($transition, 'fast')},
-    box-shadow #{map.get($transition, 'normal')};
+  border: $border-width solid transparent;
+  background-clip: padding-box;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(#{$border-width} * -1);
+    border-radius: calc(#{$radius} + #{$border-width});
+    background: linear-gradient(
+      145deg,
+      rgba(255,100,100,.50)  0%,
+      rgba(255,180,50,.40)   14%,
+      rgba(200,255,60,.35)   28%,
+      rgba(50,230,255,.45)   42%,
+      rgba(120,100,255,.50)  56%,
+      rgba(240,80,200,.45)   70%,
+      rgba(255,100,100,.50) 100%
+    );
+    background-size: 200% 200%;
+    z-index: -1;
+    opacity: $opacity;
+    animation: prism-rotate $speed linear infinite;
+    transition: opacity var(--duration-base) var(--ease-smooth);
+  }
+
+  &:hover::before {
+    opacity: min($opacity * 1.6, 1.0);
+    animation-duration: calc($speed / 2);
+  }
+}
+
+
+// ============================================================================
+// CARD MIXINS (v4 UPGRADED)
+// ============================================================================
+
+/// Floating glass card — primary component surface with full v4 depth stack.
+///
+/// @param {Length} $blur        - Backdrop blur
+/// @param {*}      $bg          - Glass background
+/// @param {*}      $border      - Border color
+/// @param {Number} $elev-level  - Resting elevation level (0–5)
+///
+/// @example scss
+///   .card { @include glass-card(); }
+///   .modal { @include glass-card($elev-level: 5); }
+@mixin glass-card(
+  $blur:       map.get($glass, 'blur-lg'),
+  $bg:         var(--glass-bg),
+  $border:     var(--glass-border),
+  $elev-level: 3
+) {
+  @include glass-surface($blur, $bg, $border);
+  border-radius: map.get($radius, 'xl', var(--radius-xl));
+  @include elevation($elev-level);
+  transition:
+    background    var(--duration-base) var(--ease-smooth),
+    border-color  var(--duration-base) var(--ease-smooth),
+    box-shadow    var(--duration-base) var(--ease-smooth),
+    transform     var(--duration-base) var(--ease-spring);
 
   &:hover {
-    background: var(--glass-bg-primary);
-    box-shadow: var(--glow-primary);
-    transform: translateY(-1px);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-strong);
+    @include elevation(5);
+    @include edge-glow(var(--accent-glow), 'md');
+    transform: var(--lift-md, translateY(-4px) scale(1.010));
+  }
+}
+
+/// Deep glass variant — heavier blur, darker, more opaque.
+@mixin glass-card-deep(
+  $blur:  map.get($glass, 'blur-xl'),
+  $bg:    var(--glass-bg-deep),
+  $border: var(--glass-border)
+) {
+  @include glass($blur, $bg, $border);
+  backdrop-filter: blur($blur) saturate(2.20) brightness(1.01);
+  -webkit-backdrop-filter: blur($blur) saturate(2.20) brightness(1.01);
+  @include elevation(4);
+}
+
+/// Stat / KPI card — accent orb bloom + cinematic number display.
+@mixin glass-stat-card() {
+  @include glass-surface();
+  border-radius: var(--radius-xl);
+  @include elevation(3);
+  padding: var(--space-lg);
+  transition: all var(--duration-base) var(--ease-smooth);
+
+  &:hover {
+    @include elevation(5);
+    @include edge-glow(var(--accent-glow), 'md');
+    transform: var(--lift-md, translateY(-4px));
+  }
+}
+
+/// Surface card — lightweight base for list items and content blocks.
+@mixin surface-card() {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  overflow: hidden;
+  position: relative;
+  transition: all var(--duration-slow) var(--ease-smooth);
+  @include elevation(2);
+
+  &:hover {
+    transform: var(--lift-md, translateY(-4px));
+    @include elevation(4);
+    border-color: var(--accent-primary);
+  }
+}
+
+
+// ============================================================================
+// BUTTON MIXINS (v4: LIQUID GLASS)
+// ============================================================================
+
+/// Liquid glass button — wet, refractive surface feel.
+/// Adds a top-edge specular sheen (::before) and a wet base edge (::after).
+///
+/// @param {Length} $blur - Backdrop blur
+/// @param {*}      $bg   - Background
+/// @param {*}      $border - Border color
+///
+/// @example scss
+///   .btn { @include glass-button(); }
+@mixin glass-button(
+  $blur:   map.get($glass, 'blur-sm'),
+  $bg:     var(--glass-bg),
+  $border: var(--glass-border)
+) {
+  @include glass($blur, $bg, $border);
+  border-radius: var(--radius-full);
+  padding: 11px 24px;
+  font-family: var(--font-display);
+  font-size: var(--type-sm, 0.875rem);
+  font-weight: 600;
+  letter-spacing: var(--type-tracking-wide, 0.04em);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    filter     var(--duration-base) var(--ease-smooth),
+    box-shadow var(--duration-base) var(--ease-smooth),
+    transform  var(--duration-fast) var(--ease-spring-heavy, cubic-bezier(.34,1.56,.64,1));
+
+  // Liquid specular sheen
+  &::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      160deg,
+      rgba(255,255,255,.30) 0%,
+      rgba(255,255,255,.08) 30%,
+      transparent           60%
+    );
+    pointer-events: none;
+    opacity: .80;
+    transition: opacity var(--duration-base) var(--ease-smooth);
+  }
+
+  // Wet base edge
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: rgba(255,255,255,.20);
+    border-radius: var(--radius-full);
+    pointer-events: none;
+  }
+
+  &:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-strong);
+    @include elevation(3);
+    @include edge-glow(var(--accent-glow), 'sm');
+    transform: var(--lift-sm, translateY(-2px) scale(1.005));
+    &::before { opacity: 1; }
+  }
+
+  &:active  { transform: var(--lift-press, translateY(1px) scale(.975)); }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
+}
+
+/// Primary gradient button with full aura stack.
+@mixin glass-button-primary() {
+  @include glass-button();
+  background: var(--accent-gradient);
+  border-color: color-mix(in srgb, var(--accent-secondary) 30%, transparent);
+  color: var(--text-on-accent);
+  @include aura(var(--accent-primary), 'normal');
+
+  &:hover {
+    filter: var(--contrast-boost-light, brightness(1.05) contrast(1.08));
+    @include elevation(3);
+    @include edge-glow(var(--accent-glow), 'md');
+    transform: var(--lift-sm);
+    @include aura(var(--accent-primary), 'intense');
+  }
+}
+
+/// Liquid glow button — pulsing aura breathe animation.
+@mixin glass-button-liquid() {
+  @include glass-button();
+  background: var(--accent-gradient);
+  color: var(--text-on-accent);
+  @include edge-glow(var(--accent-glow), 'md');
+  animation: aura-breathe 3s var(--ease-smooth) infinite;
+
+  &:hover {
+    @include edge-glow(var(--accent-glow), 'lg');
+    transform: var(--lift-md);
+    animation-play-state: paused;
+    filter: brightness(1.10);
+  }
+}
+
+/// Outline button — transparent with accent ring.
+@mixin glass-button-outline() {
+  border-radius: var(--radius-full);
+  padding: 11px 24px;
+  font-family: var(--font-display);
+  font-size: var(--type-sm, 0.875rem);
+  font-weight: 600;
+  letter-spacing: var(--type-tracking-wide, 0.04em);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  transition: all var(--duration-base) var(--ease-smooth), transform var(--duration-fast) var(--ease-spring-heavy);
+
+  &:hover {
+    background: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+    @include edge-glow(var(--accent-glow), 'sm');
+    transform: var(--lift-sm);
+  }
+  &:active { transform: var(--lift-press); }
+}
+
+
+// ============================================================================
+// MAGNETIC HOVER LIFT
+// ============================================================================
+
+/// Magnetic hover lift — spring physics elevation on interaction.
+/// Wraps transform + transition into a reusable pattern.
+///
+/// @param {String} $preset  - 'sm' | 'md' | 'lg' resting lift
+/// @param {Time}   $dur     - Transition duration
+/// @param {*}      $ease    - Easing function
+///
+/// @example scss
+///   .card { @include magnetic-lift('md'); }
+@mixin magnetic-lift($preset: 'sm', $dur: var(--duration-base), $ease: var(--ease-spring)) {
+  transition: transform $dur $ease, box-shadow $dur var(--ease-smooth);
+
+  &:hover {
+    @if $preset == 'sm' {
+      transform: var(--lift-sm, translateY(-2px) scale(1.005));
+    } @else if $preset == 'md' {
+      transform: var(--lift-md, translateY(-4px) scale(1.010));
+    } @else if $preset == 'lg' {
+      transform: var(--lift-lg, translateY(-8px) scale(1.016));
+    }
   }
 
   &:active {
-    transform: translateY(0);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 2px;
+    transform: var(--lift-press, translateY(1px) scale(.975));
   }
 }
 
-/// Glass input field
+
+// ============================================================================
+// INPUT MIXINS (v4 UPGRADED)
+// ============================================================================
+
+/// Glass input field with v4 scatter + focus glow.
+///
+/// @param {Length} $blur - Backdrop blur
+/// @param {*}      $bg   - Background color
 @mixin glass-input(
   $blur: map.get($glass, 'blur-sm'),
-  $bg-color: var(--glass-bg-tertiary)
+  $bg:   var(--glass-bg)
 ) {
-  @include glass($blur, $bg-color, var(--glass-border));
-  border-radius: map.get($radius, 'md');
-  padding: map.get($spacing, 'sm') map.get($spacing, 'md');
+  @include glass($blur, $bg, var(--glass-border));
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: var(--type-base, 1rem);
   color: var(--text-primary);
   width: 100%;
-  transition: 
-    border-color #{map.get($transition, 'fast')},
-    box-shadow #{map.get($transition, 'fast')};
+  @include elevation(1);
+  box-shadow: var(--elev-1), inset 0 2px 8px rgba(0,0,0,.06);
+  transition:
+    border-color var(--duration-fast) var(--ease-smooth),
+    background   var(--duration-fast) var(--ease-smooth),
+    box-shadow   var(--duration-base) var(--ease-smooth);
 
-  &::placeholder {
-    color: var(--text-muted);
+  &::placeholder { color: var(--text-muted); opacity: .70; }
+
+  &:hover {
+    border-color: var(--glass-border-strong);
+    background: var(--glass-bg-hover);
+    box-shadow: var(--elev-2), inset 0 2px 8px rgba(0,0,0,.06);
   }
 
   &:focus {
     outline: none;
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background: var(--glass-bg-active);
+    box-shadow:
+      0 0 0 3px var(--accent-glow),
+      var(--elev-1),
+      inset 0 2px 8px rgba(0,0,0,.06);
   }
 }
 
-/// Glass sidebar
+
+// ============================================================================
+// LAYOUT MIXINS (v4 UPGRADED)
+// ============================================================================
+
+/// Glass sidebar with depth elevation.
 @mixin glass-sidebar(
-  $blur: map.get($glass, 'blur-xl'),
+  $blur:  map.get($glass, 'blur-xl'),
   $width: map.get($layout, 'sidebar-width')
 ) {
-  @include glass($blur, var(--sidebar-bg), var(--glass-border));
+  @include glass($blur, var(--sidebar-bg, var(--glass-bg)), var(--glass-border));
   width: $width;
   height: 100vh;
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 0; top: 0;
   z-index: map.get($z-index, 'fixed');
-  transition: width #{map.get($transition, 'normal')};
+  @include elevation(4);
+  transition: width var(--duration-base) var(--ease-smooth);
   overflow: hidden;
 }
 
-/// Glass header
+/// Glass header with sticky elevation + blur.
 @mixin glass-header(
-  $blur: map.get($glass, 'blur-lg'),
+  $blur:   map.get($glass, 'blur-lg'),
   $height: map.get($layout, 'header-height')
 ) {
-  @include glass($blur, var(--header-bg), var(--glass-border));
+  @include glass($blur, var(--header-bg, var(--glass-bg)), var(--glass-border));
   height: $height;
   position: sticky;
   top: 0;
   z-index: map.get($z-index, 'sticky');
+  @include elevation(3);
+  @include scatter('light');
 }
 
-// ----------------------------------------------------------------------------
-// RESPONSIVE MIXINS
-// ----------------------------------------------------------------------------
 
+// ============================================================================
+// v4 NEW: TYPOGRAPHY MIXINS
+// ============================================================================
+
+/// Cinematic type scale — large fluid display heading.
+/// Uses clamp-based fluid sizing + gradient fill + glow drop-shadow.
+///
+/// @param {*}   $gradient - Gradient for text fill
+/// @param {*}   $glow     - Drop-shadow glow colour
+///
+/// @example scss
+///   h1 { @include cinematic-type(var(--accent-gradient), var(--accent-glow)); }
+@mixin cinematic-type(
+  $gradient: var(--accent-gradient),
+  $glow:     var(--accent-glow)
+) {
+  font-family: var(--font-display);
+  font-size: var(--type-4xl, clamp(3rem, 1.80rem + 4.50vw, 9rem));
+  font-weight: 800;
+  line-height: var(--type-leading-tight, 1.10);
+  letter-spacing: var(--type-tracking-tight, -0.03em);
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px #{$glow});
+}
+
+/// Spatial label — wide-tracked uppercase micro-type for section headers.
+///
+/// @example scss
+///   .section-label { @include spatial-label(); }
+@mixin spatial-label() {
+  font-family: var(--font-display);
+  font-size: var(--type-xs, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: var(--type-tracking-widest, 0.14em);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/// Gradient text fill.
+///
+/// @param {*} $gradient - Gradient or accent-gradient CSS var
+@mixin text-gradient($gradient: var(--accent-gradient)) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/// Intelligent contrast boost filter.
+/// Apply to surfaces that need stronger visual separation.
+///
+/// @param {String} $mode - 'light' | 'dark'
+@mixin contrast-boost($mode: 'light') {
+  @if $mode == 'light' {
+    filter: var(--contrast-boost-light, brightness(1.05) contrast(1.08));
+  } @else {
+    filter: var(--contrast-boost-dark, brightness(1.08) contrast(1.12));
+  }
+}
+
+
+// ============================================================================
+// v4 NEW: ANIMATED BACKGROUNDS
+// ============================================================================
+
+/// Animated gradient mesh — 3-layer radial accent drift.
+/// Apply directly to body or a full-bleed container.
+///
+/// @param {Time}   $speed   - Animation cycle speed
+/// @param {Number} $opacity - Mesh layer opacity
+///
+/// @example scss
+///   body { @include gradient-mesh-bg(); }
+@mixin gradient-mesh-bg($speed: 18s, $opacity: 0.60) {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, color-mix(in srgb, var(--accent-primary)  8%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, color-mix(in srgb, var(--accent-secondary) 6%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 60% 10%, color-mix(in srgb, var(--accent-tertiary)  5%, transparent) 0%, transparent 60%),
+    var(--bg-gradient);
+  background-size: 200% 200%, 200% 200%, 200% 200%, cover;
+  background-attachment: fixed;
+  animation: mesh-drift $speed var(--ease-smooth) infinite alternate;
+  opacity: $opacity;
+}
+
+/// Refined soft noise grain overlay.
+/// Apply to a fixed ::before pseudo-element (z-index: -1).
+///
+/// @param {Number} $frequency - fractalNoise baseFrequency (default .68)
+/// @param {Number} $opacity   - grain overlay opacity
+@mixin noise-grain($frequency: .68, $opacity: .50) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='#{$frequency}' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  opacity: $opacity;
+  pointer-events: none;
+}
+
+
+// ============================================================================
+// DECORATION MIXINS (v4 UPGRADED)
+// ============================================================================
+
+/// Gradient underline accent — cinematic header decoration.
+///
+/// @param {Length} $width  - Underline width
+/// @param {Length} $height - Underline thickness
+/// @param {Length} $bottom - Distance from bottom
+@mixin gradient-underline($width: 100px, $height: 3px, $bottom: 0) {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: $bottom; left: 0;
+    width: $width; height: $height;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 12px var(--accent-glow);
+    transition: width var(--duration-base) var(--ease-spring);
+  }
+
+  &:hover::after {
+    width: calc(#{$width} * 1.25);
+  }
+}
+
+/// Left accent bar — for list items, timeline entries, sidebar groups.
+///
+/// @param {Length} $width       - Bar thickness
+/// @param {*}      $gradient    - Bar gradient or color
+@mixin left-accent-bar($width: 4px, $gradient: var(--accent-gradient)) {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: $width;
+    background: $gradient;
+    border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+    box-shadow: 2px 0 8px var(--accent-glow);
+    transition: width var(--duration-base) var(--ease-spring);
+  }
+
+  &:hover::before {
+    width: calc(#{$width} * 2);
+  }
+}
+
+/// Card corner badge — accent triangle in top-right corner.
+///
+/// @param {Length} $size - Corner cutout size
+@mixin card-corner($size: 64px) {
+  position: absolute;
+  top: 0; right: 0;
+  width: $size; height: $size;
+  border-bottom-left-radius: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 10px;
+  background: var(--accent-gradient);
+  box-shadow: -3px 3px 12px var(--accent-glow);
+}
+
+/// Accent orb — soft radial bloom for background depth.
+///
+/// @param {Length} $size    - Orb diameter
+/// @param {Number} $opacity - Resting opacity
+@mixin accent-orb($size: 160px, $opacity: .10) {
+  position: absolute;
+  width: $size; height: $size;
+  background: var(--accent-gradient);
+  border-radius: 50%;
+  opacity: $opacity;
+  filter: blur(calc(#{$size} / 3.2));
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--ease-smooth),
+              transform var(--duration-slow) var(--ease-smooth);
+
+  .stat-card:hover & { opacity: $opacity * 2.4; transform: scale(1.20); }
+}
+
+
+// ============================================================================
+// RESPONSIVE MIXINS (UNCHANGED ARCHITECTURE)
+// ============================================================================
+
+/// Min-width media query breakpoint.
+/// @param {String} $breakpoint - Key from $breakpoints map
 @mixin media-up($breakpoint) {
   $min: map.get($breakpoints, $breakpoint);
-  @media (min-width: $min) {
-    @content;
-  }
+  @media (min-width: $min) { @content; }
 }
 
+/// Max-width media query breakpoint.
+/// @param {String} $breakpoint - Key from $breakpoints map
 @mixin media-down($breakpoint) {
   $max: map.get($breakpoints, $breakpoint) - 0.02px;
-  @media (max-width: $max) {
-    @content;
-  }
+  @media (max-width: $max) { @content; }
 }
 
-// ----------------------------------------------------------------------------
-// UTILITY MIXINS
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// UTILITY MIXINS (UNCHANGED ARCHITECTURE)
+// ============================================================================
 
 @mixin flex-center {
   display: flex;
@@ -175,82 +919,22 @@
 
 @mixin visually-hidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
 }
 
-// ----------------------------------------------------------------------------
-// ANIMATION MIXINS
-// ----------------------------------------------------------------------------
 
-@mixin fade-in($duration: 300ms) {
-  animation: fadeIn $duration ease-out;
+// ============================================================================
+// SCROLLBAR MIXINS (v4 UPGRADED)
+// ============================================================================
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-}
-
-@mixin slide-in-left($duration: 300ms) {
-  animation: slideInLeft $duration ease-out;
-
-  @keyframes slideInLeft {
-    from { 
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to { 
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-@mixin scale-in($duration: 200ms) {
-  animation: scaleIn $duration ease-out;
-
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-}
-
-@mixin float-animation($duration: 3s) {
-  animation: float $duration ease-in-out infinite;
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-}
-
-@mixin glow-pulse($duration: 2s) {
-  animation: glowPulse $duration ease-in-out infinite;
-
-  @keyframes glowPulse {
-    0%, 100% { box-shadow: 0 0 5px var(--accent-primary); }
-    50% { box-shadow: 0 0 20px var(--accent-primary), 0 0 40px var(--accent-secondary); }
-  }
-}
-
-// ----------------------------------------------------------------------------
-// SCROLLBAR MIXINS
-// ----------------------------------------------------------------------------
-
-@mixin custom-scrollbar($width: 6px) {
+/// Custom thin glass scrollbar.
+/// @param {Length} $width - Track + thumb width
+@mixin custom-scrollbar($width: 5px) {
   &::-webkit-scrollbar {
     width: $width;
     height: $width;
@@ -263,107 +947,256 @@
   &::-webkit-scrollbar-thumb {
     background: var(--glass-border-strong);
     border-radius: calc($width / 2);
+    transition: background var(--duration-base);
 
     &:hover {
-      background: var(--text-muted);
+      background: var(--accent-primary);
     }
   }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border-strong) transparent;
 }
 
 @mixin hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  &::-webkit-scrollbar { display: none; }
 }
 
-// ----------------------------------------------------------------------------
-// ICON MIXINS
-// ----------------------------------------------------------------------------
 
+// ============================================================================
+// ICON MIXINS (v4 UPGRADED)
+// ============================================================================
+
+/// Icon with accent glow hover.
+///
+/// @param {*}      $color - Hover/glow color
+/// @param {Length} $size  - Icon font-size
 @mixin icon-glow($color: var(--accent-primary), $size: 20px) {
   font-size: $size;
-  transition: all #{map.get($transition, 'fast')};
-  
+  transition: all var(--duration-fast) var(--ease-smooth);
+
   &:hover {
     color: $color;
-    filter: drop-shadow(0 0 8px $color);
-    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px #{$color}) drop-shadow(0 0 16px #{$color});
+    transform: scale(1.12);
   }
 }
 
+/// Fixed-size icon container.
 @mixin icon-size($size) {
   font-size: $size;
-  width: $size;
-  height: $size;
+  width: $size; height: $size;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-// ----------------------------------------------------------------------------
-// TOPIC TEMPLATE MIXINS (migrated from app/styles)
-// ----------------------------------------------------------------------------
 
-/// Gradient accent line under a header
-@mixin gradient-underline($width: 100px, $height: 3px, $bottom: 0) {
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: $bottom;
-    left: 0;
-    width: $width;
-    height: $height;
-    background: var(--accent-gradient);
-    border-radius: 2px;
-    box-shadow: 0 2px 8px var(--accent-primary);
+// ============================================================================
+// v4 NEW: ANIMATION MIXINS
+// ============================================================================
+
+/// Cinematic entrance — blur + scale + translate fade-in.
+///
+/// @param {Time}   $dur   - Animation duration
+/// @param {Length} $y     - Vertical translate distance
+/// @param {Length} $blur  - Starting blur amount
+///
+/// @example scss
+///   .card { @include cinema-entrance(400ms); }
+@mixin cinema-entrance($dur: var(--duration-slow), $y: 24px, $blur: 6px) {
+  animation: cinema-entrance-anim $dur var(--ease-out) both;
+
+  @at-root {
+    @keyframes cinema-entrance-anim {
+      from { opacity: 0; transform: translateY(#{$y}); filter: blur(#{$blur}); }
+      to   { opacity: 1; transform: translateY(0);     filter: blur(0); }
+    }
   }
 }
 
-/// Card corner badge
-@mixin card-corner($size: 60px) {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: $size;
-  height: $size;
-  border-bottom-left-radius: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding: 8px;
-  box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/// Surface card base
-@mixin surface-card {
-  border-radius: var(--radius-lg, 1rem);
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  overflow: hidden;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-    border-color: var(--accent-primary);
+/// Stagger nth-child animation delays.
+///
+/// @param {Number} $count      - Number of children to stagger
+/// @param {Time}   $base-delay - Delay step between each child
+/// @param {String} $prop       - CSS property to stagger ('animation-delay' | 'transition-delay')
+///
+/// @example scss
+///   .list { @include stagger-children(8, 60ms); }
+@mixin stagger-children($count: 6, $base-delay: 60ms, $prop: 'animation-delay') {
+  @for $i from 1 through $count {
+    &:nth-child(#{$i}) {
+      #{$prop}: calc(#{$base-delay} * #{$i - 1});
+    }
   }
 }
 
-/// Left accent bar for list items
-@mixin left-accent-bar($width: 4px) {
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: $width;
-    background: var(--accent-gradient);
-    transition: width 0.3s ease;
+/// Glow pulse animation.
+///
+/// @param {Time} $dur - Pulse cycle duration
+/// @param {*} $glow-a - Shadow at 0%/100%
+/// @param {*} $glow-b - Shadow at 50%
+@mixin glow-pulse($dur: 2.6s, $glow-a: var(--edge-glow-sm), $glow-b: var(--edge-glow-md)) {
+  animation: glow-pulse-anim $dur var(--ease-smooth) infinite;
+
+  @at-root {
+    @keyframes glow-pulse-anim {
+      0%, 100% { box-shadow: #{$glow-a}; }
+      50%      { box-shadow: #{$glow-b}; }
+    }
+  }
+}
+
+/// Ambient float levitation.
+///
+/// @param {Time}   $dur    - Float cycle duration
+/// @param {Length} $dist   - Max vertical travel
+@mixin float-animation($dur: 5s, $dist: 8px) {
+  animation: float-anim $dur var(--ease-smooth) infinite;
+
+  @at-root {
+    @keyframes float-anim {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(calc(-1 * #{$dist})); }
+    }
+  }
+}
+
+/// Dragon Ball power aura pulse.
+/// Apply to .glass-pulse inside [data-theme="dragonball"].
+@mixin power-aura-pulse($dur: 1.6s) {
+  animation: power-aura-anim $dur var(--ease-smooth) infinite;
+
+  @at-root {
+    @keyframes power-aura-anim {
+      0%, 100% { box-shadow: var(--elev-3), var(--edge-glow-sm); }
+      50%      { box-shadow: var(--elev-5), var(--edge-glow-lg), 0 0 100px var(--accent-glow); }
+    }
+  }
+}
+
+/// Aurora / Galaxy background gradient drift.
+/// Apply to body or full-bleed elements.
+///
+/// @param {Time} $dur - Drift cycle duration
+@mixin aurora-drift($dur: 16s) {
+  background-size: 300% 300%;
+  animation: aurora-shift-anim $dur ease infinite;
+
+  @at-root {
+    @keyframes aurora-shift-anim {
+      0%   { background-position:   0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position:   0% 50%; }
+    }
+  }
+}
+
+/// NGE Evangelion CRT scanline flicker.
+/// Apply to body inside [data-theme="evangelion"].
+///
+/// @param {Time} $dur - Flicker cycle duration
+@mixin eva-scanline($dur: 5s) {
+  animation: eva-scan-anim $dur step-end infinite;
+
+  @at-root {
+    @keyframes eva-scan-anim {
+      0%,100% { opacity: 1; }
+      92%     { opacity: 1; }
+      93%     { opacity: .55; }
+      94%     { opacity: 1; }
+      97%     { opacity: .75; }
+      98%     { opacity: 1; }
+    }
+  }
+}
+
+/// Neon-noir text flicker — hot neon glow on/off cycle.
+/// Apply to .neon-text inside [data-theme="neon-noir"].
+///
+/// @param {Time} $dur   - Flicker cycle duration
+/// @param {*}    $color - Glow colour (defaults to accent-glow)
+@mixin neon-flicker-text($dur: 3.5s, $color: var(--accent-glow)) {
+  animation: neon-flicker-anim $dur linear infinite;
+
+  @at-root {
+    @keyframes neon-flicker-anim {
+      0%,19%,21%,23%,25%,54%,56%,100% {
+        opacity: 1;
+        text-shadow: 0 0 12px #{$color}, 0 0 24px #{$color};
+      }
+      20%,24%,55% {
+        opacity: .35;
+        text-shadow: none;
+      }
+    }
+  }
+}
+
+/// Shimmer skeleton loading state.
+@mixin glass-shimmer() {
+  background: linear-gradient(
+    90deg,
+    var(--glass-bg)       0%,
+    var(--glass-bg-hover) 40%,
+    var(--glass-bg)       80%
+  );
+  background-size: 200%;
+  animation: shimmer-anim 2s linear infinite;
+
+  @at-root {
+    @keyframes shimmer-anim {
+      from { background-position: -200% center; }
+      to   { background-position:  200% center; }
+    }
+  }
+}
+
+/// Fade-in utility.
+@mixin fade-in($dur: var(--duration-base)) {
+  animation: fade-in-anim $dur var(--ease-out) both;
+  @at-root {
+    @keyframes fade-in-anim {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  }
+}
+
+/// Slide-in from left.
+@mixin slide-in-left($dur: var(--duration-slow), $dist: 32px) {
+  animation: slide-left-anim $dur var(--ease-out) both;
+  @at-root {
+    @keyframes slide-left-anim {
+      from { opacity: 0; transform: translateX(calc(-1 * #{$dist})); filter: blur(4px); }
+      to   { opacity: 1; transform: translateX(0); filter: blur(0); }
+    }
+  }
+}
+
+/// Scale-in entrance.
+@mixin scale-in($dur: var(--duration-slow), $from: .94) {
+  animation: scale-in-anim $dur var(--ease-spring) both;
+  @at-root {
+    @keyframes scale-in-anim {
+      from { opacity: 0; transform: scale(#{$from}) translateY(12px); filter: blur(6px); }
+      to   { opacity: 1; transform: scale(1)         translateY(0);    filter: blur(0); }
+    }
+  }
+}
+
+// ============================================================================
+// REDUCED MOTION SAFETY WRAPPER
+// ============================================================================
+
+/// Wrap animation declarations to respect prefers-reduced-motion.
+///
+/// @example scss
+///   .card { @include safe-animation { @include cinema-entrance(); } }
+@mixin safe-animation {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
   }
 }

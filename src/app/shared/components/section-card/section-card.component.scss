@@ -215,3 +215,25 @@
   .section-card,
   .section-card__icon { transition: none; }
 }
+
+// =============================================================================
+// CLICKABLE CARD LINK
+// =============================================================================
+
+.section-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 4px;
+    border-radius: var(--radius-xl, 1.5rem);
+  }
+}

@@ -11,7 +11,8 @@ import { CustomFilterPipe } from '../../../../pipes/custom-filter.pipe';
     selector: 'app-directive',
     standalone: true,
     imports: [TopicTemplate, FormsModule, UpperCasePipe, DatePipe, CurrencyPipe, CustomFilterPipe],
-    templateUrl: './pipe-eg.html'
+    templateUrl: './pipe-eg.html',
+    styleUrl: './pipe-eg.scss'
 })
 export class PipeExample {
     content: ITopicContent | any = PIPE;

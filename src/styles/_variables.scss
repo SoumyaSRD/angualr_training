@@ -1,198 +1,621 @@
 // ============================================================================
-// GLASS UI DESIGN SYSTEM - CORE VARIABLES
-// ============================================================================
-// Single source of truth for all design tokens
+// GLASS UI DESIGN SYSTEM v4.0 — CORE VARIABLES
+// Cinematic · Spatial · Luminous · Premium
+//
+// Single source of truth for all design tokens.
+//
+// NEW IN v4.0:
+// ▸ Cinematic fluid type scale     — clamp-based, viewport-relative
+// ▸ Extended font-weight scale     — thin → black (100–900)
+// ▸ Spatial tracking + leading     — letter/line-spacing token sets
+// ▸ 3D elevation shadow stack      — elev-0 → elev-5
+// ▸ Ambient edge glow tokens       — glow-sm → glow-lg (accent-aware)
+// ▸ Glass refraction tokens        — refract-light/mid/dark/specular
+// ▸ Depth light tokens             — light-primary/scatter/ambient
+// ▸ Magnetic lift transform tokens — lift-sm/md/lg/press
+// ▸ Advanced light scatter         — scatter-soft/dark
+// ▸ Prism border gradient          — rainbow-edge shimmer
+// ▸ Motion token expansion         — spring-heavy/elastic easings
+// ▸ Mesh animation tokens          — mesh-speed/opacity
+// ▸ Contrast helper filters        — contrast-boost-light/dark
+// ▸ Aura token system              — aura-near/mid/far/stack
+// ▸ Extended z-index scale         — overlay, announce levels
+// ▸ Extended layout tokens         — content-max, rail, panel widths
+// ▸ Aspect ratio tokens            — square/video/wide/portrait
+// ▸ Extended breakpoints           — 3xl for ultra-wide
+// ▸ Spatial spacing aliases        — named semantic spacing
+// ▸ Surface / background aliases   — bg-primary/secondary/tertiary
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// BASE UNIT SYSTEM (4px grid)
-// ----------------------------------------------------------------------------
+@use 'sass:map';
+
+
+// ============================================================================
+// BASE UNIT SYSTEM  (4px grid — unchanged)
+// ============================================================================
+
 $base-unit: 4px;
 
-// ----------------------------------------------------------------------------
-// SPACING SCALE
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// SPACING SCALE  (v4: extended + semantic aliases)
+// ============================================================================
+
 $spacing: (
-  '0': 0,
-  'xs': $base-unit,        // 4px
-  'sm': $base-unit * 2,    // 8px
-  'md': $base-unit * 4,    // 16px
-  'lg': $base-unit * 6,    // 24px
-  'xl': $base-unit * 8,    // 32px
+  '0':   0,
+  'xs':  $base-unit * 1,   //  4px
+  'sm':  $base-unit * 2,   //  8px
+  'md':  $base-unit * 4,   // 16px
+  'lg':  $base-unit * 6,   // 24px
+  'xl':  $base-unit * 8,   // 32px
   '2xl': $base-unit * 12,  // 48px
   '3xl': $base-unit * 16,  // 64px
   '4xl': $base-unit * 24,  // 96px
+  '5xl': $base-unit * 32,  // 128px  ← v4 new
+  '6xl': $base-unit * 40,  // 160px  ← v4 new
 );
 
-// ----------------------------------------------------------------------------
-// TYPOGRAPHY
-// ----------------------------------------------------------------------------
+// Semantic spatial aliases (v4 NEW)
+// Use these for component-level intent rather than raw scale.
+$space-component-xs:   map.get($spacing, 'xs');    //  4px — icon gap, badge pad
+$space-component-sm:   map.get($spacing, 'sm');    //  8px — button pad v
+$space-component-md:   map.get($spacing, 'md');    // 16px — card pad
+$space-component-lg:   map.get($spacing, 'lg');    // 24px — section gap
+$space-component-xl:   map.get($spacing, 'xl');    // 32px — panel pad
+$space-layout-section: map.get($spacing, '3xl');   // 64px — page section gap
+$space-layout-page:    map.get($spacing, '4xl');   // 96px — page margin
+
+
+// ============================================================================
+// TYPOGRAPHY  (v4: cinematic fluid scale + extended weight/tracking/leading)
+// ============================================================================
+
+// ── Font families (v4: swap Inter for Syne + DM Sans) ────────────────────────
+// Inter is replaced by the premium Glass UI v4 pairing.
 $font-family: (
-  'primary': '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  'mono': '"JetBrains Mono", "Fira Code", Consolas, monospace',
+  'display': '"Syne", sans-serif',
+  'body':    '"DM Sans", -apple-system, BlinkMacSystemFont, sans-serif',
+  'mono':    '"JetBrains Mono", "Fira Code", Consolas, monospace',
+  // Preserve legacy key for backwards compat
+  'primary': '"Syne", sans-serif',
 );
 
+// ── Cinematic fluid type scale (v4 NEW) ──────────────────────────────────────
+// clamp(min, preferred, max) — scales with viewport width.
+// These values are mirrored as --type-* CSS custom properties in :root.
 $font-size: (
-  'xs': 0.75rem,    // 12px
-  'sm': 0.875rem,   // 14px
-  'base': 1rem,     // 16px
-  'lg': 1.125rem,   // 18px
-  'xl': 1.25rem,    // 20px
-  '2xl': 1.5rem,    // 24px
-  '3xl': 1.875rem,  // 30px
-  '4xl': 2.25rem,   // 36px
+  'xs':   clamp(0.65rem,  0.60rem + 0.20vw, 0.75rem),    // ~10–12px
+  'sm':   clamp(0.80rem,  0.75rem + 0.25vw, 0.875rem),   // ~12–14px
+  'base': clamp(0.9375rem,0.875rem + 0.30vw, 1rem),      // ~15–16px
+  'md':   clamp(1.0625rem,0.95rem  + 0.45vw, 1.25rem),   // ~17–20px
+  'lg':   clamp(1.25rem,  1.05rem  + 0.80vw, 1.75rem),   // ~20–28px
+  'xl':   clamp(1.5rem,   1.15rem  + 1.40vw, 2.5rem),    // ~24–40px
+  '2xl':  clamp(2rem,     1.40rem  + 2.20vw, 4rem),      // ~32–64px
+  '3xl':  clamp(2.5rem,   1.60rem  + 3.20vw, 6rem),      // ~40–96px
+  '4xl':  clamp(3rem,     1.80rem  + 4.50vw, 9rem),      // ~48–144px
 );
 
+// ── Extended font-weight scale (v4: thin → black) ────────────────────────────
 $font-weight: (
-  'light': 300,
-  'normal': 400,
-  'medium': 500,
-  'semibold': 600,
-  'bold': 700,
+  'thin':       100,   // ← v4 new
+  'extralight': 200,   // ← v4 new
+  'light':      300,
+  'normal':     400,
+  'medium':     500,
+  'semibold':   600,
+  'bold':       700,
+  'extrabold':  800,   // ← v4 new
+  'black':      900,   // ← v4 new
 );
 
-// ----------------------------------------------------------------------------
-// GLASS EFFECTS
-// ----------------------------------------------------------------------------
+// ── Letter-spacing tokens (v4 NEW) ───────────────────────────────────────────
+// Mirrored as --type-tracking-* CSS custom properties in :root.
+$tracking: (
+  'tighter': -0.04em,
+  'tight':   -0.03em,
+  'normal':   0em,
+  'wide':     0.04em,
+  'wider':    0.08em,
+  'widest':   0.14em,
+  'ultra':    0.22em,   // extreme spatial labels
+);
+
+// ── Line-height tokens (v4 NEW) ──────────────────────────────────────────────
+// Mirrored as --type-leading-* CSS custom properties in :root.
+$leading: (
+  'none':   1.00,
+  'tight':  1.10,
+  'snug':   1.25,
+  'normal': 1.55,
+  'loose':  1.80,
+  'ultra':  2.20,
+);
+
+
+// ============================================================================
+// GLASS EFFECTS  (v4: extended blur scale + opacity tokens)
+// ============================================================================
+
 $glass: (
-  'blur-sm': 4px,
-  'blur-md': 8px,
-  'blur-lg': 16px,
-  'blur-xl': 24px,
-  'blur-2xl': 40px,
+  'blur-none': 0px,
+  'blur-xs':   2px,    // ← v4 new  subtle depth hint
+  'blur-sm':   4px,
+  'blur-md':   8px,
+  'blur-lg':   16px,
+  'blur-xl':   24px,
+  'blur-2xl':  40px,
+  'blur-3xl':  64px,   // ← v4 new  heavy modal overlay
 );
 
+// Saturation / brightness modifiers paired with blur (v4 NEW)
+$glass-filter: (
+  'saturate-base':  1.80,
+  'saturate-deep':  2.20,
+  'brightness-up':  1.02,   // subtle lift on light surfaces
+  'brightness-dn':  1.01,   // minimal on dark surfaces
+);
+
+// Surface opacity tiers (v4: renamed for clarity)
 $glass-opacity: (
-  'light': 0.7,
-  'medium': 0.5,
-  'dark': 0.3,
-  'subtle': 0.15,
+  'solid':   0.96,   // near-opaque — active states
+  'strong':  0.82,   // hover state
+  'default': 0.65,   // card resting
+  'light':   0.40,   // secondary surface
+  'deep':    0.25,   // tertiary / deep background
+  'ghost':   0.10,   // barely-there tint
+  'subtle':  0.05,   // refraction-only layer
 );
 
-// ----------------------------------------------------------------------------
-// BORDER RADIUS
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// BORDER RADIUS  (v4: aligned with CSS token names)
+// ============================================================================
+
 $radius: (
   'none': 0,
-  'xs': 4px,
-  'sm': 8px,
-  'md': 12px,
-  'lg': 16px,
-  'xl': 24px,
-  '2xl': 32px,
+  'xs':   4px,
+  'sm':   8px,
+  'md':   12px,
+  'lg':   20px,     // v4: bumped from 16px for rounder premium feel
+  'xl':   28px,     // v4: bumped from 24px
+  '2xl':  40px,     // v4: bumped from 32px
+  '3xl':  56px,     // ← v4 new  hero card corners
   'full': 9999px,
 );
 
-// ----------------------------------------------------------------------------
-// SHADOWS (Layered for depth)
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// SHADOW SYSTEM  (v4: upgraded with depth + elevation stack)
+// ============================================================================
+
+// ── Legacy semantic shadows (preserved for backwards compat) ─────────────────
 $shadow: (
-  'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
-  'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
-  'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-  '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  'glow-sm': '0 0 10px rgba(255, 255, 255, 0.2)',
-  'glow-md': '0 0 20px rgba(255, 255, 255, 0.3)',
-  'glow-lg': '0 0 40px rgba(255, 255, 255, 0.4)',
-  'inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)',
+  'xs':  '0 1px 2px rgba(0,0,0,.04)',
+  'sm':  '0 2px 8px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04)',
+  'md':  '0 8px 24px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04)',
+  'lg':  '0 20px 40px rgba(0,0,0,.10), 0 4px 12px rgba(0,0,0,.06)',
+  'xl':  '0 32px 64px rgba(0,0,0,.14), 0 8px 20px rgba(0,0,0,.06)',
+  '2xl': '0 48px 96px rgba(0,0,0,.20), 0 12px 28px rgba(0,0,0,.08)',
+  'inner': 'inset 0 2px 8px rgba(0,0,0,.06)',
 );
 
-// ----------------------------------------------------------------------------
-// BREAKPOINTS
-// ----------------------------------------------------------------------------
-$breakpoints: (
-  'sm': 576px,
-  'md': 768px,
-  'lg': 992px,
-  'xl': 1200px,
-  '2xl': 1400px,
+// ── 3D Elevation token stack (v4 NEW) ────────────────────────────────────────
+// Progressive depth with ring highlight and inset scatter on higher levels.
+// Mirrored as --elev-* CSS custom properties in :root.
+$elevation: (
+  0: 'none',
+  1: '0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04)',
+  2: '0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.05), 0 0 0 1px rgba(255,255,255,.08)',
+  3: '0 8px 24px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06), 0 0 0 1px rgba(255,255,255,.10), inset 0 1px 0 rgba(255,255,255,.12)',
+  4: '0 16px 40px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.07), 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.16)',
+  5: '0 28px 64px rgba(0,0,0,.16), 0 12px 24px rgba(0,0,0,.09), 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.20)',
 );
 
-// ----------------------------------------------------------------------------
-// Z-INDEX SCALE
-// ----------------------------------------------------------------------------
-$z-index: (
-  'behind': -1,
-  'base': 0,
-  'dropdown': 1000,
-  'sticky': 1020,
-  'fixed': 1030,
-  'modal-backdrop': 1040,
-  'modal': 1050,
-  'popover': 1060,
-  'tooltip': 1070,
-  'toast': 1080,
+// ── Glow shadows (v4: accent-aware — reference CSS vars) ─────────────────────
+// These are CSS-var-dependent and must be consumed at runtime in :root.
+$shadow-glow-keys: (
+  'glow-sm': '0 0 12px -2px',
+  'glow-md': '0 0 24px -4px',
+  'glow-lg': '0 0 40px -6px, 0 0 80px -12px',
 );
 
-// ----------------------------------------------------------------------------
-// TRANSITIONS
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// GLASS REFRACTION SYSTEM  (v4 NEW)
+// ============================================================================
+// Prismatic surface shimmer applied via ::before pseudo-elements.
+// Values are defaults; themes override via CSS custom properties.
+
+$glass-refract: (
+  'angle':    145deg,
+  'light':    rgba(255, 255, 255, 0.55),
+  'mid':      rgba(255, 255, 255, 0.08),
+  'dark':     rgba(0, 0, 0, 0.03),
+  'specular': rgba(255, 255, 255, 0.90),
+  'specular-size': '30%',
+);
+
+
+// ============================================================================
+// DEPTH LIGHT SYSTEM  (v4 NEW)
+// ============================================================================
+// Adaptive radial illumination engine.
+// --light-x / --light-y CSS props are updated via JS mousemove for tracking.
+
+$depth-light: (
+  'primary':  rgba(255, 255, 255, 0.22),
+  'scatter':  rgba(255, 255, 255, 0.08),
+  'ambient':  rgba(255, 255, 255, 0.04),
+  'x-default': '50%',
+  'y-default': '30%',
+);
+
+
+// ============================================================================
+// MAGNETIC LIFT TRANSFORMS  (v4 NEW)
+// ============================================================================
+// Spring-physics hover/press transforms as named string tokens.
+// Mirrored as --lift-* CSS custom properties in :root.
+
+$lift: (
+  'sm':    'translateY(-2px) scale(1.005)',
+  'md':    'translateY(-4px) scale(1.010)',
+  'lg':    'translateY(-8px) scale(1.016)',
+  'press': 'translateY(1px)  scale(0.975)',
+);
+
+
+// ============================================================================
+// MOTION SYSTEM  (v4: expanded spring + elastic easings)
+// ============================================================================
+
 $transition: (
-  'fast': '150ms cubic-bezier(0.4, 0, 0.2, 1)',
-  'normal': '250ms cubic-bezier(0.4, 0, 0.2, 1)',
-  'slow': '350ms cubic-bezier(0.4, 0, 0.2, 1)',
-  'bounce': '500ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-  'theme': '300ms ease-in-out',
+  // Legacy keys preserved for backwards compat
+  'fast':   '120ms cubic-bezier(0.4, 0, 1, 1)',
+  'normal': '240ms cubic-bezier(0.4, 0, 0.2, 1)',
+  'slow':   '400ms cubic-bezier(0.4, 0, 0.2, 1)',
+  'bounce': '500ms cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+  'theme':  '300ms ease-in-out',
+
+  // v4 New precise easing tokens
+  'ease-smooth':       'cubic-bezier(0.4, 0, 0.2, 1)',
+  'ease-in':           'cubic-bezier(0.4, 0, 1, 1)',
+  'ease-out':          'cubic-bezier(0, 0, 0.2, 1)',
+  'ease-spring':       'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  'ease-spring-heavy': 'cubic-bezier(0.34,  1.56,  0.64, 1)',
+  'ease-elastic':      'cubic-bezier(0.68, -0.55, 0.27, 1.55)',
 );
 
-// ----------------------------------------------------------------------------
-// LAYOUT DIMENSIONS
-// ----------------------------------------------------------------------------
+// Duration tokens (v4: named for semantic clarity)
+$duration: (
+  'instant': 60ms,
+  'fast':    120ms,
+  'base':    240ms,
+  'slow':    400ms,
+  'xslow':   700ms,
+  'crawl':   1200ms,   // ← v4 new  mesh drift, cinematic reveals
+);
+
+// Mesh background animation tokens (v4 NEW)
+$mesh: (
+  'speed':   18s,
+  'opacity': 0.60,
+);
+
+// Contrast helper filter values (v4 NEW)
+$contrast: (
+  'boost-light': 'brightness(1.05) contrast(1.08)',
+  'boost-dark':  'brightness(1.08) contrast(1.12)',
+);
+
+
+// ============================================================================
+// BREAKPOINTS  (v4: added 3xl for ultra-wide canvases)
+// ============================================================================
+
+$breakpoints: (
+  'xs':  480px,    // ← v4 new  large phones
+  'sm':  576px,
+  'md':  768px,
+  'lg':  992px,
+  'xl':  1200px,
+  '2xl': 1400px,
+  '3xl': 1920px,   // ← v4 new  ultra-wide / cinema display
+);
+
+
+// ============================================================================
+// Z-INDEX SCALE  (v4: extended with overlay + announcement layers)
+// ============================================================================
+
+$z-index: (
+  'behind':          -1,
+  'base':             0,
+  'raised':          10,    // ← v4 new  elevated card
+  'dropdown':      1000,
+  'sticky':        1020,
+  'fixed':         1030,
+  'overlay':       1035,    // ← v4 new  non-modal full-screen overlay
+  'modal-backdrop':1040,
+  'modal':         1050,
+  'popover':       1060,
+  'tooltip':       1070,
+  'toast':         1080,
+  'announce':      1090,    // ← v4 new  global banners / alerts
+  'max':           9999,    // ← v4 new  emergency override
+);
+
+
+// ============================================================================
+// LAYOUT DIMENSIONS  (v4: extended with content + panel tokens)
+// ============================================================================
+
 $layout: (
-  'header-height': 64px,
-  'sidebar-width': 280px,
-  'sidebar-collapsed': 72px,
-  'footer-height': 48px,
+  'header-height':       64px,
+  'sidebar-width':      280px,
+  'sidebar-collapsed':   72px,
+  'footer-height':       48px,
+
+  // v4 New content width tokens
+  'content-xs':          480px,   // narrow reading column
+  'content-sm':          640px,   // article / dialog
+  'content-md':          768px,   // default content
+  'content-lg':          960px,   // wide content
+  'content-xl':         1200px,   // full-width dashboard
+  'content-max':        1440px,   // site max-width
+
+  // v4 New panel / rail tokens
+  'panel-sm':           320px,    // detail panel / drawer
+  'panel-md':           400px,    // wide panel
+  'panel-lg':           520px,    // overlay panel
+  'rail-width':          56px,    // icon-only nav rail
 );
 
-// ----------------------------------------------------------------------------
-// CSS CUSTOM PROPERTIES (Runtime Variables)
-// These are injected by the theme system
-// ----------------------------------------------------------------------------
+
+// ============================================================================
+// ASPECT RATIOS  (v4 NEW)
+// ============================================================================
+
+$aspect-ratio: (
+  'square':   '1 / 1',
+  'video':    '16 / 9',
+  'wide':     '21 / 9',
+  'portrait': '3 / 4',
+  'golden':   '1.618 / 1',
+);
+
+
+// ============================================================================
+// CSS CUSTOM PROPERTIES  (Runtime tokens — theme system overrides these)
+// ============================================================================
+//
+// v4 ARCHITECTURE NOTE:
+// This :root block defines FALLBACK defaults that are superseded by
+// [data-theme="*"] overrides declared in _themes.scss.
+// All new v4 token groups are included here so components always have
+// a working fallback even if a theme omits them.
+// ============================================================================
+
 :root {
-  // Base colors (will be overridden by themes)
-  --glass-bg-primary: rgba(255, 255, 255, 0.7);
-  --glass-bg-secondary: rgba(255, 255, 255, 0.5);
-  --glass-bg-tertiary: rgba(255, 255, 255, 0.3);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-border-strong: rgba(255, 255, 255, 0.5);
-  
-  // Text colors
-  --text-primary: #1a1a2e;
+
+  // ── Font families ───────────────────────────────────────────────────────────
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  // ── Cinematic fluid type scale (v4 NEW) ────────────────────────────────────
+  --type-xs:   #{clamp(0.65rem,  0.60rem + 0.20vw, 0.75rem)};
+  --type-sm:   #{clamp(0.80rem,  0.75rem + 0.25vw, 0.875rem)};
+  --type-base: #{clamp(0.9375rem,0.875rem + 0.30vw, 1rem)};
+  --type-md:   #{clamp(1.0625rem,0.95rem  + 0.45vw, 1.25rem)};
+  --type-lg:   #{clamp(1.25rem,  1.05rem  + 0.80vw, 1.75rem)};
+  --type-xl:   #{clamp(1.5rem,   1.15rem  + 1.40vw, 2.5rem)};
+  --type-2xl:  #{clamp(2rem,     1.40rem  + 2.20vw, 4rem)};
+  --type-3xl:  #{clamp(2.5rem,   1.60rem  + 3.20vw, 6rem)};
+  --type-4xl:  #{clamp(3rem,     1.80rem  + 4.50vw, 9rem)};
+
+  // ── Letter-spacing tokens (v4 NEW) ─────────────────────────────────────────
+  --type-tracking-tighter: -0.04em;
+  --type-tracking-tight:   -0.03em;
+  --type-tracking-normal:   0em;
+  --type-tracking-wide:     0.04em;
+  --type-tracking-wider:    0.08em;
+  --type-tracking-widest:   0.14em;
+  --type-tracking-ultra:    0.22em;
+
+  // ── Line-height tokens (v4 NEW) ────────────────────────────────────────────
+  --type-leading-none:   1.00;
+  --type-leading-tight:  1.10;
+  --type-leading-snug:   1.25;
+  --type-leading-normal: 1.55;
+  --type-leading-loose:  1.80;
+  --type-leading-ultra:  2.20;
+
+  // ── Spacing tokens ─────────────────────────────────────────────────────────
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+  --space-6xl: 160px;
+
+  // ── Border radius tokens ───────────────────────────────────────────────────
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-2xl:  40px;
+  --radius-3xl:  56px;
+  --radius-full: 9999px;
+
+  // ── Glass surface (theme-system overrides) ─────────────────────────────────
+  // Legacy names preserved for backwards compat with existing component code.
+  --glass-bg-primary:   rgba(255, 255, 255, 0.65);
+  --glass-bg-secondary: rgba(255, 255, 255, 0.50);
+  --glass-bg-tertiary:  rgba(255, 255, 255, 0.25);
+  // v4 aligned names (used by components and mixins)
+  --glass-bg:            rgba(255, 255, 255, 0.55);
+  --glass-bg-hover:      rgba(255, 255, 255, 0.80);
+  --glass-bg-active:     rgba(255, 255, 255, 0.95);
+  --glass-bg-deep:       rgba(255, 255, 255, 0.25);
+  --glass-border:        rgba(255, 255, 255, 0.50);
+  --glass-border-strong: rgba(255, 255, 255, 0.85);
+  --glass-border-subtle: rgba(255, 255, 255, 0.20);
+  --glass-blur:          20px;
+  --glass-blur-heavy:    40px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.04);
+
+  // ── Glass refraction (v4 NEW) ──────────────────────────────────────────────
+  --glass-refract-angle:    145deg;
+  --glass-refract-light:    rgba(255, 255, 255, 0.55);
+  --glass-refract-mid:      rgba(255, 255, 255, 0.08);
+  --glass-refract-dark:     rgba(0, 0, 0, 0.03);
+  --glass-specular:         rgba(255, 255, 255, 0.90);
+  --glass-specular-size:    30%;
+
+  // Prism border gradient (v4 NEW)
+  --prism-border: linear-gradient(
+    145deg,
+    rgba(255,100,100,.50)  0%,
+    rgba(255,180,50,.40)  14%,
+    rgba(200,255,60,.35)  28%,
+    rgba(50,230,255,.45)  42%,
+    rgba(120,100,255,.50) 56%,
+    rgba(240,80,200,.45)  70%,
+    rgba(255,100,100,.50) 100%
+  );
+
+  // ── Depth lighting (v4 NEW) ────────────────────────────────────────────────
+  --light-x:       50%;
+  --light-y:       30%;
+  --light-primary: rgba(255, 255, 255, 0.22);
+  --light-scatter: rgba(255, 255, 255, 0.08);
+  --light-ambient: rgba(255, 255, 255, 0.04);
+
+  // Pre-composed radial light gradients
+  --depth-light-1:    radial-gradient(ellipse 50% 35% at var(--light-x) var(--light-y), var(--light-primary) 0%, var(--light-scatter) 50%, transparent 100%);
+  --depth-light-deep: radial-gradient(ellipse 80% 60% at 50% 0%, var(--light-ambient) 0%, transparent 70%);
+
+  // ── 3D Elevation stack (v4 NEW) ────────────────────────────────────────────
+  --elev-0: none;
+  --elev-1: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --elev-2: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.05), 0 0 0 1px rgba(255,255,255,.08);
+  --elev-3: 0 8px 24px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06), 0 0 0 1px rgba(255,255,255,.10), inset 0 1px 0 rgba(255,255,255,.12);
+  --elev-4: 0 16px 40px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.07), 0 0 0 1px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.16);
+  --elev-5: 0 28px 64px rgba(0,0,0,.16), 0 12px 24px rgba(0,0,0,.09), 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.20);
+
+  // ── Ambient edge glow (v4 NEW) — accent-aware via --accent-glow ────────────
+  --edge-glow-sm:  0 0 12px -2px  var(--accent-glow, rgba(99,102,241,.35));
+  --edge-glow-md:  0 0 24px -4px  var(--accent-glow, rgba(99,102,241,.35)),
+                   0 0 48px -8px  var(--accent-glow, rgba(99,102,241,.35));
+  --edge-glow-lg:  0 0 40px -6px  var(--accent-glow, rgba(99,102,241,.35)),
+                   0 0 80px -12px var(--accent-glow, rgba(99,102,241,.35)),
+                   0 0 120px -20px var(--accent-glow, rgba(99,102,241,.35));
+
+  // ── Dynamic accent aura stack (v4 NEW) ─────────────────────────────────────
+  --aura-near:  0 0 0 1px  color-mix(in srgb, var(--accent-primary, #6366f1) 22%, transparent);
+  --aura-mid:   0 4px 20px color-mix(in srgb, var(--accent-primary, #6366f1) 30%, transparent);
+  --aura-far:   0 12px 48px color-mix(in srgb, var(--accent-primary, #6366f1) 18%, transparent);
+  --aura-stack: var(--aura-near), var(--aura-mid), var(--aura-far);
+
+  // ── Advanced light scatter (v4 NEW) ────────────────────────────────────────
+  --scatter-soft: inset  0  1px 0 rgba(255,255,255,.80),
+                  inset  0 -1px 0 rgba(0,0,0,.06),
+                  inset  1px 0 0 rgba(255,255,255,.30),
+                  inset -1px 0 0 rgba(255,255,255,.10);
+
+  --scatter-dark: inset  0  1px 0 rgba(255,255,255,.12),
+                  inset  0 -1px 0 rgba(0,0,0,.30),
+                  inset  1px 0 0 rgba(255,255,255,.06),
+                  inset -1px 0 0 rgba(0,0,0,.06);
+
+  // ── Magnetic lift transforms (v4 NEW) ──────────────────────────────────────
+  --lift-sm:    translateY(-2px) scale(1.005);
+  --lift-md:    translateY(-4px) scale(1.010);
+  --lift-lg:    translateY(-8px) scale(1.016);
+  --lift-press: translateY(1px)  scale(0.975);
+
+  // ── Contrast helpers (v4 NEW) ──────────────────────────────────────────────
+  --contrast-boost-light: brightness(1.05) contrast(1.08);
+  --contrast-boost-dark:  brightness(1.08) contrast(1.12);
+
+  // ── Mesh animation (v4 NEW) ────────────────────────────────────────────────
+  --mesh-speed:   18s;
+  --mesh-opacity: 0.60;
+
+  // ── Text colors ────────────────────────────────────────────────────────────
+  --text-primary:   #1a1a2e;
   --text-secondary: #4a4a6a;
-  --text-muted: #7a7a9a;
-  --text-inverse: #ffffff;
-  
-  // Accent colors
-  --accent-primary: #3b82f6;
+  --text-muted:     #7a7a9a;
+  --text-inverse:   #ffffff;
+  --text-on-accent: #ffffff;
+
+  // ── Accent palette ─────────────────────────────────────────────────────────
+  --accent-primary:   #6366f1;
   --accent-secondary: #8b5cf6;
+  --accent-tertiary:  #ec4899;
+  --accent-gradient:  linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --accent-glow:      rgba(99, 102, 241, 0.35);
+
+  // Legacy accent names (backwards compat)
   --accent-success: #10b981;
   --accent-warning: #f59e0b;
-  --accent-error: #ef4444;
-  
-  // Background
-  --bg-body: #f0f4f8;
-  --bg-surface: rgba(255, 255, 255, 0.8);
-  
-  // Glow effects
-  --glow-primary: 0 0 20px rgba(59, 130, 246, 0.4);
-  --glow-accent: 0 0 20px rgba(139, 92, 246, 0.4);
-  
-  // Gradients
+  --accent-error:   #ef4444;
+
+  // ── Semantic colors ────────────────────────────────────────────────────────
+  --success:    #10b981;   --success-bg: rgba(16,185,129,0.12);
+  --warning:    #f59e0b;   --warning-bg: rgba(245,158,11,0.12);
+  --error:      #ef4444;   --error-bg:   rgba(239,68,68,0.12);
+  --info:       #3b82f6;   --info-bg:    rgba(59,130,246,0.12);
+
+  // ── Background (legacy + v4 aligned names) ─────────────────────────────────
+  --bg-body:        #f0f4f8;        // legacy
+  --bg-surface:     rgba(255, 255, 255, 0.80);  // legacy
+  --bg-primary:     #f8fafc;        // v4 aligned
+  --bg-secondary:   #f1f5f9;        // v4 aligned
+  --bg-tertiary:    #e2e8f0;        // v4 aligned
+  --bg-gradient:    linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #ede9fe 100%);
+
+  // ── Glow effects (legacy + v4) ─────────────────────────────────────────────
+  --glow-primary:     0 0 20px rgba(99,102,241,0.40);   // legacy
+  --glow-accent:      0 0 20px rgba(139,92,246,0.40);   // legacy
+  --shadow-glow:      0 0 0 1px var(--accent-glow), 0 8px 32px var(--accent-glow);
+  --shadow-inset:     inset 0 2px 8px rgba(0,0,0,.06);
+
+  // ── Gradients ──────────────────────────────────────────────────────────────
   --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  --gradient-surface: linear-gradient(135deg, var(--glass-bg-primary), var(--glass-bg-secondary));
-  
-  // Sidebar specific
-  --sidebar-bg: var(--glass-bg-primary);
-  --sidebar-text: var(--text-primary);
+  --gradient-surface: linear-gradient(135deg, var(--glass-bg), var(--glass-bg-deep));
+
+  // ── Layout tokens ──────────────────────────────────────────────────────────
+  --sidebar-bg:          var(--glass-bg);
+  --sidebar-text:        var(--text-primary);
   --sidebar-text-active: var(--accent-primary);
-  --sidebar-bg-active: rgba(59, 130, 246, 0.1);
-  
-  // Header specific
-  --header-bg: var(--glass-bg-primary);
-  --header-text: var(--text-primary);
-  
-  // Animation
-  --transition-theme: 300ms ease-in-out;
+  --sidebar-bg-active:   color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  --header-bg:           var(--glass-bg);
+  --header-text:         var(--text-primary);
+
+  // ── Motion tokens ──────────────────────────────────────────────────────────
+  --ease-spring:       cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring-heavy: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:       cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:           cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:          cubic-bezier(0, 0, 0.2, 1);
+  --ease-elastic:      cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --duration-fast:     120ms;
+  --duration-base:     240ms;
+  --duration-slow:     400ms;
+  --duration-xslow:    700ms;
+  --transition-theme:  300ms ease-in-out;  // legacy compat
+
+  // ── Aspect ratio tokens (v4 NEW) ──────────────────────────────────────────
+  --aspect-square:   1 / 1;
+  --aspect-video:    16 / 9;
+  --aspect-wide:     21 / 9;
+  --aspect-portrait: 3 / 4;
+  --aspect-golden:   1.618 / 1;
 }

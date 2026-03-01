@@ -8,7 +8,8 @@ import { FormsModule } from '@angular/forms';
     selector: 'app-data-binding',
     standalone: true,
     imports: [TopicTemplate, FormsModule],
-    templateUrl: './data-binding.html'
+    templateUrl: './data-binding.html',
+    styleUrl: './data-binding.scss'
 })
 export class DataBinding {
     content: ITopicContent | any = ANGULAR_DATA_BINDING_GUIDE;

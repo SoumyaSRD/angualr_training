@@ -1,241 +1,1025 @@
 // ============================================================================
-// GLASS UI DESIGN SYSTEM - ANIMATIONS
+// GLASS UI DESIGN SYSTEM v4.0 — ANIMATIONS
+// Cinematic · Spatial · Luminous · Premium
+//
+// NEW IN v4.0:
+// ▸ Blur-augmented entrances (filter: blur fade)
+// ▸ Depth-aware stagger system (--stagger-base + nth-child delays)
+// ▸ Cinematic motion curves (custom spring + elastic easings)
+// ▸ Multi-axis entrance choreography
+// ▸ Ambient light sweep & specular flash
+// ▸ Holographic shimmer (diagonal, colour-shifted)
+// ▸ Liquid morph scale
+// ▸ Parallax drift (subtle background-layer movement)
+// ▸ Spatial reveal (3D rotateX entrance)
+// ▸ Cinematic wipe (clip-path reveal)
+// ▸ Edge-glow pulse (layered shadow breathe)
+// ▸ Refraction flicker (glass distortion burst)
+// ▸ Magnetic snap hover (spring overshoot)
+// ▸ Theme-aware transition tokens
+// ▸ Orchestrated page-load sequence (.scene-*)
 // ============================================================================
 
+
 // ----------------------------------------------------------------------------
-// KEYFRAME ANIMATIONS
+// MOTION TOKENS
+// Centralise all easing + duration primitives so every keyframe references
+// a named value rather than a raw cubic-bezier string.
 // ----------------------------------------------------------------------------
+
+:root {
+  // Easing curves
+  --ease-smooth:        cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:           cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:            cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring:        cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-spring-heavy:  cubic-bezier(0.34,  1.56,  0.64, 1.0);
+  --ease-elastic:       cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --ease-decelerate:    cubic-bezier(0.0,  0.0,  0.2, 1.0);
+  --ease-snap:          cubic-bezier(0.87, 0, 0.13, 1);    // sharp snap-to-rest
+  --ease-cinematic:     cubic-bezier(0.22, 1, 0.36, 1);    // film-cut ease
+
+  // Durations
+  --dur-instant:  80ms;
+  --dur-fast:     140ms;
+  --dur-base:     260ms;
+  --dur-slow:     440ms;
+  --dur-xslow:    720ms;
+  --dur-cinematic: 1100ms;
+
+  // Stagger base (multiply by index for sequential reveals)
+  --stagger-base:  55ms;
+  --stagger-slow:  90ms;
+
+  // Entrance distances
+  --enter-y-sm:   12px;
+  --enter-y-md:   24px;
+  --enter-y-lg:   48px;
+  --enter-x-sm:   16px;
+  --enter-x-md:   32px;
+  --enter-x-lg:   60px;
+  --enter-scale:  0.92;
+  --enter-blur:   8px;
+  --enter-rotate: 6deg;
+}
+
+
+// ============================================================================
+// KEYFRAME LIBRARY
+// ============================================================================
+
+// ── Opacity only ─────────────────────────────────────────────────────────────
 
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+
+// ── Vertical entrances ───────────────────────────────────────────────────────
+
+// Classic — no blur
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(var(--enter-y-md)); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(calc(var(--enter-y-md) * -1)); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+// Cinematic — blur + Y translate (v4 NEW)
+@keyframes fadeInUpBlur {
+  from { opacity: 0; transform: translateY(var(--enter-y-lg)); filter: blur(var(--enter-blur)); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0px); }
+}
+
+@keyframes fadeInDownBlur {
+  from { opacity: 0; transform: translateY(calc(var(--enter-y-lg) * -1)); filter: blur(var(--enter-blur)); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0px); }
+}
+
+
+// ── Horizontal entrances ─────────────────────────────────────────────────────
+
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(calc(var(--enter-x-md) * -1)); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(var(--enter-x-md)); }
+  to   { opacity: 1; transform: translateX(0); }
 }
+
+// Cinematic blur variants (v4 NEW)
+@keyframes slideInLeftBlur {
+  from { opacity: 0; transform: translateX(calc(var(--enter-x-lg) * -1)); filter: blur(6px); }
+  to   { opacity: 1; transform: translateX(0); filter: blur(0px); }
+}
+
+@keyframes slideInRightBlur {
+  from { opacity: 0; transform: translateX(var(--enter-x-lg)); filter: blur(6px); }
+  to   { opacity: 1; transform: translateX(0); filter: blur(0px); }
+}
+
+
+// ── Scale entrances ───────────────────────────────────────────────────────────
 
 @keyframes scaleIn {
+  from { opacity: 0; transform: scale(var(--enter-scale)); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+// Liquid morph scale — spring overshoot (v4 NEW)
+@keyframes scaleLiquid {
+  0%   { opacity: 0; transform: scale(0.88); filter: blur(6px); }
+  60%  { opacity: 1; transform: scale(1.04); filter: blur(0px); }
+  80%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+// Scale-fade out
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.94); filter: blur(4px); }
+}
+
+
+// ── Spatial / 3D entrances (v4 NEW) ──────────────────────────────────────────
+
+// Perspective fold-in from above
+@keyframes spatialReveal {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: perspective(900px) rotateX(var(--enter-rotate)) translateY(var(--enter-y-md));
+    filter: blur(4px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: perspective(900px) rotateX(0deg) translateY(0);
+    filter: blur(0px);
   }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+// Perspective fold-in from below
+@keyframes spatialRevealUp {
+  from {
+    opacity: 0;
+    transform: perspective(900px) rotateX(calc(var(--enter-rotate) * -1)) translateY(calc(var(--enter-y-md) * -1));
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg) translateY(0);
+    filter: blur(0px);
+  }
 }
+
+// Subtle Z-pop — card lifts toward viewer
+@keyframes depthPop {
+  0%   { opacity: 0; transform: perspective(1200px) translateZ(-80px) scale(0.94); filter: blur(8px); }
+  70%  { opacity: 1; transform: perspective(1200px) translateZ(8px)   scale(1.01); filter: blur(0px); }
+  100% {             transform: perspective(1200px) translateZ(0)     scale(1); }
+}
+
+
+// ── Cinematic wipe (v4 NEW) ───────────────────────────────────────────────────
+
+// Left-to-right clip reveal
+@keyframes wipeRight {
+  from { clip-path: inset(0 100% 0 0); opacity: 0.6; }
+  to   { clip-path: inset(0 0% 0 0);   opacity: 1; }
+}
+
+// Bottom-to-top clip reveal
+@keyframes wipeUp {
+  from { clip-path: inset(100% 0 0 0); opacity: 0.6; }
+  to   { clip-path: inset(0% 0 0 0);   opacity: 1; }
+}
+
+// Radial iris-open reveal
+@keyframes irisOpen {
+  from { clip-path: circle(0% at 50% 50%); opacity: 0; }
+  to   { clip-path: circle(150% at 50% 50%); opacity: 1; }
+}
+
+
+// ── Ambient float ─────────────────────────────────────────────────────────────
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+// Multidirectional drift — use on background orbs (v4 NEW)
+@keyframes driftOrb {
+  0%   { transform: translate(0px,    0px)   scale(1); }
+  25%  { transform: translate(12px,  -8px)   scale(1.04); }
+  50%  { transform: translate(-8px, -14px)   scale(0.97); }
+  75%  { transform: translate(-14px,  6px)   scale(1.02); }
+  100% { transform: translate(0px,    0px)   scale(1); }
+}
+
+// Parallax slow drift for background mesh layers (v4 NEW)
+@keyframes parallaxDrift {
+  0%   { transform: translate(0%, 0%); }
+  50%  { transform: translate(1.5%, -1%); }
+  100% { transform: translate(0%, 0%); }
+}
+
+
+// ── Opacity pulse ─────────────────────────────────────────────────────────────
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50%       { opacity: 0.5; }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+// Subtle presence pulse — for "live" indicators (v4 NEW)
+@keyframes presencePulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%      { opacity: 0.65; transform: scale(0.92); }
 }
 
+
+// ── Glow & aura ──────────────────────────────────────────────────────────────
+
+// Simple single-colour glow pulse
 @keyframes glowPulse {
-  0%, 100% { 
-    box-shadow: 0 0 5px var(--accent-primary);
-  }
-  50% { 
-    box-shadow: 0 0 20px var(--accent-primary), 0 0 40px var(--accent-secondary);
-  }
+  0%, 100% { box-shadow: 0 0 6px  var(--accent-glow); }
+  50%      { box-shadow: 0 0 28px var(--accent-glow), 0 0 56px var(--accent-glow); }
 }
+
+// Edge-glow breathe — uses the v4 token stack (v4 NEW)
+@keyframes edgeGlowBreathe {
+  0%, 100% { box-shadow: var(--elev-2), var(--edge-glow-sm); }
+  50%      { box-shadow: var(--elev-4), var(--edge-glow-lg); }
+}
+
+// Aura stack breathe (v4 NEW)
+@keyframes auraBreathe {
+  0%, 100% { box-shadow: var(--elev-2), var(--aura-near); }
+  50%      { box-shadow: var(--elev-3), var(--aura-stack); }
+}
+
+// Ambient light sweep — specular flash across a surface (v4 NEW)
+@keyframes lightSweep {
+  0%   { background-position: -150% center; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { background-position:  150% center; opacity: 0; }
+}
+
+// Specular flash — single burst (v4 NEW)
+@keyframes specularFlash {
+  0%   { opacity: 0; transform: translateX(-120%) skewX(-20deg); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(220%)  skewX(-20deg); }
+}
+
+
+// ── Shimmer ───────────────────────────────────────────────────────────────────
+
+// Classic skeleton shimmer
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+// Holographic shimmer — diagonal + hue shift (v4 NEW)
+@keyframes holoShimmer {
+  0%   { background-position: 0%   50%; filter: hue-rotate(0deg); }
+  50%  { background-position: 100% 50%; filter: hue-rotate(30deg); }
+  100% { background-position: 0%   50%; filter: hue-rotate(0deg); }
+}
+
+// Prism border rotation (v4 NEW)
+@keyframes prismRotate {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+
+// ── Rotation ──────────────────────────────────────────────────────────────────
 
 @keyframes rotate {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
+
+@keyframes rotateReverse {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+// Smooth ping loader (v4 NEW)
+@keyframes spinArc {
+  0%   { transform: rotate(0deg);   stroke-dashoffset: 250; }
+  50%  { transform: rotate(180deg); stroke-dashoffset: 60; }
+  100% { transform: rotate(360deg); stroke-dashoffset: 250; }
+}
+
+
+// ── Bounce & elastic ──────────────────────────────────────────────────────────
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-25%); }
+  0%, 100% { transform: translateY(0); animation-timing-function: var(--ease-in); }
+  50%       { transform: translateY(-28%); animation-timing-function: var(--ease-out); }
 }
+
+// Spring bounce-in (v4 NEW)
+@keyframes springIn {
+  0%   { transform: scale(0); opacity: 0; }
+  55%  { transform: scale(1.12); opacity: 1; }
+  75%  { transform: scale(0.95); }
+  90%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+
+// ── Attention seekers ────────────────────────────────────────────────────────
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
+  0%, 100%                         { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90%          { transform: translateX(-6px); }
+  20%, 40%, 60%, 80%               { transform: translateX(6px); }
 }
+
+// Wobble — gentler rotational shake (v4 NEW)
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  15%      { transform: rotate(-4deg); }
+  30%      { transform: rotate(3.5deg); }
+  45%      { transform: rotate(-3deg); }
+  60%      { transform: rotate(2.5deg); }
+  75%      { transform: rotate(-1.5deg); }
+}
+
+// Ping — expanding ring (v4 NEW)
+@keyframes ping {
+  0%   { transform: scale(1);    opacity: 0.8; }
+  80%  { transform: scale(2.2);  opacity: 0; }
+  100% { transform: scale(2.2);  opacity: 0; }
+}
+
+
+// ── Gradient mesh ─────────────────────────────────────────────────────────────
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
 }
 
-// ----------------------------------------------------------------------------
+// Multi-axis mesh drift for body::before (v4 NEW)
+@keyframes meshDrift {
+  0%   { background-position: 0%   0%;   }
+  33%  { background-position: 100% 30%;  }
+  66%  { background-position: 60%  100%; }
+  100% { background-position: 0%   60%;  }
+}
+
+
+// ── Typewriter ────────────────────────────────────────────────────────────────
+
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blinkCursor {
+  0%, 100% { border-right-color: var(--accent-primary); }
+  50%      { border-right-color: transparent; }
+}
+
+// ── Number count-up (v4 NEW) ─────────────────────────────────────────────────
+
+@keyframes countUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+
+// ============================================================================
 // ANIMATION UTILITY CLASSES
-// ----------------------------------------------------------------------------
+// ============================================================================
+
+// ── Opacity ───────────────────────────────────────────────────────────────────
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn var(--dur-base) var(--ease-out) both;
 }
 
+.animate-fade-out {
+  animation: fadeOut var(--dur-base) var(--ease-in) both;
+}
+
+
+// ── Vertical ──────────────────────────────────────────────────────────────────
+
 .animate-fade-in-up {
-  animation: fadeInUp 0.4s ease-out;
+  animation: fadeInUp var(--dur-slow) var(--ease-out) both;
 }
 
 .animate-fade-in-down {
-  animation: fadeInDown 0.4s ease-out;
+  animation: fadeInDown var(--dur-slow) var(--ease-out) both;
 }
 
+// Cinematic blur variants (v4 NEW)
+.animate-fade-in-up-blur {
+  animation: fadeInUpBlur var(--dur-slow) var(--ease-cinematic) both;
+}
+
+.animate-fade-in-down-blur {
+  animation: fadeInDownBlur var(--dur-slow) var(--ease-cinematic) both;
+}
+
+
+// ── Horizontal ────────────────────────────────────────────────────────────────
+
 .animate-slide-in-left {
-  animation: slideInLeft 0.4s ease-out;
+  animation: slideInLeft var(--dur-slow) var(--ease-out) both;
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.4s ease-out;
+  animation: slideInRight var(--dur-slow) var(--ease-out) both;
 }
+
+.animate-slide-in-left-blur {
+  animation: slideInLeftBlur var(--dur-slow) var(--ease-cinematic) both;
+}
+
+.animate-slide-in-right-blur {
+  animation: slideInRightBlur var(--dur-slow) var(--ease-cinematic) both;
+}
+
+
+// ── Scale ─────────────────────────────────────────────────────────────────────
 
 .animate-scale-in {
-  animation: scaleIn 0.2s ease-out;
+  animation: scaleIn var(--dur-base) var(--ease-spring) both;
 }
+
+// Liquid morph (v4 NEW)
+.animate-scale-liquid {
+  animation: scaleLiquid var(--dur-slow) var(--ease-spring-heavy) both;
+}
+
+.animate-scale-out {
+  animation: scaleOut var(--dur-base) var(--ease-smooth) both;
+}
+
+.animate-spring-in {
+  animation: springIn var(--dur-slow) var(--ease-spring) both;
+}
+
+
+// ── Spatial / 3D (v4 NEW) ────────────────────────────────────────────────────
+
+.animate-spatial-reveal {
+  animation: spatialReveal var(--dur-slow) var(--ease-cinematic) both;
+}
+
+.animate-spatial-reveal-up {
+  animation: spatialRevealUp var(--dur-slow) var(--ease-cinematic) both;
+}
+
+.animate-depth-pop {
+  animation: depthPop var(--dur-xslow) var(--ease-spring) both;
+}
+
+
+// ── Cinematic wipe (v4 NEW) ───────────────────────────────────────────────────
+
+.animate-wipe-right {
+  animation: wipeRight var(--dur-slow) var(--ease-snap) both;
+}
+
+.animate-wipe-up {
+  animation: wipeUp var(--dur-slow) var(--ease-snap) both;
+}
+
+.animate-iris-open {
+  animation: irisOpen var(--dur-cinematic) var(--ease-cinematic) both;
+}
+
+
+// ── Ambient ───────────────────────────────────────────────────────────────────
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 5s var(--ease-smooth) infinite;
 }
+
+.animate-drift-orb {
+  animation: driftOrb 12s var(--ease-smooth) infinite;
+}
+
+.animate-parallax {
+  animation: parallaxDrift 20s var(--ease-smooth) infinite alternate;
+}
+
+
+// ── Pulse variants ────────────────────────────────────────────────────────────
 
 .animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 2.2s var(--ease-smooth) infinite;
 }
 
+.animate-presence {
+  animation: presencePulse 2s var(--ease-smooth) infinite;
+}
+
+
+// ── Glow & aura ──────────────────────────────────────────────────────────────
+
+.animate-glow-pulse {
+  animation: glowPulse 2.6s var(--ease-smooth) infinite;
+}
+
+// Edge-glow breathe (v4 NEW)
+.animate-edge-glow {
+  animation: edgeGlowBreathe 3s var(--ease-smooth) infinite;
+}
+
+// Aura breathe (v4 NEW)
+.animate-aura {
+  animation: auraBreathe 3.2s var(--ease-smooth) infinite;
+}
+
+
+// ── Shimmer ───────────────────────────────────────────────────────────────────
+
+// Classic skeleton loader
 .animate-shimmer {
   background: linear-gradient(
     90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    transparent 100%
+    transparent                          0%,
+    rgba(255, 255, 255, 0.35)           45%,
+    rgba(255, 255, 255, 0.55)           50%,
+    rgba(255, 255, 255, 0.35)           55%,
+    transparent                          100%
   );
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 2.2s var(--ease-smooth) infinite;
 }
 
-.animate-glow-pulse {
-  animation: glowPulse 2s ease-in-out infinite;
+// Holographic shimmer (v4 NEW) — for .glass-card--prism and badges
+.animate-holo {
+  background: linear-gradient(
+    105deg,
+    transparent                  0%,
+    rgba(255, 100, 100, 0.18)    20%,
+    rgba(255, 200, 50,  0.20)    30%,
+    rgba(100, 255, 120, 0.18)    40%,
+    rgba(50,  200, 255, 0.20)    50%,
+    rgba(180,  80, 255, 0.18)    60%,
+    rgba(255,  80, 200, 0.20)    70%,
+    transparent                  90%
+  );
+  background-size: 200% 200%;
+  animation: holoShimmer 5s var(--ease-smooth) infinite;
 }
+
+// Ambient light sweep (v4 NEW) — sliding specular across a surface
+.animate-light-sweep {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.22) 48%,
+      rgba(255, 255, 255, 0.38) 50%,
+      rgba(255, 255, 255, 0.22) 52%,
+      transparent 70%
+    );
+    background-size: 300% 100%;
+    animation: lightSweep 4s var(--ease-smooth) infinite;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+// Specular flash — one-shot on hover (v4 NEW)
+// Apply .animate-specular-flash to the parent; the flash runs on hover
+.animate-specular-flash {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 0;
+    width: 40%;
+    height: 140%;
+    background: linear-gradient(
+      105deg,
+      transparent,
+      rgba(255, 255, 255, 0.28),
+      transparent
+    );
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  &:hover::after {
+    animation: specularFlash var(--dur-slow) var(--ease-cinematic) forwards;
+  }
+}
+
+
+// ── Rotation ──────────────────────────────────────────────────────────────────
 
 .animate-rotate {
   animation: rotate 1s linear infinite;
 }
 
+.animate-rotate-reverse {
+  animation: rotateReverse 1.2s linear infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate 8s linear infinite;
+}
+
+
+// ── Bounce & attention ────────────────────────────────────────────────────────
+
 .animate-bounce {
-  animation: bounce 1s infinite;
+  animation: bounce 1.2s var(--ease-smooth) infinite;
 }
 
 .animate-shake {
-  animation: shake 0.5s ease-in-out;
+  animation: shake 0.55s var(--ease-cinematic) both;
 }
+
+.animate-wobble {
+  animation: wobble 0.75s var(--ease-spring) both;
+}
+
+// Ping ring — use as ::before on a status dot (v4 NEW)
+.animate-ping {
+  animation: ping 2s var(--ease-out) infinite;
+}
+
+
+// ── Gradient ──────────────────────────────────────────────────────────────────
 
 .animate-gradient {
   background-size: 200% 200%;
-  animation: gradientShift 8s ease infinite;
+  animation: gradientShift 10s var(--ease-smooth) infinite;
 }
 
-// ----------------------------------------------------------------------------
-// TRANSITION CLASSES
-// ----------------------------------------------------------------------------
+.animate-mesh {
+  background-size: 300% 300%;
+  animation: meshDrift 18s var(--ease-smooth) infinite alternate;
+}
+
+
+// ── Typewriter ────────────────────────────────────────────────────────────────
+
+// Wrap the text element in overflow:hidden and use inline-block
+.animate-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent-primary);
+  width: 0;
+  animation:
+    typewriter 2.4s var(--ease-snap) forwards,
+    blinkCursor 0.8s step-end infinite;
+}
+
+// Count-up number reveal (v4 NEW) — wrap digits in overflow: hidden
+.animate-count-up {
+  overflow: hidden;
+  display: inline-block;
+
+  span {
+    display: inline-block;
+    animation: countUp var(--dur-slow) var(--ease-spring) both;
+  }
+}
+
+
+// ============================================================================
+// DEPTH-AWARE STAGGER SYSTEM (v4 NEW)
+// Apply .stagger-* to a container; direct children receive auto-delays
+// ============================================================================
+
+// Fast stagger — UI lists, nav items
+.stagger-fast > * { animation-fill-mode: both; }
+.stagger-fast > *:nth-child(1)  { animation-delay: calc(var(--stagger-base) * 0);  }
+.stagger-fast > *:nth-child(2)  { animation-delay: calc(var(--stagger-base) * 1);  }
+.stagger-fast > *:nth-child(3)  { animation-delay: calc(var(--stagger-base) * 2);  }
+.stagger-fast > *:nth-child(4)  { animation-delay: calc(var(--stagger-base) * 3);  }
+.stagger-fast > *:nth-child(5)  { animation-delay: calc(var(--stagger-base) * 4);  }
+.stagger-fast > *:nth-child(6)  { animation-delay: calc(var(--stagger-base) * 5);  }
+.stagger-fast > *:nth-child(7)  { animation-delay: calc(var(--stagger-base) * 6);  }
+.stagger-fast > *:nth-child(8)  { animation-delay: calc(var(--stagger-base) * 7);  }
+.stagger-fast > *:nth-child(9)  { animation-delay: calc(var(--stagger-base) * 8);  }
+.stagger-fast > *:nth-child(10) { animation-delay: calc(var(--stagger-base) * 9);  }
+.stagger-fast > *:nth-child(11) { animation-delay: calc(var(--stagger-base) * 10); }
+.stagger-fast > *:nth-child(12) { animation-delay: calc(var(--stagger-base) * 11); }
+
+// Slow stagger — dashboard cards, feature grids
+.stagger-slow > * { animation-fill-mode: both; }
+.stagger-slow > *:nth-child(1)  { animation-delay: calc(var(--stagger-slow) * 0);  }
+.stagger-slow > *:nth-child(2)  { animation-delay: calc(var(--stagger-slow) * 1);  }
+.stagger-slow > *:nth-child(3)  { animation-delay: calc(var(--stagger-slow) * 2);  }
+.stagger-slow > *:nth-child(4)  { animation-delay: calc(var(--stagger-slow) * 3);  }
+.stagger-slow > *:nth-child(5)  { animation-delay: calc(var(--stagger-slow) * 4);  }
+.stagger-slow > *:nth-child(6)  { animation-delay: calc(var(--stagger-slow) * 5);  }
+.stagger-slow > *:nth-child(7)  { animation-delay: calc(var(--stagger-slow) * 6);  }
+.stagger-slow > *:nth-child(8)  { animation-delay: calc(var(--stagger-slow) * 7);  }
+
+
+// ============================================================================
+// TRANSITION UTILITY CLASSES
+// ============================================================================
+
+.transition-instant {
+  transition: all var(--dur-instant) var(--ease-smooth);
+}
 
 .transition-fast {
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--dur-fast) var(--ease-smooth);
 }
 
 .transition-normal {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--dur-base) var(--ease-smooth);
 }
 
 .transition-slow {
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--dur-slow) var(--ease-cinematic);
 }
 
+// Theme-aware transition — only properties that change between themes (v4 NEW)
 .transition-theme {
-  transition: background-color 0.3s ease-in-out,
-              border-color 0.3s ease-in-out,
-              color 0.3s ease-in-out,
-              box-shadow 0.3s ease-in-out;
+  transition:
+    background-color  var(--dur-slow)  var(--ease-smooth),
+    background        var(--dur-slow)  var(--ease-smooth),
+    border-color      var(--dur-slow)  var(--ease-smooth),
+    color             var(--dur-slow)  var(--ease-smooth),
+    box-shadow        var(--dur-slow)  var(--ease-smooth),
+    backdrop-filter   var(--dur-slow)  var(--ease-smooth),
+    opacity           var(--dur-base)  var(--ease-smooth);
 }
 
-// ----------------------------------------------------------------------------
-// HOVER EFFECTS
-// ----------------------------------------------------------------------------
+// Spring transition — for interactive elements (v4 NEW)
+.transition-spring {
+  transition:
+    transform    var(--dur-base) var(--ease-spring-heavy),
+    box-shadow   var(--dur-base) var(--ease-smooth),
+    border-color var(--dur-base) var(--ease-smooth),
+    background   var(--dur-base) var(--ease-smooth);
+}
 
+// Cinematic transition — slow, film-cut eased (v4 NEW)
+.transition-cinematic {
+  transition: all var(--dur-cinematic) var(--ease-cinematic);
+}
+
+
+// ============================================================================
+// HOVER EFFECTS  (v4 NEW — magnetic spring physics)
+// ============================================================================
+
+// Magnetic hover lift — spring overshoot, shadow depth (v4 NEW)
 .hover-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  
+  transition:
+    transform  var(--dur-base) var(--ease-spring-heavy),
+    box-shadow var(--dur-base) var(--ease-smooth);
+  will-change: transform;
+
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px) scale(1.008);
+    box-shadow: var(--elev-5), var(--edge-glow-md);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.978);
+    transition-duration: var(--dur-fast);
   }
 }
 
+// Subtle card float — less aggressive (v4 NEW)
+.hover-float {
+  transition: transform var(--dur-slow) var(--ease-spring), box-shadow var(--dur-slow) var(--ease-smooth);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--elev-4), var(--edge-glow-sm);
+  }
+}
+
+// Glow hover — accent edge bloom (v4 NEW)
 .hover-glow {
-  transition: box-shadow 0.25s ease;
-  
+  transition: box-shadow var(--dur-base) var(--ease-smooth), border-color var(--dur-base) var(--ease-smooth);
+
   &:hover {
-    box-shadow: var(--glow-primary);
+    box-shadow: var(--elev-3), var(--edge-glow-md);
+    border-color: var(--glass-border-strong);
   }
 }
 
+// Aura hover — 3-layer accent aura (v4 NEW)
+.hover-aura {
+  transition: box-shadow var(--dur-base) var(--ease-smooth);
+
+  &:hover {
+    box-shadow: var(--elev-3), var(--aura-stack);
+  }
+}
+
+// Magnetic scale — snap-spring scale-up (v4 NEW)
 .hover-scale {
-  transition: transform 0.25s ease;
-  
+  transition: transform var(--dur-fast) var(--ease-spring-heavy);
+
+  &:hover  { transform: scale(1.05);  }
+  &:active { transform: scale(0.97); transition-duration: var(--dur-instant); }
+}
+
+// Brightness boost
+.hover-brightness {
+  transition: filter var(--dur-base) var(--ease-smooth);
+
+  &:hover  { filter: brightness(1.12) saturate(1.08); }
+  &:active { filter: brightness(0.96); }
+}
+
+// Press — tactile click response (v4 NEW)
+.hover-press {
+  transition: transform var(--dur-instant) var(--ease-spring-heavy), box-shadow var(--dur-fast) var(--ease-smooth);
+
+  &:hover  { transform: translateY(-2px); box-shadow: var(--elev-3); }
+  &:active { transform: translateY(1px) scale(0.975); box-shadow: var(--elev-1); }
+}
+
+// Refraction flicker — brief glass distortion on hover (v4 NEW)
+.hover-refract {
+  transition: filter var(--dur-base) var(--ease-smooth), transform var(--dur-base) var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+
   &:hover {
-    transform: scale(1.05);
+    filter: brightness(1.06) saturate(1.10);
+    transform: translateY(-2px);
+  }
+
+  // Specular sweep on hover
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -60%;
+    width: 50%;
+    height: 140%;
+    background: linear-gradient(
+      105deg,
+      transparent,
+      rgba(255, 255, 255, 0.18),
+      transparent
+    );
+    transform: skewX(-20deg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  &:hover::before {
+    animation: specularFlash var(--dur-slow) var(--ease-cinematic) forwards;
   }
 }
 
-.hover-brightness {
-  transition: filter 0.25s ease;
-  
-  &:hover {
-    filter: brightness(1.1);
+
+// ============================================================================
+// ORCHESTRATED PAGE-LOAD SCENE SEQUENCES (v4 NEW)
+// Apply .scene-* to a section; children animate in coordinated sequence.
+// ============================================================================
+
+// Hero scene — headline → sub → cta → visual
+.scene-hero {
+  & .scene-headline {
+    animation: fadeInUpBlur var(--dur-cinematic) var(--ease-cinematic) 0ms both;
+  }
+  & .scene-sub {
+    animation: fadeInUpBlur var(--dur-slow) var(--ease-cinematic) 180ms both;
+  }
+  & .scene-cta {
+    animation: scaleLiquid var(--dur-slow) var(--ease-spring-heavy) 360ms both;
+  }
+  & .scene-visual {
+    animation: depthPop var(--dur-cinematic) var(--ease-spring) 220ms both;
+  }
+  & .scene-badge {
+    animation: springIn var(--dur-slow) var(--ease-spring) 480ms both;
+  }
+}
+
+// Dashboard scene — cards stagger in with depth
+.scene-dashboard {
+  & .scene-header {
+    animation: slideInLeftBlur var(--dur-slow) var(--ease-cinematic) 0ms both;
+  }
+  & .scene-stat {
+    animation: spatialReveal var(--dur-slow) var(--ease-cinematic) both;
+    &:nth-child(1) { animation-delay:  80ms; }
+    &:nth-child(2) { animation-delay: 160ms; }
+    &:nth-child(3) { animation-delay: 240ms; }
+    &:nth-child(4) { animation-delay: 320ms; }
+    &:nth-child(5) { animation-delay: 400ms; }
+    &:nth-child(6) { animation-delay: 480ms; }
+  }
+  & .scene-chart {
+    animation: irisOpen var(--dur-cinematic) var(--ease-snap) 200ms both;
+  }
+}
+
+// Modal / overlay scene
+.scene-modal {
+  & .scene-overlay {
+    animation: fadeIn var(--dur-base) var(--ease-smooth) both;
+  }
+  & .scene-panel {
+    animation: depthPop var(--dur-slow) var(--ease-spring-heavy) var(--dur-fast) both;
+  }
+}
+
+
+// ============================================================================
+// DELAY UTILITIES
+// ============================================================================
+
+.delay-0   { animation-delay:   0ms; }
+.delay-1   { animation-delay:  55ms; }
+.delay-2   { animation-delay: 110ms; }
+.delay-3   { animation-delay: 165ms; }
+.delay-4   { animation-delay: 220ms; }
+.delay-5   { animation-delay: 275ms; }
+.delay-6   { animation-delay: 330ms; }
+.delay-7   { animation-delay: 385ms; }
+.delay-8   { animation-delay: 440ms; }
+.delay-9   { animation-delay: 495ms; }
+.delay-10  { animation-delay: 550ms; }
+.delay-12  { animation-delay: 660ms; }
+.delay-16  { animation-delay: 880ms; }
+.delay-20  { animation-delay: 1100ms; }
+
+
+// ============================================================================
+// DURATION UTILITIES
+// ============================================================================
+
+.duration-instant  { animation-duration: var(--dur-instant); }
+.duration-fast     { animation-duration: var(--dur-fast); }
+.duration-normal   { animation-duration: var(--dur-base); }
+.duration-slow     { animation-duration: var(--dur-slow); }
+.duration-xslow    { animation-duration: var(--dur-xslow); }
+.duration-cinematic{ animation-duration: var(--dur-cinematic); }
+
+
+// ============================================================================
+// FILL MODE + ITERATION UTILITIES
+// ============================================================================
+
+.anim-fill-both    { animation-fill-mode: both; }
+.anim-fill-forward { animation-fill-mode: forwards; }
+.anim-once         { animation-iteration-count: 1; }
+.anim-infinite     { animation-iteration-count: infinite; }
+.anim-paused       { animation-play-state: paused; }
+.anim-running      { animation-play-state: running; }
+
+
+// ============================================================================
+// REDUCED MOTION
+// All animations resolve instantly; transitions collapse to theme-only props.
+// ============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+  }
+
+  // Keep opacity transitions so theme switches still feel intentional
+  .transition-theme {
+    transition: color 0ms, background-color 0ms, border-color 0ms !important;
   }
 }

@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 type SectionCardVariant = 'default' | 'accent' | 'glass';
 
 @Component({
   selector: 'app-section-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,4 +30,7 @@ export class SectionCardComponent {
 
   /** Visual variant of the card. Defaults to 'default'. */
   readonly variant = input<SectionCardVariant>('default');
+
+  /** Optional route to navigate to when card is clicked. */
+  readonly route = input<string>();
 }

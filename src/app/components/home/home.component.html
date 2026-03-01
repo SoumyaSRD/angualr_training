@@ -2,21 +2,26 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero__content">
-      <p class="hero__eyebrow">Angular Academy · Enterprise Training</p>
+      <p class="hero__eyebrow">
+        <i class="bi bi-award"></i>
+        Angular Academy · Enterprise Training
+      </p>
       <h1 class="hero__title">
         Master Angular&nbsp;21
         <span class="hero__title-highlight">from fundamentals to enterprise</span>
       </h1>
       <p class="hero__subtitle">
         A curated learning path with live examples, visuals and hands-on topics.
-        Inspired by modern one-page designs.
+        Build production-ready applications with modern Angular patterns.
       </p>
 
       <div class="hero__actions">
         <a class="btn btn--primary" [routerLink]="navigationService.topics[0].subTopics[0].route">
+          <i class="bi bi-rocket-takeoff"></i>
           Start learning
         </a>
         <a class="btn btn--ghost" routerLink="/fundamentals">
+          <i class="bi bi-map"></i>
           View roadmap
         </a>
       </div>
@@ -36,7 +41,8 @@
   <!-- Highlights -->
   <section class="section section--highlights">
     <app-section-card title="Comprehensive Curriculum" subtitle="From web fundamentals to advanced Angular 21 patterns."
-      icon="school" badge="Start here" variant="accent"></app-section-card>
+      icon="school" badge="Start here" variant="accent"
+      [route]="navigationService.topics[0].subTopics[0].route"></app-section-card>
 
     <app-section-card title="Real Code Examples" subtitle="Every topic ships with code you can paste into real apps."
       icon="code"></app-section-card>
@@ -79,6 +85,7 @@
 
       @if (filteredTopics().length === 0) {
       <div class="topics-grid__empty">
+        <p><i class="bi bi-search" style="font-size: 2rem; opacity: 0.5;"></i></p>
         <p>No matching topics or lessons found.</p>
         <p class="topics-grid__empty-hint">Try a different keyword.</p>
       </div>

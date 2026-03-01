@@ -1,166 +1,133 @@
 <app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
   [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
   [keyPoints]="content.keyPoints">
-  <p>
-    Pipes in Angular are used to transform and format data directly within
-    templates. They provide a clean and declarative way to modify how values are
-    displayed without changing the underlying data. Pipes help keep component
-    logic simple by moving display-related transformations into reusable
-    functions.
-  </p>
 
-  <p>
-    Angular includes several built-in pipes for common data transformations such
-    as formatting dates, currencies, numbers, JSON objects, and text casing.
-    Developers can also create custom pipes to implement application-specific
-    formatting or transformation logic. Pipes are applied in templates using the
-    pipe (<code>|</code>) operator, making templates more readable and expressive.
-  </p>
+  <div class="topic-content">
+    <h2 class="content-title"><span class="emoji">🔧</span>Angular Pipes</h2>
 
-  <h3>Why Use Pipes?</h3>
-  <ul>
-    <li>
-      <strong>Cleaner Templates:</strong> Simplifies data transformation directly
-      in HTML.
-    </li>
-    <li>
-      <strong>Reusable Logic:</strong> Write once and reuse across multiple
-      components.
-    </li>
-    <li>
-      <strong>Separation of Concerns:</strong> Keeps formatting logic separate
-      from business logic.
-    </li>
-    <li>
-      <strong>Improved Readability:</strong> Makes templates easier to understand.
-    </li>
-  </ul>
+    <p class="content-text">
+      Pipes in Angular are used to transform and format data directly within
+      templates. They provide a clean and declarative way to modify how values are
+      displayed without changing the underlying data.
+    </p>
 
-  <h3>Common Built-in Pipes</h3>
-  <ul>
-    <li>
-      <strong>DatePipe:</strong> Formats dates according to locale settings.
-    </li>
-    <li>
-      <strong>CurrencyPipe:</strong> Formats numbers as currency values.
-    </li>
-    <li>
-      <strong>DecimalPipe:</strong> Formats numeric values with decimal precision.
-    </li>
-    <li>
-      <strong>UpperCasePipe / LowerCasePipe:</strong> Converts text casing.
-    </li>
-    <li>
-      <strong>JsonPipe:</strong> Displays objects in JSON format for debugging.
-    </li>
-    <li>
-      <strong>AsyncPipe:</strong> Automatically subscribes to Observables or
-      Promises and updates values when data changes.
-    </li>
-  </ul>
+    <h3 class="content-subtitle">Why Use Pipes?</h3>
+    <ul class="content-list">
+      <li><strong>Cleaner Templates:</strong> Simplifies data transformation directly in HTML.</li>
+      <li><strong>Reusable Logic:</strong> Write once and reuse across multiple components.</li>
+      <li><strong>Separation of Concerns:</strong> Keeps formatting logic separate from business logic.</li>
+      <li><strong>Improved Readability:</strong> Makes templates easier to understand.</li>
+    </ul>
 
-  <h3>Using Pipes in Templates</h3>
+    <h3 class="content-subtitle">Common Built-in Pipes</h3>
+    <ul class="content-list">
+      <li><strong>DatePipe:</strong> Formats dates according to locale settings.</li>
+      <li><strong>CurrencyPipe:</strong> Formats numbers as currency values.</li>
+      <li><strong>DecimalPipe:</strong> Formats numeric values with decimal precision.</li>
+      <li><strong>UpperCasePipe / LowerCasePipe:</strong> Converts text casing.</li>
+      <li><strong>JsonPipe:</strong> Displays objects in JSON format for debugging.</li>
+      <li><strong>AsyncPipe:</strong> Automatically subscribes to Observables or Promises.</li>
+    </ul>
 
-  <p>
-    Pipes are applied using the <code>|</code> symbol followed by the pipe name.
-  </p>
+    <div class="live-demo">
+      <div class="demo-header">
+        <span class="emoji">🎮</span>
+        <h3>Live Demo - Built-in Pipes</h3>
+      </div>
 
+      <div class="demo-grid">
+        <div class="demo-card demo-card--primary">
+          <h4><i class="bi bi-input-cursor-text"></i> Text Input</h4>
+          <div class="demo-input-group">
+            <label>Enter your name:</label>
+            <input class="demo-input" type="text" [(ngModel)]="username" placeholder="e.g., John Doe" />
+          </div>
+          <div class="demo-output">
+            <strong>Uppercase:</strong> <span class="pipe-result">{{ username | uppercase }}</span>
+          </div>
+        </div>
 
-  <div class="live-demo">
+        <div class="demo-card demo-card--success">
+          <h4><i class="bi bi-calendar-date"></i> Date Input</h4>
+          <div class="demo-input-group">
+            <label>Select a date:</label>
+            <input class="demo-input" type="date" [(ngModel)]="day" />
+          </div>
+          <div class="demo-output">
+            <strong>Formatted:</strong> <span class="pipe-result">{{ day | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
 
-    <input type="text" [(ngModel)]="username" placeholder="Enter your name" />
-    <input type="date" [(ngModel)]="day" placeholder="Enter today's date" />
-    <br />
-    <pre>
-      &lt;p&gt;{{ username | uppercase }}&lt;/p&gt;
-      &lt;p&gt;{{ day | date:'mediumDate' }}&lt;/p&gt;
-    </pre>
+      <div class="code-preview">
+        <code>{{ username | uppercase }}</code> → <span class="pipe-result">{{ username | uppercase }}</span><br>
+        <code>{{ day | date:'mediumDate' }}</code> → <span class="pipe-result">{{ day | date:'mediumDate' }}</span>
+      </div>
+    </div>
+
+    <h3 class="content-subtitle">Custom Pipes Demo</h3>
+    <p class="content-text">
+      Developers can create custom pipes when built-in pipes are not sufficient.
+      Below is a live demo of a custom filter pipe that searches across multiple fields.
+    </p>
+
+    <div class="live-demo">
+      <div class="demo-header">
+        <span class="emoji">🔍</span>
+        <h3>Custom Filter Pipe Demo</h3>
+      </div>
+
+      <div class="demo-input-group">
+        <label>Search employees:</label>
+        <input class="demo-input" type="text" [(ngModel)]="searchTerm"
+          placeholder="Search by name, department, or designation..." />
+      </div>
+
+      <div class="demo-table-wrapper">
+        <table class="demo-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Designation</th>
+              <th>Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of employees | customFilter:searchTerm:['name','department','designation']; track item.id) {
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.department }}</td>
+              <td>{{ item.designation }}</td>
+              <td>{{ item.salary | currency:'INR':'symbol':'1.0-0' }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3 class="content-subtitle">Pure vs Impure Pipes</h3>
+    <div class="demo-grid">
+      <div class="demo-card demo-card--success">
+        <h4><i class="bi bi-check-circle"></i> Pure Pipes</h4>
+        <p class="content-text">Execute only when input values change (default behavior). Better performance.</p>
+      </div>
+      <div class="demo-card demo-card--warning">
+        <h4><i class="bi bi-exclamation-triangle"></i> Impure Pipes</h4>
+        <p class="content-text">Execute on every change detection cycle. Used when data changes frequently.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4><span class="emoji">💡</span>Best Practice</h4>
+      <ul>
+        <li>Use pure pipes by default for better performance</li>
+        <li>Only use impure pipes when necessary (e.g., filtering arrays that change internally)</li>
+        <li>Consider using signals for complex transformations instead of impure pipes</li>
+      </ul>
+    </div>
   </div>
-
-  <h3>Custom Pipes</h3>
-
-  <p>
-    Developers can create custom pipes when built-in pipes are not sufficient.
-    Custom pipes are created using the <code>@Pipe</code> decorator and implement
-    the <code>PipeTransform</code> interface. They allow custom transformation
-    logic to be reused across templates.
-  </p>
-
-  <hr>
-
-  <div class="live-demo">
-    <input type="text" [(ngModel)]="searchTermNorm" placeholder="Search" />
-    <table border="1" cellpadding="8" cellspacing="0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Department</th>
-          <th>Designation</th>
-          <th>Salary</th>
-        </tr>
-      </thead>
-
-      @for (item of employees | customFilter:searchTermNorm; track item.id; let i =
-      $index) {
-      <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.department }}</td>
-        <td>{{ item.designation }}</td>
-        <td>{{ item.salary | currency:'INR':'symbol':'1.0-0' }}</td>
-      </tr>
-      }
-    </table>
-    <br />
-    <hr>
-
-    <input type="text" [(ngModel)]="searchTerm" placeholder="Search" />
-    <table border="1" cellpadding="8" cellspacing="0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Department</th>
-          <th>Designation</th>
-          <th>Salary</th>
-        </tr>
-      </thead>
-
-      @for (item of employees | customFilter:searchTerm:['name','department','designation']; track item.id; let i =
-      $index) {
-      <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.department }}</td>
-        <td>{{ item.designation }}</td>
-        <td>{{ item.salary | currency:'INR':'symbol':'1.0-0' }}</td>
-      </tr>
-      }
-    </table>
-
-
-  </div>
-
-  <h3>Pure vs Impure Pipes</h3>
-  <ul>
-    <li>
-      <strong>Pure Pipes:</strong> Execute only when input values change (default
-      behavior, better performance).
-    </li>
-    <li>
-      <strong>Impure Pipes:</strong> Execute on every change detection cycle; used
-      when data changes frequently without reference updates.
-    </li>
-  </ul>
-
-  <h3>Summary</h3>
-  <p>
-    Pipes enhance Angular templates by providing an efficient way to transform
-    and format data. They improve code readability, encourage reuse, and help
-    maintain a clean separation between presentation and logic.
-  </p>
-
-
-
 </app-topic-template>

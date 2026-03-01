@@ -15,13 +15,13 @@ import { Component } from '@angular/core';
           </div>
           
           <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none">
+            <a href="https://github.com/SoumyaSRD/angualr_training"  target="_blank" class="text-muted text-decoration-none">
               <i class="bi bi-github"></i>
             </a>
-            <a href="#" class="text-muted text-decoration-none">
+            <a href="https://www.linkedin.com/in/soumyasrd/" target="_blank" class="text-muted text-decoration-none">
               <i class="bi bi-twitter"></i>
             </a>
-            <a href="#" class="text-muted text-decoration-none">
+            <a href="https://www.linkedin.com/in/soumyasrd/" target="_blank" class="text-muted text-decoration-none">
               <i class="bi bi-linkedin"></i>
             </a>
           </div>

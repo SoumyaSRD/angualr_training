@@ -5,8 +5,10 @@ import {
     output,
     inject,
     signal,
+    OnInit,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { NavigationService, type Topic } from '@app/core';
 
 @Component({
@@ -52,13 +54,13 @@ import { NavigationService, type Topic } from '@app/core';
 
                 <!-- Topics -->
                 @for (topic of navigationService.topics; track topic.title) {
-                    <div class="nav-group">
+                    <div class="nav-group" [attr.data-topic]="topic.title">
 
                         @if (!isCollapsed()) {
                             <!-- Expanded: label + collapsible submenu -->
                             <button
                                 class="nav-link nav-group-toggle"
-                                (click)="toggleTopic(topic.title)"
+                                (click)="toggleTopic(topic.title); navigateToFirstSubtopic(topic)"
                                 [class.expanded]="isTopicExpanded(topic.title)"
                             >
                                 <div class="nav-icon">
@@ -174,8 +176,9 @@ import { NavigationService, type Topic } from '@app/core';
         }
     `,
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
     readonly navigationService = inject(NavigationService);
+    readonly router = inject(Router);
 
     // ── State signals ────────────────────────────────────────────────────────
     readonly isCollapsed = signal(false);
@@ -195,6 +198,45 @@ export class SidebarComponent {
     // ── Outputs ──────────────────────────────────────────────────────────────
     readonly itemSelected = output<void>();
     readonly collapseChanged = output<boolean>();
+
+    // ── Lifecycle ────────────────────────────────────────────────────────────
+
+    ngOnInit(): void {
+        // Listen to route changes and expand the corresponding topic
+        this.router.events
+            .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+            .subscribe((event) => {
+                this.expandTopicForRoute(event.url);
+            });
+    }
+
+    // ── Topic expansion based on route ───────────────────────────────────────
+
+    private expandTopicForRoute(url: string): void {
+        // Find which topic contains the current route
+        for (const topic of this.navigationService.topics) {
+            const hasMatchingSubtopic = topic.subTopics.some(sub =>
+                url.startsWith(sub.route) || sub.route === url
+            );
+            if (hasMatchingSubtopic) {
+                this.expandedTopics.update(set => {
+                    const next = new Set(set);
+                    next.add(topic.title);
+                    return next;
+                });
+                // Scroll to the topic after a short delay to allow rendering
+                setTimeout(() => this.scrollToTopic(topic.title), 100);
+                break;
+            }
+        }
+    }
+
+    private scrollToTopic(topicTitle: string): void {
+        const topicElement = document.querySelector(`[data-topic="${topicTitle}"]`);
+        if (topicElement) {
+            topicElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
 
     // ── Toggle / expand ──────────────────────────────────────────────────────
 
@@ -257,4 +299,10 @@ export class SidebarComponent {
 
     closeMobile(): void { this.isMobileOpen.set(false); }
     openMobile(): void { this.isMobileOpen.set(true); }
+
+    navigateToFirstSubtopic(topic: Topic): void {
+        if (topic.subTopics.length > 0) {
+            this.router.navigate([topic.subTopics[0].route]);
+        }
+    }
 }

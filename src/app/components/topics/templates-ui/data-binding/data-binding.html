@@ -1,66 +1,96 @@
-<app-topic-template
-  [title]="content.title"
-  [tags]="content.tags"
-  [paragraphs]="content.paragraphs"
-  [sections]="content.sections"
-  [codeExamples]="content.codeExamples"
-  [bestPractices]="content.bestPractices"
-  [keyPoints]="content.keyPoints"
->
-  <div class="container">
-    <h2>📊 Live Data Binding Comparison</h2>
+<app-topic-template [title]="content.title" [tags]="content.tags" [paragraphs]="content.paragraphs"
+  [sections]="content.sections" [codeExamples]="content.codeExamples" [bestPractices]="content.bestPractices"
+  [keyPoints]="content.keyPoints">
+  <div class="demo-container">
+    <h2 class="demo-title"><span class="emoji">📊</span>Live Data Binding Comparison</h2>
 
     <!-- Live Demo Section -->
     <div class="live-demo">
-      <h3>🎮 Try It Yourself</h3>
+      <div class="demo-header">
+        <span class="emoji">🎮</span>
+        <h3>Try It Yourself</h3>
+      </div>
+
       <div class="comparison">
         <!-- TRADITIONAL -->
-        <div class="method">
-          <h3>🟡 Traditional (ngModel)</h3>
-          <input [(ngModel)]="traditionalValue" />
-          <p>Value: {{traditionalValue}}</p>
-          <button (click)="resetTraditional()">Reset</button>
+        <div class="method-card method-card--traditional">
+          <h4><span>🟡</span> Traditional <span class="badge">Classic</span></h4>
+          <div class="demo-input-group">
+            <label>Enter your name:</label>
+            <input class="demo-input" [(ngModel)]="traditionalValue" placeholder="Type something..." />
+          </div>
+          <div class="demo-output">
+            <strong>Output:</strong> {{traditionalValue}}
+          </div>
+          <button class="demo-button" (click)="resetTraditional()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
         </div>
 
         <!-- SIGNALS -->
-        <div class="method">
-          <h3>🟢 Modern (Signals)</h3>
-          <input [value]="signalValue()" (input)="updateSignal($event)" />
-          <p>Value: {{signalValue()}}</p>
-          <p>Uppercase: {{uppercaseSignal()}}</p>
-          <button (click)="resetSignal()">Reset</button>
+        <div class="method-card method-card--signals">
+          <h4><span>🟢</span> Modern Signals <span class="badge">Reactive</span></h4>
+          <div class="demo-input-group">
+            <label>Enter your name:</label>
+            <input class="demo-input" [value]="signalValue()" (input)="updateSignal($event)"
+              placeholder="Type something..." />
+          </div>
+          <div class="demo-output">
+            <strong>Value:</strong> {{signalValue()}}
+          </div>
+          <div class="demo-output">
+            <strong>Computed:</strong> {{uppercaseSignal()}}
+          </div>
+          <button class="demo-button" (click)="resetSignal()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
         </div>
 
         <!-- MODEL SIGNAL (Angular 17.3+) -->
-        <div class="method">
-          <h3>🔵 Two-Way Model</h3>
-          <input [(ngModel)]="modelSignal" />
-          <p>Value: {{modelSignal()}}</p>
-          <button (click)="resetModel()">Reset</button>
+        <div class="method-card method-card--model">
+          <h4><span>🔵</span> Model Signal <span class="badge">New</span></h4>
+          <div class="demo-input-group">
+            <label>Enter your name:</label>
+            <input class="demo-input" [(ngModel)]="modelSignal" placeholder="Type something..." />
+          </div>
+          <div class="demo-output">
+            <strong>Output:</strong> {{modelSignal()}}
+          </div>
+          <button class="demo-button" (click)="resetModel()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
         </div>
       </div>
 
-      <div class="info">
-        <h4>💡 Key Differences:</h4>
+      <div class="info-box">
+        <h4><span class="emoji">💡</span>Key Differences</h4>
         <ul>
-          <li>
-            <strong>Traditional:</strong> Simpler, but updates whole component
+          <li><strong>Traditional:</strong> Uses ngModel for two-way binding. Simple but triggers full change detection.
           </li>
-          <li><strong>Signals:</strong> Reactive, updates only what changed</li>
-          <li><strong>Model:</strong> Best of both worlds (Angular 17.3+)</li>
+          <li><strong>Signals:</strong> Fine-grained reactivity. Only updates components that actually use the signal
+            value.</li>
+          <li><strong>Model Signal:</strong> Combines signal reactivity with two-way binding convenience (Angular
+            17.3+).</li>
         </ul>
       </div>
     </div>
 
     <!-- Code Examples Section -->
-    <div class="code-examples">
-      <h3>💻 Code Implementation</h3>
+    <div class="code-section">
+      <div class="section-header">
+        <h3>💻 Code Implementation</h3>
+        <p>Compare implementation patterns side by side</p>
+      </div>
 
-      <!-- Traditional Binding Example -->
-      <div class="code-example">
-        <h4>🟡 Traditional Binding (TypeScript)</h4>
-        <pre><code>
-// traditional.component.ts
+      <div class="code-grid">
+        <!-- Traditional Binding Example -->
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-icon code-icon--ts">TS</span>
+            <h4>Traditional Binding</h4>
+          </div>
+          <div class="code-content">
+            <pre><code>// traditional.component.ts
 import {{'{'}} Component {{'}'}} from '@angular/core';
 import {{'{'}} FormsModule {{'}'}} from '@angular/forms';
 
@@ -71,7 +101,6 @@ import {{'{'}} FormsModule {{'}'}} from '@angular/forms';
   template: `
     &lt;input [(ngModel)]="username"&gt;
     &lt;p&gt;Hello {{'{{username}}'}}!&lt;/p&gt;
-    &lt;button (click)="updateName()"&gt;Update&lt;/button&gt;
   `
 {{'}'}})
 export class TraditionalComponent {{'{'}}
@@ -80,89 +109,82 @@ export class TraditionalComponent {{'{'}}
   updateName() {{'{'}}
     this.username = 'John';
   {{'}'}}
-{{'}'}}
-        </code></pre>
-      </div>
+{{'}'}}</code></pre>
+          </div>
+        </div>
 
-      <div class="code-example">
-        <h4>🟡 Traditional Binding (HTML)</h4>
-        <pre><code>
-&lt;!-- Parent Component Template --&gt;
-&lt;app-traditional&gt;&lt;/app-traditional&gt;
-
-&lt;!-- With @Input/@Output --&gt;
-&lt;app-child 
-  [message]="parentMessage" 
-  (messageSent)="onMessage($event)"&gt;
-&lt;/app-child&gt;
-
-&lt;!-- Two-way binding --&gt;
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-icon code-icon--html">HTML</span>
+            <h4>Template Usage</h4>
+          </div>
+          <div class="code-content">
+            <pre><code>&lt;!-- Two-way binding --&gt;
 &lt;input [(ngModel)]="email"&gt;
 &lt;p&gt;{{'{{email}}'}}&lt;/p&gt;
-        </code></pre>
-      </div>
 
-      <!-- Signals Example -->
-      <div class="code-example">
-        <h4>🟢 Modern Signals (TypeScript)</h4>
-        <pre><code>
-// signals.component.ts
-import {{'{'}} Component, signal, computed, model {{'}'}} from '@angular/core';
-import {{'{'}} FormsModule {{'}'}} from '@angular/forms';
+&lt;!-- Event binding --&gt;
+&lt;button (click)="save()"&gt;Save&lt;/button&gt;
+
+&lt;!-- Property binding --&gt;
+&lt;img [src]="imageUrl"&gt;
+
+&lt;!-- Attribute binding --&gt;
+&lt;div [attr.aria-label]="label"&gt;&lt;/div&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- Signals Example -->
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-icon code-icon--ts">TS</span>
+            <h4>Modern Signals</h4>
+          </div>
+          <div class="code-content">
+            <pre><code>// signals.component.ts
+import {{'{'}} Component, signal, computed {{'}'}} from '@angular/core';
 
 @Component({{'{'}}
   selector: 'app-signals',
   standalone: true,
-  imports: [FormsModule],
-  template: `
-    &lt;input [value]="username()" 
-           (input)="updateUsername($event)"&gt;
-    &lt;p&gt;Hello {{'{{username()}}'}}!&lt;/p&gt;
-    &lt;p&gt;Uppercase: {{'{{uppercaseName()}}'}}&lt;/p&gt;
-    
-    &lt;!-- Model Signal (Angular 17.3+) --&gt;
-    &lt;input [(ngModel)]="email"&gt;
-    &lt;p&gt;Email: {{'{{email()}}'}}&lt;/p&gt;
-  `
+  template: `...`
 {{'}'}})
 export class SignalsComponent {{'{'}}
   // Basic signal
   username = signal('Guest');
   
-  // Computed signal (auto-updates)
+  // Computed signal
   uppercaseName = computed(() => 
     this.username().toUpperCase()
   );
   
-  // Model signal for two-way binding
-  email = model('test@example.com');
-  
-  updateUsername(event: Event) {{'{'}}
-    const input = event.target as HTMLInputElement;
-    this.username.set(input.value);
+  // Update signal
+  updateName(value: string) {{'{'}}
+    this.username.set(value);
   {{'}'}}
-{{'}'}}
-        </code></pre>
-      </div>
+{{'}'}}</code></pre>
+          </div>
+        </div>
 
-      <div class="code-example">
-        <h4>🟢 Modern Signals (HTML)</h4>
-        <pre><code>
-&lt;!-- Using signals in template --&gt;
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-icon code-icon--html">HTML</span>
+            <h4>Signal Template</h4>
+          </div>
+          <div class="code-content">
+            <pre><code>&lt;!-- Signal binding --&gt;
 &lt;input [value]="firstName()" 
        (input)="firstName.set($event.target.value)"&gt;
 
 &lt;!-- Computed values --&gt;
 &lt;p&gt;Full name: {{'{{fullName()}}'}}&lt;/p&gt;
 
-&lt;!-- Model signal --&gt;
-&lt;input [(ngModel)]="emailModel"&gt;
-
-&lt;!-- With conditionals --&gt;
-&lt;div *ngIf="isLoggedIn()"&gt;
-  Welcome back, {{'{{userName()}}'}}!
-&lt;/div&gt;
-        </code></pre>
+&lt;!-- Signal in conditionals --&gt;
+&amp;#64;if (isLoggedIn()) {{
+  &lt;p&gt;Welcome user!&lt;/p&gt;
+&amp;#125;</code></pre>
+          </div>
+        </div>
       </div>
 
       <!-- Side-by-side Comparison -->
@@ -195,9 +217,7 @@ export class SignalsComponent {{'{'}}
             <tr>
               <td>Derived values</td>
               <td>
-                <code
-                  >get computed() {{'{'}} return this.value * 2; {{'}'}}</code
-                >
+                <code>get computed() {{'{'}} return this.value * 2; {{'}'}}</code>
               </td>
               <td><code>computed(() => signal() * 2)</code></td>
             </tr>
@@ -210,40 +230,19 @@ export class SignalsComponent {{'{'}}
         </div>
       </div>
 
-      <!-- Migration Example -->
-      <div class="code-example">
-        <h4>🔄 Migration Example</h4>
-        <pre><code>
-// OLD WAY (before migration)
-export class OldComponent {{'{'}}
-  searchText = '';
-  items = ['Apple', 'Banana', 'Cherry'];
-  
-  get filteredItems() {{'{'}}
-    return this.items.filter(item => 
-      item.includes(this.searchText)
-    );
-  {{'}'}}
-{{'}'}}
-
-// NEW WAY (after migration)
-export class NewComponent {{'{'}}
-  searchText = signal('');
-  items = signal(['Apple', 'Banana', 'Cherry']);
-  
-  filteredItems = computed(() => {{'{'}}
-    return this.items().filter(item => 
-      item.includes(this.searchText())
-    );
-  {{'}'}});
-{{'}'}}
-
-// TEMPLATE (works with both)
-&lt;input [(ngModel)]="searchText"&gt; &lt;!-- Old --&gt;
-&lt;!-- OR --&gt;
-&lt;input [value]="searchText()" 
-       (input)="searchText.set($event.target.value)"&gt; &lt;!-- New --&gt;
-        </code></pre>
+      <!-- Migration Tips -->
+      <div class="migration-card">
+        <h4><span class="emoji">🔄</span>Migration Tips</h4>
+        <div class="info-box" style="margin-top: 0;">
+          <ul>
+            <li><strong>Start with new features:</strong> Use signals for new components, migrate existing ones
+              gradually.</li>
+            <li><strong>Replace getters with computed:</strong> Convert get properties to computed() for automatic
+              reactivity.</li>
+            <li><strong>Use model() for inputs:</strong> When you need two-way binding on component inputs.</li>
+            <li><strong>Mixing is okay:</strong> Signals and traditional binding can coexist in the same app.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

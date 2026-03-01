@@ -1,0 +1,24 @@
+// Pipe Example Component Styles
+@use '../../../../shared/styles/topic-content';
+
+// Additional pipe-specific styles
+.pipe-preview {
+  background: var(--glass-bg-deep);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md, 0.75rem);
+  padding: var(--spacing-md, 1rem);
+  margin: var(--spacing-sm, 0.75rem) 0;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+
+  .pipe-result {
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+}
+
+.search-highlight {
+  background: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  color: var(--accent-primary);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm, 0.25rem);
+}

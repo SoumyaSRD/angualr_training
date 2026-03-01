@@ -1,3 +1,35 @@
+@if (route()) {
+<a class="section-card-link" [routerLink]="route()">
+  <article class="section-card" [ngClass]="'section-card--' + variant()">
+    <header class="section-card__header">
+      <div class="section-card__title-group">
+
+        @if (icon()) {
+        <span class="section-card__icon" aria-hidden="true">
+          <i class="{{ icon() }}"></i>
+        </span>
+        }
+
+        <div class="section-card__title-block">
+          <h3 class="section-card__title">{{ title() }}</h3>
+          @if (subtitle()) {
+          <p class="section-card__subtitle">{{ subtitle() }}</p>
+          }
+        </div>
+
+      </div>
+
+      @if (badge()) {
+      <span class="section-card__badge">{{ badge() }}</span>
+      }
+    </header>
+
+    <div class="section-card__body">
+      <ng-content></ng-content>
+    </div>
+  </article>
+</a>
+} @else {
 <article class="section-card" [ngClass]="'section-card--' + variant()">
   <header class="section-card__header">
     <div class="section-card__title-group">
@@ -26,3 +58,4 @@
     <ng-content></ng-content>
   </div>
 </article>
+}

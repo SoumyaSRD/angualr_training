@@ -7,12 +7,14 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+# ── Global: read-only baseline.
+# deploy_pages job overrides with elevated scopes it actually needs.
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 jobs:
+
+  # ────────────────────────────────────────────────────────────────────────────
   ci:
     name: Build (prod)
     runs-on: ubuntu-latest
@@ -32,18 +34,23 @@ jobs:
       - name: Build (production)
         run: npm run build -- --configuration production
 
+  # ────────────────────────────────────────────────────────────────────────────
   deploy_pages:
     name: Deploy to GitHub Pages
     if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'master')
     needs: ci
     runs-on: ubuntu-latest
+
+    # Job-level override — only this job gets write access to Pages + OIDC token
     permissions:
       contents: read
       pages: write
       id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,14 +67,14 @@ jobs:
       - name: Build for Pages
         run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
 
-      - name: Setup Pages
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/angular-training
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

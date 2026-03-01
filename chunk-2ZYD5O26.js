@@ -1,0 +1,1 @@
+import{f as t}from"./chunk-TT5QCDKO.js";import"./chunk-FEIPXN7P.js";import"./chunk-LMJIRV6F.js";import"./chunk-LDGWIROF.js";import"./chunk-WFO7GJJM.js";import"./chunk-CVNJEO4S.js";import"./chunk-XGBKVH7G.js";import"./chunk-ESOSN4X2.js";var e=[{path:"",canActivate:[t],loadComponent:()=>import("./chunk-I2OLFNK2.js").then(o=>o.SettingsComponent)}];export{e as settingsRoutes};

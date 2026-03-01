@@ -7,8 +7,7 @@ import { ROUTING } from "./routing.const";
   selector: "app-routing",
   standalone: true,
   imports: [TopicTemplate],
-  templateUrl: "./routing.html",
-  styleUrls: ["./routing.scss"],
+  templateUrl: "./routing.html"
 })
 export class Routing {
   content: ITopicContent | any = ROUTING;
@@ -19,7 +18,7 @@ ngOnInit() {
 }`;
   dataEg = `{
   path: 'dashboard',
-  component: DashboardComponent,
+  component: Dashboard,
   children: [
     { path: 'stats', component: StatsComponent }
   ]

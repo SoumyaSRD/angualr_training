@@ -7,8 +7,7 @@ import { ITopicContent } from "../../../../interfaces/topic";
   selector: 'app-ng-httpclient',
   standalone: true,
   imports: [TopicTemplate],
-  templateUrl: './ng-httpclient.html',
-  styleUrls: ['./ng-httpclient.scss']
+  templateUrl: './ng-httpclient.html'
 })
 export class NgHttpClient {
   content: ITopicContent | any = _HTTP_CLIENT;

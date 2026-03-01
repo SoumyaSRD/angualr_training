@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 type SectionCardVariant = 'default' | 'accent' | 'glass';
 
@@ -9,21 +9,24 @@ type SectionCardVariant = 'default' | 'accent' | 'glass';
   imports: [CommonModule],
   templateUrl: './section-card.component.html',
   styleUrl: './section-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SectionCardComponent {
   /** Main title of the card. */
-  @Input({ required: true }) title!: string;
+  readonly title = input.required<string>();
 
   /** Optional short description under the title. */
-  @Input() subtitle?: string;
+  readonly subtitle = input<string>();
 
   /** Optional small badge in the top-right corner (e.g. "New", "Core"). */
-  @Input() badge?: string;
+  readonly badge = input<string>();
 
-  /** Optional icon name (Material icon) to display to the left of the title. */
-  @Input() icon?: string;
+  /**
+   * Bootstrap Icon class string to display left of the title.
+   * Pass the full class e.g. "bi bi-boxes" — rendered as <i class="...">
+   */
+  readonly icon = input<string>();
 
-  /** Visual variant of the card. */
-  @Input() variant: SectionCardVariant = 'default';
+  /** Visual variant of the card. Defaults to 'default'. */
+  readonly variant = input<SectionCardVariant>('default');
 }
-

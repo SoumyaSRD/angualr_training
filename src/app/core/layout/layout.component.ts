@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
     Component,
+    ChangeDetectionStrategy,
     HostListener,
     inject,
     signal,
+    viewChild,
+    OnInit,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
@@ -12,8 +15,8 @@ import { HeaderComponent } from './header.component';
 import { SidebarComponent } from './sidebar.component';
 import { FooterComponent } from './footer.component';
 import { ModalService } from '../services/modal.service';
-import { Login } from '../../components/auth/login/login';
 import { ToastService } from '../services/toast.service';
+import { Login } from '../../components/auth/login/login';
 
 @Component({
     selector: 'app-layout',
@@ -26,233 +29,160 @@ import { ToastService } from '../services/toast.service';
         SidebarComponent,
         FooterComponent,
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrl: './layout.scss',
     template: `
-    <div class="layout-wrapper d-flex flex-column vh-100">
-      <app-header (menuToggle)="toggleSidebar()"></app-header>
+        <div class="app-layout">
 
-      <div class="layout-body d-flex flex-grow-1 overflow-hidden">
-        <!-- Sidebar - Desktop: always visible, Mobile: offcanvas -->
-        <aside
-          class="sidebar"
-          [class.sidebar-open]="isSidebarOpen()"
-          [class.sidebar-mobile]="isMobile()"
-        >
-          <app-sidebar (itemSelected)="closeSidebarOnMobile()"></app-sidebar>
-        </aside>
+            <!-- ── Sidebar ──────────────────────────────────────── -->
+            <app-sidebar
+                #sidebar
+                (itemSelected)="onSidebarItemSelected()"
+                (collapseChanged)="onSidebarCollapse($event)"
+            ></app-sidebar>
 
-        <!-- Overlay for mobile -->
-        @if (isMobile() && isSidebarOpen()) {
-          <div class="sidebar-overlay" (click)="closeSidebar()"></div>
-        }
+            <!-- ── Main Content ──────────────────────────────────── -->
+            <main
+                class="main-content"
+                [class.sidebar-collapsed]="isSidebarCollapsed()"
+            >
+                <!-- Header -->
+                <app-header (menuToggle)="onMenuToggle()"></app-header>
 
-        <!-- Main Content -->
-        <main class="main-content flex-grow-1 d-flex flex-column overflow-hidden">
-          <!-- Breadcrumb -->
-          <nav aria-label="breadcrumb" class="breadcrumb-wrapper px-4 py-2">
-            <ol class="breadcrumb mb-0">
-              <li class="breadcrumb-item">
-                <a routerLink="/" class="text-decoration-none">
-                  <i class="bi bi-house-door"></i>
-                </a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">
-                {{ currentPageTitle() }}
-              </li>
-            </ol>
-          </nav>
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a routerLink="/" aria-label="Home">
+                                <i class="bi bi-house-door-fill"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ currentPageTitle() }}
+                        </li>
+                    </ol>
+                </nav>
 
-          <!-- Page Content -->
-          <div class="content-area flex-grow-1 overflow-auto p-4">
-            <router-outlet></router-outlet>
-          </div>
+                <!-- Page Content -->
+                <div class="content-wrapper">
+                    <router-outlet></router-outlet>
+                </div>
 
-          <!-- Footer -->
-          <app-footer></app-footer>
-        </main>
-      </div>
+                <!-- Footer -->
+                <app-footer></app-footer>
+            </main>
 
-      <!-- Toast Container -->
-      <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
-        @for (toast of toastService.toasts(); track toast.id) {
-          <div
-            class="toast show align-items-center text-white bg-{{ toast.type }} border-0"
-            role="alert"
-            aria-live="assertive"
-            aria-atomic="true"
-          >
-            <div class="d-flex">
-              <div class="toast-body">
-                @if (toast.type === 'success') {
-                  <i class="bi bi-check-circle-fill me-2"></i>
-                } @else if (toast.type === 'error') {
-                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                } @else if (toast.type === 'warning') {
-                  <i class="bi bi-exclamation-circle-fill me-2"></i>
-                } @else {
-                  <i class="bi bi-info-circle-fill me-2"></i>
+            <!-- ── Toast Container ──────────────────────────────── -->
+            <div class="toast-container" aria-live="polite" aria-atomic="false">
+                @for (toast of toastService.toasts(); track toast.id) {
+                    <div
+                        class="glass-toast"
+                        [class.toast-success]="toast.type === 'success'"
+                        [class.toast-error]="toast.type === 'error'"
+                        [class.toast-warning]="toast.type === 'warning'"
+                        [class.toast-info]="toast.type === 'info'"
+                        role="alert"
+                    >
+                        <!-- Icon -->
+                        <div class="toast-icon">
+                            @switch (toast.type) {
+                                @case ('success') { <i class="bi bi-check-circle-fill"></i> }
+                                @case ('error')   { <i class="bi bi-x-circle-fill"></i> }
+                                @case ('warning') { <i class="bi bi-exclamation-triangle-fill"></i> }
+                                @default          { <i class="bi bi-info-circle-fill"></i> }
+                            }
+                        </div>
+
+                        <!-- Message -->
+                        <div class="toast-content">
+                            <div class="toast-message">{{ toast.message }}</div>
+                        </div>
+
+                        <!-- Dismiss -->
+                        @if (toast.dismissible) {
+                            <button
+                                class="toast-close"
+                                (click)="toastService.dismiss(toast.id)"
+                                aria-label="Dismiss notification"
+                            >
+                                <i class="bi bi-x"></i>
+                            </button>
+                        }
+                    </div>
                 }
-                {{ toast.message }}
-              </div>
-              @if (toast.dismissible) {
-                <button
-                  type="button"
-                  class="btn-close btn-close-white me-2 m-auto"
-                  (click)="toastService.dismiss(toast.id)"
-                  aria-label="Close"
-                ></button>
-              }
             </div>
-          </div>
-        }
-      </div>
-    </div>
-  `,
-    styles: [`
-    .layout-wrapper {
-      background: var(--background-color);
-    }
 
-    .layout-body {
-      position: relative;
-    }
-
-    .sidebar {
-      width: 280px;
-      min-width: 280px;
-      height: 100%;
-      overflow-y: auto;
-      transition: transform 0.3s ease;
-      z-index: 1040;
-    }
-
-    .sidebar-mobile {
-      position: fixed;
-      left: 0;
-      top: 56px; /* Height of navbar */
-      bottom: 0;
-      transform: translateX(-100%);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .sidebar-mobile.sidebar-open {
-      transform: translateX(0);
-    }
-
-    .sidebar-overlay {
-      position: fixed;
-      top: 56px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1035;
-    }
-
-    .main-content {
-      background: var(--background-color);
-    }
-
-    .breadcrumb-wrapper {
-      background: var(--surface-color);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .breadcrumb {
-      font-size: 0.875rem;
-    }
-
-    .breadcrumb-item a {
-      color: var(--text-secondary);
-      
-      &:hover {
-        color: var(--primary-color);
-      }
-    }
-
-    .breadcrumb-item.active {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .content-area {
-      scroll-behavior: smooth;
-    }
-
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 260px;
-        min-width: 260px;
-      }
-    }
-  `],
+        </div>
+    `,
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
     private readonly router = inject(Router);
     private readonly modalService = inject(ModalService);
     readonly toastService = inject(ToastService);
 
-    // Sidebar state
-    readonly isSidebarOpen = signal(true);
+    readonly sidebar = viewChild<SidebarComponent>('sidebar');
+
+    // ── State ────────────────────────────────────────────────────────────────
+    readonly isSidebarCollapsed = signal(false);
     readonly isMobile = signal(window.innerWidth < 992);
 
-    // Page title for breadcrumb
+    // ── Breadcrumb title ─────────────────────────────────────────────────────
     readonly currentPageTitle = toSignal(
         this.router.events.pipe(
             filter((e): e is NavigationEnd => e instanceof NavigationEnd),
             startWith(null),
-            map(() => this.resolvePageTitle())
+            map(() => this.resolvePageTitle()),
         ),
-        { initialValue: this.resolvePageTitle() }
+        { initialValue: this.resolvePageTitle() },
     );
 
-    constructor() {
-        // Handle initial sidebar state based on screen size
-        this.updateSidebarState();
+    // ── Lifecycle ────────────────────────────────────────────────────────────
 
-        // Listen for route changes to scroll to top
+    ngOnInit(): void {
+        // Global login event (fired from HeaderComponent or elsewhere)
+        window.addEventListener('app:login', () => this.openLogin());
+
+        // Scroll to top on each navigation
         this.router.events
             .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
             .subscribe(() => {
-                const contentArea = document.querySelector('.content-area');
-                if (contentArea) {
-                    contentArea.scrollTo({ top: 0, behavior: 'smooth' });
-                }
+                document
+                    .querySelector('.content-wrapper')
+                    ?.scrollTo({ top: 0, behavior: 'smooth' });
             });
-
-        // Listen for login event from header
-        window.addEventListener('app:login', () => {
-            this.openLogin();
-        });
     }
+
+    // ── Host listeners ───────────────────────────────────────────────────────
 
     @HostListener('window:resize')
     onResize(): void {
-        const isMobileNow = window.innerWidth < 992;
-        this.isMobile.set(isMobileNow);
-        this.updateSidebarState();
+        this.isMobile.set(window.innerWidth < 992);
     }
 
-    private updateSidebarState(): void {
+    // ── Sidebar handlers ─────────────────────────────────────────────────────
+
+    onMenuToggle(): void {
+        const sidebar = this.sidebar();
+        if (!sidebar) return;
+
         if (this.isMobile()) {
-            this.isSidebarOpen.set(false);
+            sidebar.openMobile();
         } else {
-            this.isSidebarOpen.set(true);
+            sidebar.toggleCollapse();
         }
     }
 
-    toggleSidebar(): void {
-        this.isSidebarOpen.update((open) => !open);
+    onSidebarCollapse(collapsed: boolean): void {
+        this.isSidebarCollapsed.set(collapsed);
     }
 
-    closeSidebar(): void {
-        this.isSidebarOpen.set(false);
-    }
-
-    closeSidebarOnMobile(): void {
+    onSidebarItemSelected(): void {
         if (this.isMobile()) {
-            this.closeSidebar();
+            this.sidebar()?.closeMobile();
         }
     }
+
+    // ── Modal ─────────────────────────────────────────────────────────────────
 
     openLogin(): void {
         this.modalService.open(Login, {
@@ -263,18 +193,19 @@ export class LayoutComponent {
         });
     }
 
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private resolvePageTitle(): string {
         const url = this.router.url;
+
         if (url === '/' || url === '/dashboard') return 'Dashboard';
-        // Extract title from URL path
+
         const segments = url.split('/').filter(Boolean);
-        if (segments.length > 0) {
-            const lastSegment = segments[segments.length - 1];
-            return lastSegment
-                .split('-')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-        }
-        return 'Learning';
+        if (segments.length === 0) return 'Learning';
+
+        return segments[segments.length - 1]
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
     }
 }

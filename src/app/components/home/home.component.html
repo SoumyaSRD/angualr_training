@@ -13,10 +13,7 @@
       </p>
 
       <div class="hero__actions">
-        <a
-          class="btn btn--primary"
-          [routerLink]="navigationService.topics[0].subTopics[0].route"
-        >
+        <a class="btn btn--primary" [routerLink]="navigationService.topics[0].subTopics[0].route">
           Start learning
         </a>
         <a class="btn btn--ghost" routerLink="/fundamentals">
@@ -38,32 +35,17 @@
 
   <!-- Highlights -->
   <section class="section section--highlights">
-    <app-section-card
-      title="Comprehensive Curriculum"
-      subtitle="From web fundamentals to advanced Angular 21 patterns."
-      icon="school"
-      badge="Start here"
-      variant="accent"
-    ></app-section-card>
+    <app-section-card title="Comprehensive Curriculum" subtitle="From web fundamentals to advanced Angular 21 patterns."
+      icon="school" badge="Start here" variant="accent"></app-section-card>
 
-    <app-section-card
-      title="Real Code Examples"
-      subtitle="Every topic ships with code you can paste into real apps."
-      icon="code"
-    ></app-section-card>
+    <app-section-card title="Real Code Examples" subtitle="Every topic ships with code you can paste into real apps."
+      icon="code"></app-section-card>
 
-    <app-section-card
-      title="Modern Angular"
-      subtitle="Standalone components, signals, zoneless workflows and more."
-      icon="auto_awesome"
-    ></app-section-card>
+    <app-section-card title="Modern Angular" subtitle="Standalone components, signals, zoneless workflows and more."
+      icon="auto_awesome"></app-section-card>
 
-    <app-section-card
-      title="Enterprise Focus"
-      subtitle="Core/shared/features structure for 50+ screens and teams."
-      icon="business_center"
-      variant="glass"
-    ></app-section-card>
+    <app-section-card title="Enterprise Focus" subtitle="Core/shared/features structure for 50+ screens and teams."
+      icon="business_center" variant="glass"></app-section-card>
   </section>
 
   <!-- Topics overview -->
@@ -76,38 +58,30 @@
     </div>
 
     <div class="section__search">
-      <input
-        type="search"
-        class="search-input"
-        [value]="searchTerm()"
+      <input type="search" class="search-input" [value]="searchTerm()"
         (input)="searchTerm.set($any($event.target).value)"
-        placeholder="Search topics or lessons (e.g. components, signals, routing)"
-      />
+        placeholder="Search topics or lessons (e.g. components, signals, routing)" />
     </div>
 
     <div class="topics-grid">
       @for (topic of filteredTopics(); track topic.title) {
-        <app-section-card
-          class="topics-grid__card"
-          [title]="topic.title"
-          [subtitle]="topic.subTopics.length + ' lessons'"
-          [icon]="topic.icon"
-        >
-          <ul class="topics-grid__list">
-            @for (sub of topic.subTopics; track sub.route) {
-              <li>
-                <a [routerLink]="sub.route">{{ sub.title }}</a>
-              </li>
-            }
-          </ul>
-        </app-section-card>
+      <app-section-card class="topics-grid__card" [title]="topic.title" [subtitle]="topic.subTopics.length + ' lessons'"
+        [icon]="topic.icon">
+        <ul class="topics-grid__list">
+          @for (sub of topic.subTopics; track sub.route) {
+          <li>
+            <a [routerLink]="sub.route">{{ sub.title }}</a>
+          </li>
+          }
+        </ul>
+      </app-section-card>
       }
 
       @if (filteredTopics().length === 0) {
-        <div class="topics-grid__empty">
-          <p>No matching topics or lessons found.</p>
-          <p class="topics-grid__empty-hint">Try a different keyword.</p>
-        </div>
+      <div class="topics-grid__empty">
+        <p>No matching topics or lessons found.</p>
+        <p class="topics-grid__empty-hint">Try a different keyword.</p>
+      </div>
       }
     </div>
   </section>

@@ -1,84 +1,217 @@
+// =============================================================================
+// SECTION CARD — Glassmorphism SCSS
+// Consumes tokens from glass-design-system.css (:root / [data-theme])
+// =============================================================================
+
+@mixin glass-surface($blur: var(--glass-blur), $bg: var(--glass-bg)) {
+  background: $bg;
+  backdrop-filter: blur($blur) saturate(1.8);
+  -webkit-backdrop-filter: blur($blur) saturate(1.8);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md), var(--glass-inner-shadow);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.04) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// BASE CARD
+// =============================================================================
+
 .section-card {
-  border-radius: var(--border-radius);
-  background: var(--surface-color);
-  padding: var(--spacing-xl);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl, 1.5rem);
+  background: var(--glass-bg);
+  padding: var(--spacing-xl, 2rem);
+  box-shadow: var(--shadow-md), var(--glass-inner-shadow);
+  border: 1px solid var(--glass-border);
   transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast);
+    transform       var(--duration-base, 240ms) var(--ease-smooth),
+    box-shadow      var(--duration-base, 240ms) var(--ease-smooth),
+    border-color    var(--duration-base, 240ms) var(--ease-smooth),
+    background      var(--duration-base, 240ms) var(--ease-smooth);
+
+  // Top-edge glass sheen
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.04) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
+    background: var(--glass-bg-hover);
+    box-shadow: var(--shadow-lg), var(--shadow-glow), var(--glass-inner-shadow);
+    border-color: var(--glass-border-strong);
+
+    .section-card__icon { transform: scale(1.10) rotate(-5deg); }
   }
 }
+
+// =============================================================================
+// HEADER
+// =============================================================================
 
 .section-card__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-md);
+  gap: 12px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
 }
 
 .section-card__title-group {
   display: flex;
-  gap: var(--spacing-md);
+  gap: 14px;
   align-items: flex-start;
+  min-width: 0;
 }
+
+// =============================================================================
+// ICON  ← main fix: sized for <i class="bi bi-*">, not raw text
+// =============================================================================
 
 .section-card__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 9999px;
-  background: var(--surface-variant);
-  color: var(--primary-color);
-  font-size: var(--font-size-md);
-  box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md, 12px);
+
+  // Tinted glass bubble
+  background: color-mix(in srgb, var(--accent-primary) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  box-shadow:
+    0 4px 16px color-mix(in srgb, var(--accent-primary) 22%, transparent),
+    var(--glass-inner-shadow);
+
+  transition: transform var(--duration-base) var(--ease-spring);
+
+  // The <i> Bootstrap icon glyph
+  i {
+    font-size: 1.1875rem;       // correct render size for bi icons
+    line-height: 1;
+    color: var(--accent-primary);
+
+    // Gradient paint on the icon via background-clip trick
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// =============================================================================
+// TITLE BLOCK
+// =============================================================================
+
+.section-card__title-block {
+  min-width: 0;
 }
 
 .section-card__title {
-  margin: 0 0 var(--spacing-xs);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+  margin: 0 0 4px;
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: var(--font-size-lg, 1.0625rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.25;
 }
 
 .section-card__subtitle {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm, 0.875rem);
   color: var(--text-secondary);
+  line-height: 1.55;
 }
+
+// =============================================================================
+// BADGE
+// =============================================================================
 
 .section-card__badge {
-  padding: 2px 10px;
-  border-radius: 9999px;
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: var(--radius-full, 9999px);
   background: var(--accent-gradient);
-  color: var(--text-on-primary);
-  font-size: var(--font-size-xxs);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-wide);
+  color: var(--text-on-accent, #fff);
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
+  box-shadow: 0 3px 10px var(--accent-glow);
+  white-space: nowrap;
+  margin-left: auto;
 }
+
+// =============================================================================
+// BODY
+// =============================================================================
 
 .section-card__body {
-  font-size: var(--font-size-md);
+  position: relative;
+  z-index: 1;
+  font-size: var(--font-size-md, 0.9375rem);
   color: var(--text-secondary);
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-relaxed, 1.65);
 }
 
+// =============================================================================
+// VARIANTS
+// =============================================================================
+
+// ── accent — gradient background wash ────────────────────────────────────────
 .section-card--accent {
-  background: var(--surface-gradient);
+  background: var(--bg-gradient);
+  border-color: var(--glass-border-strong);
+
+  &:hover { border-color: var(--accent-primary); }
 }
 
+// ── glass — full glassmorphism with heavy blur ────────────────────────────────
 .section-card--glass {
-  background: var(--glass-bg);
-  backdrop-filter: var(--blur-lg);
-  -webkit-backdrop-filter: var(--blur-lg);
+  @include glass-surface(var(--glass-blur-heavy, 40px), var(--glass-bg));
   border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow-lg), var(--glass-inner-shadow);
+
+  &:hover {
+    box-shadow: var(--shadow-xl), var(--shadow-glow), var(--glass-inner-shadow);
+    border-color: var(--glass-border-strong);
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .section-card,
+  .section-card__icon { transition: none; }
 }

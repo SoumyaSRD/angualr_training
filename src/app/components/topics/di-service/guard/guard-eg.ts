@@ -7,8 +7,7 @@ import { GUARD } from './guard-eg.const';
   selector: 'app-guard-eg',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './guard-eg.html',
-  styleUrls: ['./guard-eg.scss']
+  templateUrl: './guard-eg.html'
 })
 export class GuardExample {
   content: ITopicContent | any = GUARD;
@@ -61,7 +60,7 @@ export class DataResolver implements Resolve<Data> {
 export const routes: Routes = [
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    component: Dashboard,
     canActivate: [AuthGuard]
   }
 ];

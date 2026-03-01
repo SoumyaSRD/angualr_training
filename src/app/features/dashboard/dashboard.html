@@ -1,0 +1,206 @@
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  DASHBOARD PAGE                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="dashboard">
+
+    <!-- ── Welcome ───────────────────────────────────────── -->
+    <div class="welcome-card">
+        <div class="orb"></div>
+        <h1 class="welcome-title">
+            Welcome back, <span class="name">{{ authService.username() }}</span>!
+        </h1>
+        <p class="welcome-sub">
+            Here's what's happening with your learning progress.
+        </p>
+    </div>
+
+    <!-- ── Stats Grid ─────────────────────────────────────── -->
+    <div class="stats-grid">
+
+        <!-- Topics Completed -->
+        <div class="stat-card" style="--icon-color: var(--accent-primary)">
+            <div class="orb"></div>
+            <div class="stat-body">
+                <div class="stat-icon-wrap">
+                    <div class="stat-icon">
+                        <i class="bi bi-book-fill"></i>
+                    </div>
+                </div>
+                <div class="stat-meta">
+                    <p class="stat-label">Topics Completed</p>
+                    <span class="stat-value">12</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quizzes Passed -->
+        <div class="stat-card" style="--icon-color: var(--success)">
+            <div class="orb"></div>
+            <div class="stat-body">
+                <div class="stat-icon-wrap">
+                    <div class="stat-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                </div>
+                <div class="stat-meta">
+                    <p class="stat-label">Quizzes Passed</p>
+                    <span class="stat-value">8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hours Learned -->
+        <div class="stat-card" style="--icon-color: var(--warning)">
+            <div class="orb"></div>
+            <div class="stat-body">
+                <div class="stat-icon-wrap">
+                    <div class="stat-icon">
+                        <i class="bi bi-clock-fill"></i>
+                    </div>
+                </div>
+                <div class="stat-meta">
+                    <p class="stat-label">Hours Learned</p>
+                    <span class="stat-value">24</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="stat-card" style="--icon-color: var(--info)">
+            <div class="orb"></div>
+            <div class="stat-body">
+                <div class="stat-icon-wrap">
+                    <div class="stat-icon">
+                        <i class="bi bi-trophy-fill"></i>
+                    </div>
+                </div>
+                <div class="stat-meta">
+                    <p class="stat-label">Achievements</p>
+                    <span class="stat-value">5</span>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /stats-grid -->
+
+    <!-- ── Bottom Grid ────────────────────────────────────── -->
+    <div class="bottom-grid">
+
+        <!-- Learning Progress -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Learning Progress</span>
+                <span class="panel-badge">4 Courses</span>
+            </div>
+            <div class="panel-divider"></div>
+            <div class="panel-body">
+                <div class="progress-list">
+
+                    <div class="progress-item" style="--track-color: var(--accent-primary)">
+                        <div class="progress-meta">
+                            <span class="progress-topic">Angular Fundamentals</span>
+                            <span class="progress-pct">75%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item" style="--track-color: var(--success)">
+                        <div class="progress-meta">
+                            <span class="progress-topic">TypeScript Basics</span>
+                            <span class="progress-pct">90%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item" style="--track-color: var(--warning)">
+                        <div class="progress-meta">
+                            <span class="progress-topic">RxJS &amp; Observables</span>
+                            <span class="progress-pct">45%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item" style="--track-color: var(--info)">
+                        <div class="progress-meta">
+                            <span class="progress-topic">Angular Material</span>
+                            <span class="progress-pct">60%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Recent Activity</span>
+                <span class="panel-badge">Last 2 days</span>
+            </div>
+            <div class="panel-divider"></div>
+            <div class="panel-body">
+                <div class="activity-list">
+
+                    <div class="activity-item" style="--icon-color: var(--success)">
+                        <div class="activity-icon-wrap">
+                            <div class="activity-icon">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        </div>
+                        <div class="activity-body">
+                            <p class="activity-text">Completed "Components Basics"</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item" style="--icon-color: var(--accent-primary)">
+                        <div class="activity-icon-wrap">
+                            <div class="activity-icon">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </div>
+                        </div>
+                        <div class="activity-body">
+                            <p class="activity-text">Started "Services &amp; DI"</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item" style="--icon-color: var(--warning)">
+                        <div class="activity-icon-wrap">
+                            <div class="activity-icon">
+                                <i class="bi bi-trophy-fill"></i>
+                            </div>
+                        </div>
+                        <div class="activity-body">
+                            <p class="activity-text">Earned "Quick Learner" badge</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item" style="--icon-color: var(--info)">
+                        <div class="activity-icon-wrap">
+                            <div class="activity-icon">
+                                <i class="bi bi-file-earmark-check-fill"></i>
+                            </div>
+                        </div>
+                        <div class="activity-body">
+                            <p class="activity-text">Passed TypeScript Quiz</p>
+                            <span class="activity-time">2 days ago</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /bottom-grid -->
+</div><!-- /dashboard -->

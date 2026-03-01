@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, HostListener, inject, input, signal, viewChild } from '@angular/core';
+import { ToastService } from '../../core/services/toast.service';
 import { ICodeExample } from '../../interfaces/code-example';
 import { ISection } from '../../interfaces/topic';
-import { ThemeService } from '../../services/theme.service';
-import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-topic-template',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './topic-template.html',
-  styleUrl: './topic-template.scss'
+  styleUrl: './topic-template.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TopicTemplate {
+  readonly trackBySectionIndex = (index: number) => index;
   title = input('');
   tags = input<string[]>([]);
   paragraphs = input<string[]>([]);
@@ -20,14 +21,13 @@ export class TopicTemplate {
   codeExamples = input<ICodeExample[]>([]);
   bestPractices = input<string[]>([]);
   keyPoints = input<string[]>([]);
-  themeService = inject(ThemeService);
   readonly targetElement = viewChild<ElementRef<HTMLDivElement>>('scrollTopRef');
   private toastService = inject(ToastService);
 
   // State signals
   expandedCodeIndex = signal<number | null>(null);
   copiedCodeIndex = signal<number | null>(null);
-  scrolled = signal(true);
+  scrolled = signal(false);
   currentSectionIndex = signal(0);
 
   constructor() {
@@ -38,8 +38,10 @@ export class TopicTemplate {
     });
   }
 
-  onWindowScroll(event: any) {
-    this.scrolled.set(window.scrollY > 300);
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    this.scrolled.set(scrollY > 300);
 
     const sections = this.sections();
     if (sections.length > 0) {
@@ -50,9 +52,8 @@ export class TopicTemplate {
         const element = document.getElementById(this.getSectionId(section, index));
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Calculation of how much of the section is visible in the viewport
           const intersection = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-          if (intersection > maxIntersection) {
+          if (intersection > maxIntersection && intersection > 0) {
             maxIntersection = intersection;
             currentIndex = index;
           }

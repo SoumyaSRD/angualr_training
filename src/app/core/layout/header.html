@@ -1,0 +1,191 @@
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HEADER                                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<header class="glass-header">
+
+    <!-- ── Left ─────────────────────────────────────────── -->
+    <div class="header-left">
+        <button class="menu-toggle" (click)="onToggleMenu()" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <a class="header-brand" routerLink="/">
+            <!-- Custom Angular Logo -->
+            <div class="angular-logo">
+                <svg viewBox="0 0 250 250" class="logo-svg">
+                    <!-- Outer shield shape -->
+                    <path class="logo-shield" d="M125 0L0 45l20 160 105 45 105-45 20-160L125 0z" />
+                    <!-- Inner shield -->
+                    <path class="logo-inner" d="M125 25L30 60l15 130 80 35 80-35 15-130-95-35z" />
+                    <!-- A letter stylized -->
+                    <path class="logo-a" d="M125 50L85 170h25l10-35h30l10 35h25L145 50h-20zm10 45l10 35h-20l10-35z" />
+                    <!-- Decorative accent lines -->
+                    <path class="logo-accent" d="M125 15L125 35M60 55L75 65M190 55L175 65" />
+                </svg>
+                <div class="logo-glow"></div>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">Angular</span>
+                <span class="brand-subtitle">Academy</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- ── Right ────────────────────────────────────────── -->
+    <div class="header-right">
+
+        <!-- Theme trigger → opens offcanvas -->
+        <button class="theme-btn" (click)="openThemePanel()"
+            [title]="'Theme: ' + themeService.currentThemeConfig().name" aria-label="Choose theme">
+            <i class="bi {{ themeService.currentThemeConfig().icon }} theme-icon"></i>
+            <span class="theme-name">{{ themeService.currentThemeConfig().name }}</span>
+            <i class="bi bi-sliders2"></i>
+        </button>
+
+        <!-- User dropdown -->
+        <div class="user-dropdown">
+            <button class="user-btn">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <span class="user-name">{{ authService.username() }}</span>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+
+            <div class="user-menu">
+                <div class="user-header">
+                    <div class="user-avatar user-avatar--lg">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-display-name">{{ authService.username() }}</span>
+                        <span class="user-role">Student</span>
+                    </div>
+                </div>
+
+                <div class="menu-divider"></div>
+
+                <a class="menu-item" routerLink="/settings">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+
+                @if (authService.isLoggedIn()) {
+                <button class="menu-item" (click)="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Sign out
+                </button>
+                } @else {
+                <button class="menu-item" (click)="login()">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Sign in
+                </button>
+                }
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  THEME OFFCANVAS  (Bootstrap offcanvas — end side)        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div #themeOffcanvas class="offcanvas offcanvas-end theme-offcanvas" tabindex="-1" id="themeOffcanvas"
+    aria-labelledby="themeOffcanvasLabel">
+    <!-- Header -->
+    <div class="offcanvas-header-glass">
+        <div class="offcanvas-title-group">
+            <span class="offcanvas-title" id="themeOffcanvasLabel">
+                Choose Theme
+            </span>
+            <span class="offcanvas-subtitle">
+                {{ themeService.themes.length }} themes available
+            </span>
+        </div>
+        <button class="offcanvas-close" (click)="closeThemePanel()" aria-label="Close theme panel">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <!-- Body -->
+    <div class="offcanvas-body-glass">
+
+        <!-- ── Light Themes ──────────────────────────────── -->
+        <p class="theme-category">Light</p>
+        <div class="theme-grid">
+            @for (theme of lightThemes(); track theme.id) {
+            <button class="theme-option" [class.active]="themeService.currentTheme() === theme.id"
+                (click)="setTheme(theme.id)" [title]="theme.description">
+                <div class="theme-preview" [style.background]="theme.gradient"></div>
+                <span class="theme-label">{{ theme.name }}</span>
+                @if (themeService.currentTheme() === theme.id) {
+                <i class="bi bi-check-circle-fill check-icon"></i>
+                }
+            </button>
+            }
+        </div>
+
+        <!-- ── Dark Themes ───────────────────────────────── -->
+        <p class="theme-category">Dark</p>
+        <div class="theme-grid">
+            @for (theme of darkThemes(); track theme.id) {
+            <button class="theme-option" [class.active]="themeService.currentTheme() === theme.id"
+                (click)="setTheme(theme.id)" [title]="theme.description">
+                <div class="theme-preview" [style.background]="theme.gradient"></div>
+                <span class="theme-label">{{ theme.name }}</span>
+                @if (themeService.currentTheme() === theme.id) {
+                <i class="bi bi-check-circle-fill check-icon"></i>
+                }
+            </button>
+            }
+        </div>
+
+        <!-- ── Batman ────────────────────────────────────── -->
+        <p class="theme-category">Batman</p>
+        <div class="theme-grid">
+            @for (theme of batmanThemes(); track theme.id) {
+            <button class="theme-option" [class.active]="themeService.currentTheme() === theme.id"
+                (click)="setTheme(theme.id)" [title]="theme.description">
+                <div class="theme-preview" [style.background]="theme.gradient"></div>
+                <span class="theme-label">{{ theme.name }}</span>
+                @if (themeService.currentTheme() === theme.id) {
+                <i class="bi bi-check-circle-fill check-icon"></i>
+                }
+            </button>
+            }
+        </div>
+
+        <!-- ── Cool ──────────────────────────────────────── -->
+        <p class="theme-category">Cool</p>
+        <div class="theme-grid">
+            @for (theme of coolThemes(); track theme.id) {
+            <button class="theme-option" [class.active]="themeService.currentTheme() === theme.id"
+                (click)="setTheme(theme.id)" [title]="theme.description">
+                <div class="theme-preview" [style.background]="theme.gradient"></div>
+                <span class="theme-label">{{ theme.name }}</span>
+                @if (themeService.currentTheme() === theme.id) {
+                <i class="bi bi-check-circle-fill check-icon"></i>
+                }
+            </button>
+            }
+        </div>
+
+        <!-- ── Anime ─────────────────────────────────────── -->
+        <p class="theme-category">Anime</p>
+        <div class="theme-grid">
+            @for (theme of animeThemes(); track theme.id) {
+            <button class="theme-option" [class.active]="themeService.currentTheme() === theme.id"
+                (click)="setTheme(theme.id)" [title]="theme.description">
+                <div class="theme-preview" [style.background]="theme.gradient"></div>
+                <span class="theme-label">{{ theme.name }}</span>
+                @if (themeService.currentTheme() === theme.id) {
+                <i class="bi bi-check-circle-fill check-icon"></i>
+                }
+            </button>
+            }
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap offcanvas backdrop (auto-managed by BS) -->

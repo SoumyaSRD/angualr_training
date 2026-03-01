@@ -7,8 +7,7 @@ import { DECORATOR } from './decorator.const';
   selector: 'app-decorator',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './decorator.html',
-  styleUrls: ['./decorator.scss']
+  templateUrl: './decorator.html'
 })
 export class DecoratorExample {
   content: ITopicContent | any = DECORATOR;

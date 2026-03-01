@@ -4,20 +4,19 @@ import { TopicTemplate } from '../../../topic-template/topic-template';
 import { SERVICE_EG } from './service-eg.const';
 
 @Component({
-    selector: 'app-service-eg',
-    standalone: true,
-    imports: [TopicTemplate,],
-    templateUrl: './service-eg.html',
-    styleUrls: ['./service-eg.scss']
+  selector: 'app-service-eg',
+  standalone: true,
+  imports: [TopicTemplate,],
+  templateUrl: './service-eg.html'
 })
 export class ServiceExample {
-    content: ITopicContent | any = SERVICE_EG;
-    dataEg2 = `constructor(private dataService: DataService) {}
+  content: ITopicContent | any = SERVICE_EG;
+  dataEg2 = `constructor(private dataService: DataService) {}
 
 ngOnInit() {
   console.log(this.dataService.getMessage());
 }`
-    dataEg = `@Injectable({
+  dataEg = `@Injectable({
   providedIn: 'root'
 })
 export class DataService {

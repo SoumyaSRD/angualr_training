@@ -7,8 +7,7 @@ import { FORMS_MODULE_DEEP_DIVE } from './form-eg.const';
   selector: 'app-form-eg',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './form-eg.html',
-  styleUrls: ['./form-eg.scss']
+  templateUrl: './form-eg.html'
 })
 export class FormExample {
   content: ITopicContent | any = FORMS_MODULE_DEEP_DIVE;

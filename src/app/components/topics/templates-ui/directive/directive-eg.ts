@@ -9,8 +9,7 @@ import { VisibleIfDirective } from '../../../../directives/visible-if.directive'
     selector: 'app-directive',
     standalone: true,
     imports: [TopicTemplate, VisibleIfDirective],
-    templateUrl: './directive-eg.html',
-    styleUrls: ['./directive-eg.scss']
+    templateUrl: './directive-eg.html'
 })
 export class DirectiveExample {
     content: ITopicContent | any = DIRECTIVE;

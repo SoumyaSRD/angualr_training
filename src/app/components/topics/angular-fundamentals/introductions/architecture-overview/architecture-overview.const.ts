@@ -168,7 +168,7 @@ export class UserListComponent implements OnInit {
     <app-notifications></app-notifications>
   \`
 })
-export class DashboardComponent {
+export class Dashboard {
   totalUsers = 100;
   activeUsers = 85;
   

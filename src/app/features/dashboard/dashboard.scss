@@ -1,0 +1,456 @@
+// =============================================================================
+// DASHBOARD COMPONENT — Glassmorphism SCSS
+// Consumes tokens from glass-design-system.css (:root / [data-theme])
+// =============================================================================
+
+// ─── Mixins (local — mirrors the design system helpers) ───────────────────────
+
+@mixin glass-surface($blur: var(--glass-blur), $bg: var(--glass-bg)) {
+  background: $bg;
+  backdrop-filter: blur($blur) saturate(1.8);
+  -webkit-backdrop-filter: blur($blur) saturate(1.8);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md), var(--glass-inner-shadow);
+  position: relative;
+  overflow: hidden;
+
+  // Diagonal light-catch — the glassy sheen
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.04) 45%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
+
+@mixin gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin transition($props: all, $dur: var(--duration-base), $ease: var(--ease-smooth)) {
+  transition: $props $dur $ease;
+}
+
+// ─── Animations ──────────────────────────────────────────────────────────────
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes count-in {
+  from { opacity: 0; transform: scale(0.80); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer-bar {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.12; }
+  50%       { transform: scale(1.15); opacity: 0.20; }
+}
+
+// =============================================================================
+// HOST
+// =============================================================================
+
+:host {
+  display: block;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+}
+
+// =============================================================================
+// PAGE WRAPPER
+// =============================================================================
+
+.dashboard {
+  padding: 32px 28px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// =============================================================================
+// WELCOME HERO
+// =============================================================================
+
+.welcome-card {
+  @include glass-surface;
+  border-radius: var(--radius-xl);
+  padding: 32px 36px;
+  margin-bottom: 28px;
+  animation: fade-up 500ms var(--ease-smooth) both;
+
+  // Ambient orb
+  .orb {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.13;
+    animation: orb-pulse 5s var(--ease-smooth) infinite;
+    pointer-events: none;
+  }
+}
+
+.welcome-title {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+
+  .name {
+    @include gradient-text;
+  }
+}
+
+.welcome-sub {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+// =============================================================================
+// STATS GRID
+// =============================================================================
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 540px)  { grid-template-columns: 1fr; }
+}
+
+// ── Single stat card ─────────────────────────────────────────────────────────
+
+.stat-card {
+  @include glass-surface;
+  border-radius: var(--radius-xl);
+  padding: 22px 20px;
+  @include transition(all, var(--duration-base), var(--ease-smooth));
+
+  // Staggered entrance
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) { animation: fade-up 500ms #{($i - 1) * 70ms} var(--ease-smooth) both; }
+  }
+
+  &:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-strong);
+    box-shadow: var(--shadow-lg), var(--shadow-glow), var(--glass-inner-shadow);
+    transform: translateY(-3px) scale(1.01);
+
+    .stat-icon { transform: scale(1.10) rotate(-5deg); }
+  }
+
+  // Ambient orb per card
+  .orb {
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 130px; height: 130px;
+    background: var(--icon-color, var(--accent-primary));
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.12;
+    pointer-events: none;
+    @include transition(opacity);
+  }
+  &:hover .orb { opacity: 0.22; }
+}
+
+.stat-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative; // above ::before sheen + orb
+  z-index: 1;
+}
+
+.stat-icon-wrap {
+  flex-shrink: 0;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.375rem;
+  // Icon bg + color set per-card via CSS custom props
+  background: color-mix(in srgb, var(--icon-color, var(--accent-primary)) 14%, transparent);
+  color: var(--icon-color, var(--accent-primary));
+  border: 1px solid color-mix(in srgb, var(--icon-color, var(--accent-primary)) 22%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--icon-color, var(--accent-primary)) 25%, transparent);
+  @include transition(transform, var(--duration-base), var(--ease-spring));
+}
+
+.stat-meta { flex: 1; min-width: 0; }
+
+.stat-label {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  @include gradient-text;
+  animation: count-in 600ms var(--ease-spring) both;
+}
+
+// =============================================================================
+// BOTTOM GRID — Progress + Activity (8/4 split)
+// =============================================================================
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+// =============================================================================
+// SHARED CARD BASE
+// =============================================================================
+
+.panel {
+  @include glass-surface;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  animation: fade-up 500ms 280ms var(--ease-smooth) both;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+  position: relative;
+  z-index: 1;
+
+  .panel-title {
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .panel-badge {
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--accent-primary) 13%, transparent);
+    color: var(--accent-primary);
+    border: 1px solid color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  }
+}
+
+// ── Divider under header ─────────────────────────────────────────────────────
+.panel-divider {
+  height: 1px;
+  margin: 14px 24px 0;
+  background: linear-gradient(90deg, transparent, var(--glass-border-strong), transparent);
+  position: relative;
+  z-index: 1;
+}
+
+.panel-body {
+  flex: 1;
+  padding: 18px 24px 22px;
+  position: relative;
+  z-index: 1;
+}
+
+// =============================================================================
+// PROGRESS SECTION
+// =============================================================================
+
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress-item {}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.progress-topic {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.progress-pct {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  // Per-item color via --track-color
+  color: var(--track-color, var(--accent-primary));
+}
+
+.progress-track {
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--track-color, var(--accent-primary)) 12%, var(--glass-bg-deep, rgba(0,0,0,0.07)));
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--track-color, var(--accent-primary)) 10%, transparent);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  // Gradient uses track-color for a cohesive look
+  background: linear-gradient(
+    90deg,
+    var(--track-color, var(--accent-primary)),
+    color-mix(in srgb, var(--track-color, var(--accent-primary)) 60%, #fff)
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--track-color, var(--accent-primary)) 50%, transparent);
+  position: relative;
+
+  // Animated shimmer sweep
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 100%
+    );
+    background-size: 200%;
+    animation: shimmer-bar 2.2s linear infinite;
+    border-radius: inherit;
+  }
+}
+
+// =============================================================================
+// ACTIVITY FEED
+// =============================================================================
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--glass-border-subtle, rgba(0,0,0,0.05));
+  @include transition(all, var(--duration-fast), var(--ease-smooth));
+
+  &:last-child { border-bottom: none; padding-bottom: 0; }
+  &:first-child { padding-top: 0; }
+
+  &:hover {
+    .activity-icon { transform: scale(1.12) rotate(-4deg); }
+    .activity-text { color: var(--text-primary); }
+  }
+}
+
+.activity-icon-wrap {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.activity-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: color-mix(in srgb, var(--icon-color, var(--accent-primary)) 13%, transparent);
+  color: var(--icon-color, var(--accent-primary));
+  border: 1px solid color-mix(in srgb, var(--icon-color, var(--accent-primary)) 20%, transparent);
+  @include transition(transform, var(--duration-base), var(--ease-spring));
+}
+
+.activity-body { flex: 1; min-width: 0; }
+
+.activity-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 3px;
+  line-height: 1.4;
+  @include transition(color);
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+// =============================================================================
+// RESPONSIVE TWEAKS
+// =============================================================================
+
+@media (max-width: 600px) {
+  .dashboard       { padding: 20px 16px 48px; }
+  .welcome-card    { padding: 22px 20px; }
+  .panel-header,
+  .panel-body      { padding-left: 18px; padding-right: 18px; }
+  .panel-divider   { margin-left: 18px; margin-right: 18px; }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill::after,
+  .orb { animation: none; }
+
+  .stat-card,
+  .welcome-card,
+  .panel { animation: none; opacity: 1; transform: none; }
+}

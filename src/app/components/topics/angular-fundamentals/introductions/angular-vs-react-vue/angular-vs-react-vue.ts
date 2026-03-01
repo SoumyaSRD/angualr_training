@@ -8,8 +8,7 @@ import { FRAMEWORK_COMPARISON } from './angular-react-vue.const';
     selector: 'app-angular-vs-react-vue',
     standalone: true,
     imports: [TopicTemplate],
-    templateUrl: './angular-vs-react-vue.html',
-    styleUrl: './angular-vs-react-vue.scss'
+    templateUrl: './angular-vs-react-vue.html'
 })
 export class AngularReactVue {
     content: ITopicContent | any = FRAMEWORK_COMPARISON

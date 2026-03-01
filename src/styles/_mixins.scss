@@ -1,0 +1,369 @@
+// ============================================================================
+// GLASS UI DESIGN SYSTEM - MIXINS
+// ============================================================================
+
+@use 'sass:map';
+@use 'sass:math';
+@use 'variables' as *;
+
+// ----------------------------------------------------------------------------
+// GLASS MORPHISM MIXINS
+// ----------------------------------------------------------------------------
+
+/// Core glass effect mixin
+/// @param {Number} $blur - Blur amount
+/// @param {Color} $bg-color - Background color
+/// @param {Color} $border-color - Border color
+/// @param {Number} $border-width - Border width
+@mixin glass(
+  $blur: map.get($glass, 'blur-md'),
+  $bg-color: var(--glass-bg-primary),
+  $border-color: var(--glass-border),
+  $border-width: 1px
+) {
+  background: $bg-color;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: $border-width solid $border-color;
+}
+
+/// Floating glass card with lift effect
+@mixin glass-card(
+  $blur: map.get($glass, 'blur-lg'),
+  $bg-color: var(--glass-bg-primary),
+  $border-color: var(--glass-border),
+  $shadow: map.get($shadow, 'xl')
+) {
+  @include glass($blur, $bg-color, $border-color);
+  border-radius: map.get($radius, 'lg');
+  box-shadow: #{$shadow};
+  transition: 
+    transform #{map.get($transition, 'normal')},
+    box-shadow #{map.get($transition, 'normal')},
+    border-color #{map.get($transition, 'fast')};
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: #{$shadow}, 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: var(--glass-border-strong);
+  }
+}
+
+/// Glass button with glow effect
+@mixin glass-button(
+  $blur: map.get($glass, 'blur-sm'),
+  $bg-color: var(--glass-bg-secondary),
+  $border-color: var(--glass-border)
+) {
+  @include glass($blur, $bg-color, $border-color);
+  border-radius: map.get($radius, 'md');
+  padding: map.get($spacing, 'sm') map.get($spacing, 'md');
+  font-weight: map.get($font-weight, 'medium');
+  cursor: pointer;
+  transition: 
+    all #{map.get($transition, 'fast')},
+    box-shadow #{map.get($transition, 'normal')};
+
+  &:hover {
+    background: var(--glass-bg-primary);
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+/// Glass input field
+@mixin glass-input(
+  $blur: map.get($glass, 'blur-sm'),
+  $bg-color: var(--glass-bg-tertiary)
+) {
+  @include glass($blur, $bg-color, var(--glass-border));
+  border-radius: map.get($radius, 'md');
+  padding: map.get($spacing, 'sm') map.get($spacing, 'md');
+  color: var(--text-primary);
+  width: 100%;
+  transition: 
+    border-color #{map.get($transition, 'fast')},
+    box-shadow #{map.get($transition, 'fast')};
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/// Glass sidebar
+@mixin glass-sidebar(
+  $blur: map.get($glass, 'blur-xl'),
+  $width: map.get($layout, 'sidebar-width')
+) {
+  @include glass($blur, var(--sidebar-bg), var(--glass-border));
+  width: $width;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: map.get($z-index, 'fixed');
+  transition: width #{map.get($transition, 'normal')};
+  overflow: hidden;
+}
+
+/// Glass header
+@mixin glass-header(
+  $blur: map.get($glass, 'blur-lg'),
+  $height: map.get($layout, 'header-height')
+) {
+  @include glass($blur, var(--header-bg), var(--glass-border));
+  height: $height;
+  position: sticky;
+  top: 0;
+  z-index: map.get($z-index, 'sticky');
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE MIXINS
+// ----------------------------------------------------------------------------
+
+@mixin media-up($breakpoint) {
+  $min: map.get($breakpoints, $breakpoint);
+  @media (min-width: $min) {
+    @content;
+  }
+}
+
+@mixin media-down($breakpoint) {
+  $max: map.get($breakpoints, $breakpoint) - 0.02px;
+  @media (max-width: $max) {
+    @content;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// UTILITY MIXINS
+// ----------------------------------------------------------------------------
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ----------------------------------------------------------------------------
+// ANIMATION MIXINS
+// ----------------------------------------------------------------------------
+
+@mixin fade-in($duration: 300ms) {
+  animation: fadeIn $duration ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+@mixin slide-in-left($duration: 300ms) {
+  animation: slideInLeft $duration ease-out;
+
+  @keyframes slideInLeft {
+    from { 
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+@mixin scale-in($duration: 200ms) {
+  animation: scaleIn $duration ease-out;
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+@mixin float-animation($duration: 3s) {
+  animation: float $duration ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+@mixin glow-pulse($duration: 2s) {
+  animation: glowPulse $duration ease-in-out infinite;
+
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 5px var(--accent-primary); }
+    50% { box-shadow: 0 0 20px var(--accent-primary), 0 0 40px var(--accent-secondary); }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SCROLLBAR MIXINS
+// ----------------------------------------------------------------------------
+
+@mixin custom-scrollbar($width: 6px) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--glass-border-strong);
+    border-radius: calc($width / 2);
+
+    &:hover {
+      background: var(--text-muted);
+    }
+  }
+}
+
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ICON MIXINS
+// ----------------------------------------------------------------------------
+
+@mixin icon-glow($color: var(--accent-primary), $size: 20px) {
+  font-size: $size;
+  transition: all #{map.get($transition, 'fast')};
+  
+  &:hover {
+    color: $color;
+    filter: drop-shadow(0 0 8px $color);
+    transform: scale(1.1);
+  }
+}
+
+@mixin icon-size($size) {
+  font-size: $size;
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ----------------------------------------------------------------------------
+// TOPIC TEMPLATE MIXINS (migrated from app/styles)
+// ----------------------------------------------------------------------------
+
+/// Gradient accent line under a header
+@mixin gradient-underline($width: 100px, $height: 3px, $bottom: 0) {
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: $bottom;
+    left: 0;
+    width: $width;
+    height: $height;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px var(--accent-primary);
+  }
+}
+
+/// Card corner badge
+@mixin card-corner($size: 60px) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: $size;
+  height: $size;
+  border-bottom-left-radius: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 8px;
+  box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/// Surface card base
+@mixin surface-card {
+  border-radius: var(--radius-lg, 1rem);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--accent-primary);
+  }
+}
+
+/// Left accent bar for list items
+@mixin left-accent-bar($width: 4px) {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: $width;
+    background: var(--accent-gradient);
+    transition: width 0.3s ease;
+  }
+}

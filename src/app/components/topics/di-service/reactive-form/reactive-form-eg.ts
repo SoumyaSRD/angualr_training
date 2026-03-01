@@ -7,8 +7,7 @@ import { REACTIVE_FORMS_MODULE_DEEP_DIVE } from './reactive-form-eg.const';
   selector: 'app-reactive-form-eg',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './reactive-form-eg.html',
-  styleUrls: ['./reactive-form-eg.scss']
+  templateUrl: './reactive-form-eg.html'
 })
 export class ReactiveFormExample {
   content: ITopicContent | any = REACTIVE_FORMS_MODULE_DEEP_DIVE;

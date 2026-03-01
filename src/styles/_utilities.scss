@@ -1,0 +1,274 @@
+// ============================================================================
+// GLASS UI DESIGN SYSTEM - UTILITY CLASSES
+// ============================================================================
+
+@use 'sass:map';
+@use 'variables' as *;
+
+// ----------------------------------------------------------------------------
+// SPACING UTILITIES
+// ----------------------------------------------------------------------------
+
+@each $key, $value in $spacing {
+  .m-#{$key} { margin: $value; }
+  .mt-#{$key} { margin-top: $value; }
+  .mr-#{$key} { margin-right: $value; }
+  .mb-#{$key} { margin-bottom: $value; }
+  .ml-#{$key} { margin-left: $value; }
+  .mx-#{$key} { margin-left: $value; margin-right: $value; }
+  .my-#{$key} { margin-top: $value; margin-bottom: $value; }
+  
+  .p-#{$key} { padding: $value; }
+  .pt-#{$key} { padding-top: $value; }
+  .pr-#{$key} { padding-right: $value; }
+  .pb-#{$key} { padding-bottom: $value; }
+  .pl-#{$key} { padding-left: $value; }
+  .px-#{$key} { padding-left: $value; padding-right: $value; }
+  .py-#{$key} { padding-top: $value; padding-bottom: $value; }
+}
+
+.m-auto { margin: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+// ----------------------------------------------------------------------------
+// DISPLAY UTILITIES
+// ----------------------------------------------------------------------------
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline { display: inline; }
+.d-inline-block { display: inline-block; }
+.d-flex { display: flex; }
+.d-inline-flex { display: inline-flex; }
+.d-grid { display: grid; }
+
+// ----------------------------------------------------------------------------
+// FLEX UTILITIES
+// ----------------------------------------------------------------------------
+
+.flex-row { flex-direction: row; }
+.flex-column { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.flex-1 { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.align-start { align-items: flex-start; }
+.align-end { align-items: flex-end; }
+.align-center { align-items: center; }
+.align-stretch { align-items: stretch; }
+
+// ----------------------------------------------------------------------------
+// TEXT UTILITIES
+// ----------------------------------------------------------------------------
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+@each $key, $value in $font-weight {
+  .font-#{$key} { font-weight: $value; }
+}
+
+@each $key, $value in $font-size {
+  .text-#{$key} { font-size: $value; }
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+.text-accent { color: var(--accent-primary); }
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-wrap { white-space: normal; }
+.text-nowrap { white-space: nowrap; }
+
+// ----------------------------------------------------------------------------
+// GLASS UTILITIES
+// ----------------------------------------------------------------------------
+
+.glass {
+  background: var(--glass-bg-primary);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-sm {
+  background: var(--glass-bg-secondary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-dark {
+  background: var(--glass-bg-tertiary);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border-strong);
+}
+
+// ----------------------------------------------------------------------------
+// BACKGROUND UTILITIES
+// ----------------------------------------------------------------------------
+
+.bg-body { background: var(--bg-body); }
+.bg-surface { background: var(--bg-surface); }
+.bg-primary { background: var(--accent-primary); }
+.bg-gradient { background: var(--gradient-primary); }
+
+// ----------------------------------------------------------------------------
+// BORDER RADIUS UTILITIES
+// ----------------------------------------------------------------------------
+
+@each $key, $value in $radius {
+  .rounded-#{$key} { border-radius: $value; }
+}
+
+// ----------------------------------------------------------------------------
+// SHADOW UTILITIES
+// ----------------------------------------------------------------------------
+
+@each $key, $value in $shadow {
+  .shadow-#{$key} { box-shadow: #{$value}; }
+}
+
+.shadow-glow {
+  box-shadow: var(--glow-primary);
+}
+
+.shadow-glow-accent {
+  box-shadow: var(--glow-accent);
+}
+
+// ----------------------------------------------------------------------------
+// WIDTH/HEIGHT UTILITIES
+// ----------------------------------------------------------------------------
+
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.w-screen { width: 100vw; }
+
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+.h-screen { height: 100vh; }
+
+// ----------------------------------------------------------------------------
+// POSITION UTILITIES
+// ----------------------------------------------------------------------------
+
+.position-static { position: static; }
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.position-fixed { position: fixed; }
+.position-sticky { position: sticky; }
+
+// ----------------------------------------------------------------------------
+// OVERFLOW UTILITIES
+// ----------------------------------------------------------------------------
+
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-visible { overflow: visible; }
+.overflow-scroll { overflow: scroll; }
+
+// ----------------------------------------------------------------------------
+// CURSOR UTILITIES
+// ----------------------------------------------------------------------------
+
+.cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+// ----------------------------------------------------------------------------
+// ICON UTILITIES
+// ----------------------------------------------------------------------------
+
+.icon-glow {
+  transition: all 0.25s ease;
+  
+  &:hover {
+    filter: drop-shadow(0 0 8px var(--accent-primary));
+    transform: scale(1.1);
+  }
+}
+
+.icon-sm { font-size: 0.875rem; }
+.icon-md { font-size: 1.25rem; }
+.icon-lg { font-size: 1.5rem; }
+.icon-xl { font-size: 2rem; }
+
+// ----------------------------------------------------------------------------
+// GLASS CARD UTILITIES
+// ----------------------------------------------------------------------------
+
+.glass-card {
+  background: var(--glass-bg-primary);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: map.get($radius, 'lg');
+  box-shadow: #{map.get($shadow, 'xl')};
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: #{map.get($shadow, 'xl')}, 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: var(--glass-border-strong);
+  }
+}
+
+.glass-button {
+  background: var(--glass-bg-secondary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: map.get($radius, 'md');
+  padding: map.get($spacing, 'sm') map.get($spacing, 'md');
+  font-weight: map.get($font-weight, 'medium');
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: var(--glass-bg-primary);
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE HIDE UTILITIES
+// ----------------------------------------------------------------------------
+
+@media (max-width: 575.98px) {
+  .hidden-xs { display: none !important; }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .hidden-sm { display: none !important; }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .hidden-md { display: none !important; }
+}
+
+@media (min-width: 992px) {
+  .hidden-lg { display: none !important; }
+}

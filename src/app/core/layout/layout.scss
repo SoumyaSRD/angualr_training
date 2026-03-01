@@ -1,0 +1,272 @@
+// =============================================================================
+// LAYOUT COMPONENT — Glassmorphism SCSS
+// Consumes tokens from glass-design-system.css (:root / [data-theme])
+// =============================================================================
+
+@mixin transition($props: all, $dur: var(--duration-base), $ease: var(--ease-smooth)) {
+  transition: $props $dur $ease;
+}
+
+// =============================================================================
+// HOST
+// =============================================================================
+
+:host { display: contents; }
+
+// =============================================================================
+// APP SHELL
+// =============================================================================
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+// =============================================================================
+// MAIN CONTENT
+// =============================================================================
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;        // ← was 280px; sidebar width is 260px
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  @include transition(margin-left, var(--duration-slow), var(--ease-smooth));
+
+  &.sidebar-collapsed {
+    margin-left: 72px;
+  }
+}
+
+// =============================================================================
+// BREADCRUMB
+// =============================================================================
+
+.breadcrumb-nav {
+  padding: 12px 24px;
+  // ← was --glass-bg-secondary (doesn't exist); correct token is --glass-bg
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+  z-index: 1;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  gap: 0;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  a {
+    color: var(--text-muted);
+    text-decoration: none;
+    @include transition(color, var(--duration-fast));
+    &:hover { color: var(--accent-primary); }
+  }
+
+  &.active {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  // Separator — using ::before on all items after first
+  & + .breadcrumb-item {
+    &::before {
+      content: '/';
+      color: var(--text-muted);
+      margin: 0 8px;
+      opacity: 0.5;
+    }
+  }
+}
+
+// =============================================================================
+// CONTENT WRAPPER
+// =============================================================================
+
+.content-wrapper {
+  flex: 1;
+  padding: 24px;
+  overflow-x: hidden;
+}
+
+// =============================================================================
+// TOAST CONTAINER
+// =============================================================================
+
+.toast-container {
+  position: fixed;
+  top: 80px;   // below the sticky header (70px + 10px gap)
+  right: 16px;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 400px;
+  width: calc(100vw - 32px);
+}
+
+// =============================================================================
+// GLASS TOAST
+// =============================================================================
+
+.glass-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  // ← was --glass-bg-primary (doesn't exist); correct token is --glass-bg-hover
+  background: var(--glass-bg-hover);
+  backdrop-filter: blur(var(--glass-blur-heavy)) saturate(2);
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl), var(--glass-inner-shadow);
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  animation: toast-slide-in var(--duration-base) var(--ease-spring) both;
+
+  // Top-edge sheen
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(145deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  // Left accent stripe — coloured per type
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 12%; bottom: 12%;
+    width: 3px;
+    border-radius: 0 var(--radius-full) var(--radius-full) 0;
+    background: var(--_toast-color, var(--accent-primary));
+  }
+
+  // ── Variants ────────────────────────────────────────────────────────────
+
+  &.toast-success {
+    // ← was --accent-success (doesn't exist); correct token is --success
+    --_toast-color: var(--success);
+    border-color: color-mix(in srgb, var(--success) 30%, transparent);
+  }
+
+  &.toast-error {
+    // ← was --accent-error (doesn't exist); correct token is --error
+    --_toast-color: var(--error);
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+  }
+
+  &.toast-warning {
+    // ← was --accent-warning (doesn't exist); correct token is --warning
+    --_toast-color: var(--warning);
+    border-color: color-mix(in srgb, var(--warning) 30%, transparent);
+  }
+
+  &.toast-info {
+    --_toast-color: var(--info);
+    border-color: color-mix(in srgb, var(--info) 30%, transparent);
+  }
+}
+
+// ── Toast Icon ────────────────────────────────────────────────────────────────
+
+.toast-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  // Icon color driven by the per-variant custom prop
+  color: var(--_toast-color, var(--accent-primary));
+}
+
+// ── Toast Content ─────────────────────────────────────────────────────────────
+
+.toast-content { flex: 1; min-width: 0; }
+
+.toast-message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+// ── Close Button ──────────────────────────────────────────────────────────────
+
+.toast-close {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  @include transition(all, var(--duration-fast));
+
+  &:hover {
+    // ← was --glass-bg-secondary (doesn't exist); correct token is --glass-bg
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    color: var(--text-primary);
+  }
+}
+
+// =============================================================================
+// ANIMATIONS
+// =============================================================================
+
+@keyframes toast-slide-in {
+  from { opacity: 0; transform: translateX(calc(100% + 16px)); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+// =============================================================================
+// RESPONSIVE
+// =============================================================================
+
+@media (max-width: 991.98px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .content-wrapper {
+    padding: 16px;
+  }
+
+  .toast-container {
+    top: auto;
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-toast { animation: none; }
+  .main-content { transition: none; }
+}

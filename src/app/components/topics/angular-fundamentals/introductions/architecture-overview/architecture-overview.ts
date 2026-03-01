@@ -8,8 +8,7 @@ import { ANGULAR_ARCHITECTURE_OVERVIEW } from './architecture-overview.const';
     selector: 'app-architecture-overview',
     standalone: true,
     imports: [TopicTemplate],
-    templateUrl: './architecture-overview.html',
-    styleUrl: './architecture-overview.scss'
+    templateUrl: './architecture-overview.html'
 })
 export class ArchitectureOverview {
     content: ITopicContent | any = ANGULAR_ARCHITECTURE_OVERVIEW

@@ -1,51 +1,52 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <!-- Basic -->
-    <meta charset="utf-8" />
-    <title>My App</title>
-    <base href="/" />
+<html lang="en" data-theme="arctic">
 
-    <!-- Responsive -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <title>Angular Academy</title>
+  <base href="/" />
 
-    <!-- Theme color (Android / Chrome) -->
-    <meta name="theme-color" content="#1976d2" />
+  <!-- Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Description (SEO) -->
-    <meta name="description" content="My App — modern Angular application" />
+  <!-- Theme color (Android / Chrome) - will be updated by ThemeService -->
+  <meta name="theme-color" content="#6366f1" />
 
-    <!-- Material Icons -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+  <!-- Description (SEO) -->
+  <meta name="description" content="Angular Academy - Master Angular 21 with comprehensive training" />
 
-    <!-- Preconnect for faster font loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Open Graph (social sharing) -->
-    <meta property="og:title" content="My App" />
-    <meta property="og:description" content="Modern Angular application" />
-    <meta
-      property="og:image"
-      content="https://bolt.new/static/og_default.png"
-    />
-    <meta property="og:type" content="website" />
+  <!-- Open Graph (social sharing) -->
+  <meta property="og:title" content="Angular Academy" />
+  <meta property="og:description" content="Master Angular 21 with comprehensive training" />
+  <meta property="og:type" content="website" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:image"
-      content="https://bolt.new/static/og_default.png"
-    />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  </head>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
 
-  <body>
-    <app-root>Loading...</app-root>
-  </body>
+<body>
+  <!-- Theme initialization - prevents flash of wrong theme -->
+  <script>
+    (function () {
+      try {
+        const validThemes = ['arctic', 'sunset', 'emerald', 'midnight', 'aurora', 'cyber'];
+        const stored = localStorage.getItem('glass-ui-theme');
+        const theme = validThemes.includes(stored) ? stored : 'arctic';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        // localStorage not available, default arctic already set on html
+      }
+    })();
+  </script>
+  <app-root>Loading...</app-root>
+</body>
+
 </html>

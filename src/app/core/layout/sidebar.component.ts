@@ -1,160 +1,237 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { NavigationService, type Topic, type SubTopic } from '@app/core';
+import {
+    Component,
+    ChangeDetectionStrategy,
+    output,
+    inject,
+    signal,
+} from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationService, type Topic } from '@app/core';
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
     imports: [CommonModule, RouterLink, RouterLinkActive],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrl: './sidebar.scss',
     template: `
-    <div class="sidebar-content h-100 d-flex flex-column">
-      <div class="accordion accordion-flush flex-grow-1" id="sidebarAccordion">
-        @for (topic of navigationService.topics; track topic.title; let i = $index) {
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button"
-                [class.collapsed]="!isTopicExpanded(topic)"
-                type="button"
-                data-bs-toggle="collapse"
-                [attr.data-bs-target]="'#collapse' + i"
-                [attr.aria-expanded]="isTopicExpanded(topic)"
-              >
-                <i class="bi me-2" [class]="getTopicIcon(topic)"></i>
-                <span>{{ topic.title }}</span>
-              </button>
-            </h2>
-            <div
-              [id]="'collapse' + i"
-              class="accordion-collapse collapse"
-              [class.show]="isTopicExpanded(topic)"
-              data-bs-parent="#sidebarAccordion"
-            >
-              <div class="accordion-body p-0">
-                <div class="list-group list-group-flush">
-                  @for (sub of topic.subTopics; track sub.route) {
-                    <a
-                      [routerLink]="sub.route"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="onItemSelected()"
-                      class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
-                    >
-                      <span class="d-flex align-items-center">
-                        <i class="bi bi-chevron-right me-2 small"></i>
-                        {{ sub.title }}
-                      </span>
-                      @if (isCompleted(sub.route)) {
-                        <i class="bi bi-check-circle-fill text-success"></i>
-                      }
-                    </a>
-                  }
-                </div>
-              </div>
+        <aside
+            class="sidebar"
+            [class.collapsed]="isCollapsed()"
+            [class.mobile-open]="isMobileOpen()"
+        >
+            <!-- ── Logo ──────────────────────────────────────────── -->
+            <div class="sidebar-logo">
+                <a class="logo-link" routerLink="/">
+                    <div class="logo-icon">
+                        <i class="bi bi-code-square"></i>
+                    </div>
+                    @if (!isCollapsed()) {
+                        <span class="logo-text">Angular</span>
+                    }
+                </a>
             </div>
-          </div>
+
+            <!-- ── Main Nav ──────────────────────────────────────── -->
+            <nav class="sidebar-nav">
+
+                <!-- Dashboard -->
+                <a
+                    class="nav-link"
+                    routerLink="/"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="onItemClick()"
+                >
+                    <div class="nav-icon"><i class="bi bi-grid-fill"></i></div>
+                    @if (!isCollapsed()) {
+                        <span class="nav-label">Dashboard</span>
+                    }
+                </a>
+
+                <!-- Topics -->
+                @for (topic of navigationService.topics; track topic.title) {
+                    <div class="nav-group">
+
+                        @if (!isCollapsed()) {
+                            <!-- Expanded: label + collapsible submenu -->
+                            <button
+                                class="nav-link nav-group-toggle"
+                                (click)="toggleTopic(topic.title)"
+                                [class.expanded]="isTopicExpanded(topic.title)"
+                            >
+                                <div class="nav-icon">
+                                    <i class="{{ topic.icon }}"></i>
+                                </div>
+                                <span class="nav-label">{{ topic.title }}</span>
+                                <i class="bi bi-chevron-right arrow-icon"></i>
+                            </button>
+
+                            @if (isTopicExpanded(topic.title)) {
+                                <div class="submenu">
+                                    @for (sub of topic.subTopics; track sub.route) {
+                                        <a
+                                            class="submenu-link"
+                                            [routerLink]="sub.route"
+                                            routerLinkActive="active"
+                                            (click)="onItemClick()"
+                                        >
+                                            <span class="submenu-dot"></span>
+                                            <span>{{ sub.title }}</span>
+                                        </a>
+                                    }
+                                </div>
+                            }
+
+                        } @else {
+                            <!-- Collapsed: icon-only + hover tooltip -->
+                            <div
+                                class="nav-link"
+                                (mouseenter)="showTooltip(topic, $event)"
+                                (mouseleave)="hideTooltip()"
+                            >
+                                <div class="nav-icon">
+                                    <i class="{{ topic.icon }}"></i>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                }
+            </nav>
+
+            <!-- ── Footer ───────────────────────────────────────── -->
+            <div class="sidebar-footer">
+                <button class="nav-link" (click)="toggleCollapse()">
+                    <div class="nav-icon">
+                        <i
+                            class="bi"
+                            [class.bi-chevron-double-left]="!isCollapsed()"
+                            [class.bi-chevron-double-right]="isCollapsed()"
+                        ></i>
+                    </div>
+                    @if (!isCollapsed()) {
+                        <span class="nav-label">Collapse</span>
+                    }
+                </button>
+            </div>
+
+            <!-- ── Collapsed Tooltip ─────────────────────────────── -->
+            @if (activeTooltip() && isCollapsed()) {
+                <div
+                    class="nav-tooltip"
+                    [style.top.px]="tooltipPosition().top"
+                    [style.left.px]="tooltipPosition().left"
+                    (mouseenter)="onTooltipEnter()"
+                    (mouseleave)="hideTooltip()"
+                >
+                    <div class="tooltip-header">
+                        <i class="{{ activeTooltip()!.icon }}"></i>
+                        <span>{{ activeTooltip()!.title }}</span>
+                    </div>
+                    <div class="tooltip-content">
+                        @for (sub of activeTooltip()!.subTopics; track sub.route) {
+                            <a
+                                class="tooltip-item"
+                                [routerLink]="sub.route"
+                                (click)="onTooltipItemClick()"
+                            >
+                                {{ sub.title }}
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </aside>
+
+        <!-- Mobile backdrop -->
+        @if (isMobileOpen()) {
+            <div class="sidebar-overlay" (click)="closeMobile()"></div>
         }
-      </div>
-    </div>
-  `,
-    styles: [`
-    .sidebar-content {
-      background: var(--surface-color);
-      border-right: 1px solid var(--border-color);
-    }
-
-    .accordion-item {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--border-color-light);
-    }
-
-    .accordion-button {
-      background: var(--surface-gradient);
-      color: var(--text-primary);
-      font-weight: 600;
-      padding: 1rem;
-      font-size: 0.9rem;
-      
-      &:not(.collapsed) {
-        background: var(--surface-variant);
-        color: var(--primary-color);
-        box-shadow: none;
-      }
-      
-      &:focus {
-        box-shadow: none;
-        border-color: var(--primary-color);
-      }
-      
-      &::after {
-        filter: invert(0.5);
-        width: 0.8rem;
-        height: 0.8rem;
-        background-size: 0.8rem;
-      }
-    }
-
-    .accordion-body {
-      background: var(--background-color);
-    }
-
-    .list-group-item {
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
-      border-left: 3px solid transparent;
-      
-      &:hover {
-        background: var(--surface-variant);
-        color: var(--text-primary);
-      }
-      
-      &.active {
-        background: transparent;
-        color: var(--primary-color);
-        border-left-color: var(--primary-color);
-        font-weight: 500;
-      }
-    }
-  `]
+    `,
 })
 export class SidebarComponent {
-    @Output() itemSelected = new EventEmitter<void>();
-
     readonly navigationService = inject(NavigationService);
-    private readonly router = inject(Router);
 
-    onItemSelected(): void {
+    // ── State signals ────────────────────────────────────────────────────────
+    readonly isCollapsed = signal(false);
+    readonly isMobileOpen = signal(false);
+    readonly expandedTopics = signal<Set<string>>(new Set());
+
+    // ── Tooltip state ────────────────────────────────────────────────────────
+    readonly activeTooltip = signal<Topic | null>(null);
+    readonly tooltipPosition = signal<{ top: number; left: number }>({ top: 0, left: 0 });
+
+    /**
+     * Separate timers so mouseenter on the tooltip itself cancels the
+     * "mouse left the nav item" hide, preventing flicker.
+     */
+    private hideTimer: ReturnType<typeof setTimeout> | null = null;
+
+    // ── Outputs ──────────────────────────────────────────────────────────────
+    readonly itemSelected = output<void>();
+    readonly collapseChanged = output<boolean>();
+
+    // ── Toggle / expand ──────────────────────────────────────────────────────
+
+    toggleCollapse(): void {
+        this.isCollapsed.update(v => !v);
+        this.collapseChanged.emit(this.isCollapsed());
+        // Clear any open tooltip when collapsing
+        if (!this.isCollapsed()) this.activeTooltip.set(null);
+    }
+
+    toggleTopic(title: string): void {
+        this.expandedTopics.update(set => {
+            const next = new Set(set);
+            next.has(title) ? next.delete(title) : next.add(title);
+            return next;
+        });
+    }
+
+    isTopicExpanded(title: string): boolean {
+        return this.expandedTopics().has(title);
+    }
+
+    // ── Tooltip ──────────────────────────────────────────────────────────────
+
+    showTooltip(topic: Topic, event: MouseEvent): void {
+        this._clearHideTimer();
+
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        this.tooltipPosition.set({ top: rect.top, left: rect.right + 10 });
+        this.activeTooltip.set(topic);
+    }
+
+    /** Called when the mouse enters the tooltip panel itself — cancel hide. */
+    onTooltipEnter(): void {
+        this._clearHideTimer();
+    }
+
+    hideTooltip(): void {
+        this.hideTimer = setTimeout(() => this.activeTooltip.set(null), 160);
+    }
+
+    private _clearHideTimer(): void {
+        if (this.hideTimer !== null) {
+            clearTimeout(this.hideTimer);
+            this.hideTimer = null;
+        }
+    }
+
+    // ── Click handlers ───────────────────────────────────────────────────────
+
+    onTooltipItemClick(): void {
+        this.activeTooltip.set(null);
+        this.onItemClick();
+    }
+
+    onItemClick(): void {
         this.itemSelected.emit();
+        if (window.innerWidth < 992) this.isMobileOpen.set(false);
     }
 
-    isCompleted(route: string): boolean {
-        const completedRoutes = ['/basics', '/components', '/services'];
-        return completedRoutes.some((r) => route.includes(r));
-    }
-
-    isTopicExpanded(topic: Topic): boolean {
-        return topic.subTopics.some((sub: SubTopic) =>
-            this.router.url.includes(sub.route)
-        );
-    }
-
-    getTopicIcon(topic: Topic): string {
-        // Map topic titles to Bootstrap icons
-        const iconMap: Record<string, string> = {
-            'Prerequisites': 'bi-journal-text',
-            'Angular Fundamentals': 'bi-angular',
-            'Core Building Blocks': 'bi-boxes',
-            'Templates & UI': 'bi-layout-text-window',
-            'Services & DI': 'bi-gear',
-            'Routing & Decorators': 'bi-signpost',
-            'Forms': 'bi-input-cursor-text',
-            'RxJS & HTTP': 'bi-arrow-repeat',
-        };
-        return iconMap[topic.title] || 'bi-folder';
-    }
+    closeMobile(): void { this.isMobileOpen.set(false); }
+    openMobile(): void { this.isMobileOpen.set(true); }
 }

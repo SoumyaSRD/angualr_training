@@ -1,21 +1,378 @@
-.content-section {
-  ::ng-deep ul {
-    list-style: none;
-    padding-left: 0;
+// What is Angular - Dynamic Glassmorphism Styles
+// Aligned with the global theme system
 
-    li {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 8px;
+:host {
+  display: block;
+}
 
-      // Use a Material-like bullet or icon
-      &:before {
-        content: "check_circle";
-        font-family: "Material Icons";
-        color: #3f51b5; // Primary color
-        margin-right: 10px;
-        font-size: 18px;
-      }
+// Hero Introduction
+.intro-hero {
+  text-align: center;
+  padding: var(--spacing-xl, 2rem) 0;
+  margin-bottom: var(--spacing-xl, 2rem);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  padding: var(--spacing-xs, 0.25rem) var(--spacing-md, 1rem);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  backdrop-filter: blur(var(--glass-blur));
+
+  i {
+    color: var(--accent-primary);
+    font-size: 1rem;
+  }
+}
+
+.lead-text {
+  font-size: var(--font-size-xl, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md, 1rem);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .highlight {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+  }
+}
+
+.secondary-text {
+  font-size: var(--font-size-md, 1rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+// Section Title
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  font-size: var(--font-size-xl, 1.25rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  padding-bottom: var(--spacing-sm, 0.5rem);
+  border-bottom: 1px solid var(--glass-border);
+
+  i {
+    color: var(--accent-primary);
+    font-size: 1.2em;
+  }
+}
+
+// Features Grid
+.features-section {
+  margin-bottom: var(--spacing-xxl, 3rem);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-lg, 1.5rem);
+}
+
+.feature-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg, 1rem);
+  padding: var(--spacing-lg, 1.5rem);
+  transition: all var(--transition-fast, 150ms) ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    transform: scaleX(0);
+    transition: transform var(--transition-fast, 150ms) ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+
+    &::before {
+      transform: scaleX(1);
     }
+
+    .feature-icon {
+      transform: scale(1.1);
+    }
+  }
+
+  h4 {
+    font-size: var(--font-size-md, 1rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-sm, 0.5rem) 0;
+  }
+
+  p {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md, 0.75rem);
+  background: var(--glass-bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast, 150ms) ease;
+  margin-bottom: var(--spacing-sm, 0.5rem);
+
+  i {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+  }
+
+  &.typescript i {
+    color: #3178c6;
+  }
+
+  &.reactive i {
+    color: #ff4081;
+  }
+
+  &.cli i {
+    color: #dd0031;
+  }
+
+  &.pwa i {
+    color: #5a0fc8;
+  }
+
+  &.signals i {
+    color: #00bcd4;
+  }
+
+  &.ssr i {
+    color: #4caf50;
+  }
+}
+
+// Philosophy Section
+.philosophy-section {
+  margin-bottom: var(--spacing-xxl, 3rem);
+}
+
+.philosophy-card {
+  background: var(--bg-gradient);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl, 1.5rem);
+  padding: var(--spacing-xl, 2rem);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+}
+
+.philosophy-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 1rem);
+  margin-bottom: var(--spacing-md, 1rem);
+
+  i {
+    font-size: 2rem;
+    color: var(--accent-primary);
+  }
+
+  h3 {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.philosophy-card p {
+  font-size: var(--font-size-md, 1rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-lg, 1.5rem);
+}
+
+.philosophy-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+.point-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 0.25rem);
+  padding: var(--spacing-xs, 0.25rem) var(--spacing-sm, 0.5rem);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm, 0.5rem);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--text-secondary);
+
+  i {
+    color: var(--success-color, #22c55e);
+  }
+}
+
+// Testability Section
+.testability-section {
+  margin-bottom: var(--spacing-xxl, 3rem);
+}
+
+.testability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md, 1rem);
+}
+
+.test-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  padding: var(--spacing-md, 1rem);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md, 0.75rem);
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast, 150ms) ease;
+
+  &:hover {
+    border-color: var(--accent-primary);
+    transform: translateX(4px);
+  }
+
+  i {
+    font-size: 1.25rem;
+    color: var(--accent-primary);
+  }
+}
+
+// Use Cases Section
+.usecases-section {
+  margin-bottom: var(--spacing-xl, 2rem);
+}
+
+.usecases-lead {
+  font-size: var(--font-size-lg, 1.125rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-lg, 1.5rem);
+
+  .highlight {
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+}
+
+.usecase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--spacing-md, 1rem);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+}
+
+.usecase-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  padding: var(--spacing-lg, 1.5rem) var(--spacing-md, 1rem);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg, 1rem);
+  text-align: center;
+  transition: all var(--transition-fast, 150ms) ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+
+    i {
+      transform: scale(1.1);
+      color: var(--accent-primary);
+    }
+  }
+
+  i {
+    font-size: 2rem;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast, 150ms) ease;
+  }
+
+  span {
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+}
+
+.usecases-summary {
+  font-size: var(--font-size-md, 1rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .testability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .usecase-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .philosophy-points {
+    justify-content: center;
   }
 }

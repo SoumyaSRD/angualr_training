@@ -6,7 +6,6 @@ import { RouterOutlet } from '@angular/router';
     selector: 'app-fundamentals',
     standalone: true,
     imports: [RouterOutlet, CommonModule],
-    templateUrl: './angular-fundamentals.html',
-    styleUrls: ['./angular-fundamentals.scss']
+    templateUrl: './angular-fundamentals.html'
 })
 export class AngularFundamentals { }

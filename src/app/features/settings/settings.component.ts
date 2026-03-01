@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService, ThemeService, ToastService } from '@app/core';
+import { AuthService, ThemeService, ToastService, type Theme } from '@app/core';
 
 @Component({
     selector: 'app-settings',
@@ -51,15 +51,16 @@ import { AuthService, ThemeService, ToastService } from '@app/core';
             <div class="card-body">
               <div class="mb-3">
                 <label class="form-label">Theme</label>
-                <div class="d-flex gap-2">
-                  @for (theme of themeService.themes; track theme) {
+                <div class="theme-selector">
+                  @for (theme of themeService.themes; track theme.id) {
                     <button
-                      class="btn"
-                      [class.btn-primary]="themeService.currentTheme() === theme"
-                      [class.btn-outline-secondary]="themeService.currentTheme() !== theme"
-                      (click)="themeService.setTheme(theme)"
+                      class="theme-option-btn"
+                      [class.active]="themeService.currentTheme() === theme.id"
+                      (click)="setTheme(theme.id)"
+                      [title]="theme.description"
                     >
-                      {{ theme | titlecase }}
+                      <i class="bi {{ theme.icon }}"></i>
+                      <span>{{ theme.name }}</span>
                     </button>
                   }
                 </div>
@@ -147,5 +148,9 @@ export class SettingsComponent {
 
     changePassword(): void {
         this.toastService.success('Password changed successfully!');
+    }
+
+    setTheme(themeId: Theme): void {
+        this.themeService.setTheme(themeId);
     }
 }

@@ -7,8 +7,7 @@ import { FORM_VALIDATION_COMPLETE } from './form-validation.const';
   selector: 'app-form-validation',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './form-validation.html',
-  styleUrls: ['./form-validation.scss']
+  templateUrl: './form-validation.html'
 })
 export class FormValidationComponentEg {
   content: ITopicContent | any = FORM_VALIDATION_COMPLETE;

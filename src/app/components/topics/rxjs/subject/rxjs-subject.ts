@@ -7,8 +7,7 @@ import { ITopicContent } from "../../../../interfaces/topic";
     selector: 'app-rxjs-subject',
     standalone: true,
     imports: [TopicTemplate],
-    templateUrl: './rxjs-subject.html',
-    styleUrls: ['./rxjs-subject.scss']
+    templateUrl: './rxjs-subject.html'
 })
 export class RxjsSubject {
     content: ITopicContent | any = RXJS_SUBJECT;

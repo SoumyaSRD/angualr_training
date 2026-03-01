@@ -4,15 +4,14 @@ import { INTERCEPTOR } from "./ng-interceptor.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({
-    selector: 'app-ng-interceptor',
-    standalone: true,
-    imports: [TopicTemplate],
-    templateUrl: './ng-interceptor.html',
-    styleUrls: ['./ng-interceptor.scss']
+  selector: 'app-ng-interceptor',
+  standalone: true,
+  imports: [TopicTemplate],
+  templateUrl: './ng-interceptor.html'
 })
 export class NgInterceptor {
-    content: ITopicContent | any = INTERCEPTOR;
-    interceptorExample = `
+  content: ITopicContent | any = INTERCEPTOR;
+  interceptorExample = `
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
@@ -30,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 `;
 
-    registerInterceptorExample = `
+  registerInterceptorExample = `
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(

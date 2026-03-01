@@ -1,48 +1,74 @@
-<div class="topic-container glass" #scrollTopRef>
+<div class="topic-container" #scrollTopRef>
+  <!-- Progress Bar (Sticky) -->
+  @if (sections().length > 0) {
+  <div class="progress-bar-container">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="calculateProgress()"></div>
+    </div>
+    <span class="progress-text">{{ getCurrentSection() }} / {{ getTotalSections() }}</span>
+  </div>
+  }
+
   <!-- Header Section -->
   <header class="topic-header">
     <div class="header-content">
-      <h1 class="topic-title gradient-text">{{ title() }}</h1>
+      <div class="title-wrapper">
+        <h1 class="topic-title">{{ title() }}</h1>
+        <div class="title-underline"></div>
+      </div>
 
       @if (tags() && tags().length > 0) {
       <nav class="tags-navigation" aria-label="Topic tags">
-        <div class="d-flex flex-wrap gap-2">
-          @for (tag of tags(); track tag) {
-          <span class="badge bg-primary cursor-pointer" (click)="scrollToTag(tag)" [class.clickable]="getTagLink(tag)">
-            <i class="bi bi-tag-fill me-1"></i>
-            {{ tag }}
-          </span>
-          }
-        </div>
+        @for (tag of tags(); track tag) {
+        <span class="topic-tag" (click)="scrollToTag(tag)" [class.clickable]="getTagLink(tag)">
+          <i class="bi bi-tag-fill"></i>
+          {{ tag }}
+        </span>
+        }
       </nav>
       }
 
       <div class="topic-meta">
         <span class="meta-item">
-          <i class="bi bi-clock meta-icon"></i>
-          <span>Read time: {{ calculateReadTime() }} min</span>
+          <div class="meta-icon-wrapper">
+            <i class="bi bi-clock"></i>
+          </div>
+          <div class="meta-info">
+            <span class="meta-label">Read time</span>
+            <span class="meta-value">{{ calculateReadTime() }} min</span>
+          </div>
         </span>
+        <span class="meta-divider"></span>
         <span class="meta-item">
-          <i class="bi bi-book meta-icon"></i>
-          <span>{{ sections().length }} sections</span>
+          <div class="meta-icon-wrapper">
+            <i class="bi bi-layers"></i>
+          </div>
+          <div class="meta-info">
+            <span class="meta-label">Sections</span>
+            <span class="meta-value">{{ sections().length }}</span>
+          </div>
         </span>
         @if (codeExamples().length > 0) {
+        <span class="meta-divider"></span>
         <span class="meta-item">
-          <i class="bi bi-code-square meta-icon"></i>
-          <span>{{ codeExamples().length }} examples</span>
+          <div class="meta-icon-wrapper">
+            <i class="bi bi-code-square"></i>
+          </div>
+          <div class="meta-info">
+            <span class="meta-label">Examples</span>
+            <span class="meta-value">{{ codeExamples().length }}</span>
+          </div>
         </span>
         }
       </div>
     </div>
   </header>
 
-  <hr class="glass-divider">
-
   <!-- Introduction Section -->
-  <section class="introduction-section card-lift glass">
-    <div class="section-header intro-header">
-      <i class="bi bi-file-text section-icon"></i>
-      <h2 class="gradient-text-primary">Introduction</h2>
+  <section class="introduction-section">
+    <div class="section-badge">
+      <i class="bi bi-journal-text"></i>
+      <span>Introduction</span>
     </div>
     <div class="intro-content">
       <ng-content></ng-content>
@@ -52,56 +78,58 @@
   <!-- Detailed Sections -->
   @if (sections() && sections().length > 0) {
   <section class="detailed-sections">
-    <div class="section-header">
-      <i class="bi bi-journal-text section-icon"></i>
-      <h2 class="gradient-text-primary">Detailed Explanation</h2>
-      <span class="section-count">{{ sections().length }} sections</span>
+    <div class="section-header-main">
+      <div class="section-header-icon">
+        <i class="bi bi-collection"></i>
+      </div>
+      <div class="section-header-content">
+        <h2>Detailed Sections</h2>
+        <p>{{ sections().length }} topic sections to explore</p>
+      </div>
     </div>
 
-    <div class="sections-grid">
+    <div class="sections-timeline">
       @for (section of sections(); track section.heading; let idx = $index) {
-      <article class="section-card-wrapper" [id]="getSectionId(section, idx)"
+      <article class="timeline-item" [id]="getSectionId(section, idx)"
         [class.section-highlight]="isSectionHighlighted($any(section).heading)">
-        <div class="card section-card card-lift glass">
-          <div class="card-corner">
-            <span class="corner-number">{{ idx + 1 }}</span>
-          </div>
+        <div class="timeline-marker">
+          <span class="marker-number">{{ idx + 1 }}</span>
+        </div>
+        <div class="timeline-content">
+          <div class="section-card">
+            <div class="card-header">
+              <h5 class="card-title">{{ section.heading }}</h5>
+              <span class="card-badge">Step {{ idx + 1 }}</span>
+            </div>
 
-          <div class="card-header bg-transparent border-0">
-            <div class="d-flex align-items-center gap-3">
-              <div class="section-number">{{ idx + 1 }}</div>
-              <div>
-                <h5 class="card-title mb-0">{{ section.heading }}</h5>
-                <p class="card-subtitle text-muted small mb-0">
-                  Section {{ idx + 1 }} of {{ sections().length }}
-                </p>
+            <div class="card-body">
+              @if (section.content) {
+              <div class="section-content">
+                <p>{{ section.content }}</p>
               </div>
-            </div>
-          </div>
-
-          <div class="card-body">
-            @if (section.content) {
-            <div class="section-content">
-              <p>{{ section.content }}</p>
-            </div>
-            } @if (section.list && section.list.length > 0) {
-            <ul class="section-list">
-              @for (item of section.list; track item) {
-              <li>
-                <i class="bi bi-arrow-right-short list-icon"></i>
-                <span [innerHTML]="item"></span>
-              </li>
               }
-            </ul>
-            } @if (section.additionalExplanation) {
-            <div class="additional-note glass">
-              <div class="note-header">
-                <i class="bi bi-info-circle"></i>
-                <span>Important Note</span>
+              @if (section.list && section.list.length > 0) {
+              <ul class="feature-list">
+                @for (item of section.list; track item) {
+                <li>
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span [innerHTML]="item"></span>
+                </li>
+                }
+              </ul>
+              }
+              @if (section.additionalExplanation) {
+              <div class="info-note">
+                <div class="note-icon">
+                  <i class="bi bi-lightbulb"></i>
+                </div>
+                <div class="note-content">
+                  <strong>Pro Tip</strong>
+                  <p>{{ section.additionalExplanation }}</p>
+                </div>
               </div>
-              <p>{{ section.additionalExplanation }}</p>
+              }
             </div>
-            }
           </div>
         </div>
       </article>
@@ -113,61 +141,57 @@
   <!-- Code Examples -->
   @if (codeExamples() && codeExamples().length > 0) {
   <section class="code-examples-section">
-    <div class="section-header">
-      <i class="bi bi-terminal section-icon"></i>
-      <h2 class="gradient-text-primary">Code Examples</h2>
-      <span class="section-count">{{ codeExamples().length }} examples</span>
+    <div class="section-header-main">
+      <div class="section-header-icon code-icon">
+        <i class="bi bi-code-square"></i>
+      </div>
+      <div class="section-header-content">
+        <h2>Code Examples</h2>
+        <p>{{ codeExamples().length }} hands-on examples</p>
+      </div>
     </div>
 
-    <div class="code-examples-grid">
+    <div class="code-examples-list">
       @for (example of codeExamples(); track example.title; let idx = $index) {
-      <div class="card code-card card-lift">
-        <div class="card-corner">
-          <i class="bi bi-code-slash corner-icon"></i>
-        </div>
-
-        <div class="card-header bg-transparent">
-          <div class="d-flex align-items-center gap-3">
-            <div class="code-number">
-              <i class="bi bi-code"></i>
-            </div>
+      <div class="code-example-item">
+        <div class="code-example-header">
+          <div class="code-title-group">
+            <span class="code-number">{{ idx + 1 }}</span>
             <div>
-              <h5 class="card-title mb-0">{{ example.title }}</h5>
+              <h5 class="code-title">{{ example.title }}</h5>
               @if (example.description) {
-              <p class="card-subtitle text-muted small mb-0">{{ example.description }}</p>
+              <p class="code-description">{{ example.description }}</p>
               }
             </div>
           </div>
+          <div class="code-actions">
+            <button class="action-btn" title="Copy code" (click)="copyCode(example.code,idx)"
+              [class.copied]="isCopied(idx)">
+              <i class="bi" [class.bi-check-lg]="isCopied(idx)" [class.bi-clipboard]="!isCopied(idx)"></i>
+            </button>
+            <button class="action-btn" title="Expand code" (click)="toggleCodeExpansion(idx)">
+              <i class="bi" [class.bi-arrows-angle-contract]="isExpanded(idx)"
+                [class.bi-arrows-angle-expand]="!isExpanded(idx)"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="card-body">
-          <div class="code-toolbar glass">
-            <div class="toolbar-left">
-              <span class="badge bg-secondary">
-                <i class="bi bi-code-square me-1"></i>
-                {{ example.language || "text" }}
-              </span>
-              <span class="badge bg-light text-dark">
-                <i class="bi bi-list-ol me-1"></i>
-                {{ countCodeLines(example.code) }} lines
-              </span>
-            </div>
-            <div class="toolbar-right">
-              <button class="btn btn-sm btn-outline-secondary" title="Copy code" (click)="copyCode(example.code,idx)"
-                [class.btn-success]="isCopied(idx)">
-                <i class="bi" [class.bi-check-lg]="isCopied(idx)" [class.bi-clipboard]="!isCopied(idx)"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-secondary" title="Expand code" (click)="toggleCodeExpansion(idx)">
-                <i class="bi" [class.bi-arrows-angle-contract]="isExpanded(idx)"
-                  [class.bi-arrows-angle-expand]="!isExpanded(idx)"></i>
-              </button>
-            </div>
+        <div class="code-meta-bar">
+          <div class="code-meta-left">
+            <span class="lang-badge">
+              <i class="bi bi-file-code"></i>
+              {{ example.language || "text" }}
+            </span>
+            <span class="lines-badge">
+              <i class="bi bi-list-ol"></i>
+              {{ countCodeLines(example.code) }} lines
+            </span>
           </div>
+        </div>
 
-          <div class="code-wrapper" [class.expanded]="isExpanded(idx)" [class.copied]="isCopied(idx)">
-            <pre
-              class="code-block"><code [class]="'language-' + (example.language || 'text')">{{ example.code }}</code></pre>
-          </div>
+        <div class="code-wrapper" [class.expanded]="isExpanded(idx)">
+          <pre
+            class="code-block"><code [class]="'language-' + (example.language || 'text')">{{ example.code }}</code></pre>
         </div>
       </div>
       }
@@ -178,40 +202,32 @@
   <!-- Best Practices -->
   @if (bestPractices() && bestPractices().length > 0) {
   <section class="best-practices-section">
-    <div class="card info-card best-practices-card card-lift glass">
-      <div class="card-corner success-corner">
-        <i class="bi bi-patch-check corner-icon"></i>
-      </div>
-
-      <div class="card-header bg-transparent">
-        <div class="d-flex align-items-center gap-3">
-          <div class="card-icon success-icon">
-            <i class="bi bi-patch-check-fill"></i>
-          </div>
-          <div>
-            <h5 class="card-title mb-0 gradient-text-success">Best Practices</h5>
-            <p class="card-subtitle text-muted small mb-0">Industry-recommended approaches</p>
-          </div>
+    <div class="insight-card success-card">
+      <div class="insight-header">
+        <div class="insight-icon">
+          <i class="bi bi-patch-check-fill"></i>
+        </div>
+        <div class="insight-title-group">
+          <h3>Best Practices</h3>
+          <p>Industry-recommended approaches</p>
         </div>
       </div>
 
-      <div class="card-body">
-        <ul class="practices-list">
+      <div class="insight-body">
+        <ul class="insight-list">
           @for (practice of bestPractices(); track practice; let idx = $index) {
-          <li class="ripple">
-            <div class="practice-number">{{ idx + 1 }}</div>
-            <div class="practice-content">
-              <i class="bi bi-check-circle-fill practice-icon text-success"></i>
-              <span>{{ practice }}</span>
-            </div>
+          <li>
+            <span class="insight-number">{{ idx + 1 }}</span>
+            <i class="bi bi-check-circle-fill insight-check"></i>
+            <span class="insight-text">{{ practice }}</span>
           </li>
           }
         </ul>
       </div>
 
-      <div class="card-footer bg-transparent">
-        <button class="btn btn-primary" (click)="showBestPracticesTips()">
-          <i class="bi bi-lightbulb me-2"></i>
+      <div class="insight-footer">
+        <button class="insight-btn primary" (click)="showBestPracticesTips()">
+          <i class="bi bi-lightbulb"></i>
           Learn More
         </button>
       </div>
@@ -222,40 +238,32 @@
   <!-- Key Takeaways -->
   @if (keyPoints() && keyPoints().length > 0) {
   <section class="key-points-section">
-    <div class="card info-card key-points-card card-lift glass">
-      <div class="card-corner primary-corner">
-        <i class="bi bi-lightbulb corner-icon"></i>
-      </div>
-
-      <div class="card-header bg-transparent">
-        <div class="d-flex align-items-center gap-3">
-          <div class="card-icon primary-icon">
-            <i class="bi bi-lightbulb-fill"></i>
-          </div>
-          <div>
-            <h5 class="card-title mb-0 gradient-text-primary">Key Takeaways</h5>
-            <p class="card-subtitle text-muted small mb-0">Essential points to remember</p>
-          </div>
+    <div class="insight-card accent-card">
+      <div class="insight-header">
+        <div class="insight-icon accent">
+          <i class="bi bi-lightbulb-fill"></i>
+        </div>
+        <div class="insight-title-group">
+          <h3>Key Takeaways</h3>
+          <p>Essential points to remember</p>
         </div>
       </div>
 
-      <div class="card-body">
-        <ul class="takeaways-list">
+      <div class="insight-body">
+        <ul class="insight-list">
           @for (point of keyPoints(); track point; let idx = $index) {
-          <li class="ripple">
-            <div class="takeaway-number">{{ idx + 1 }}</div>
-            <div class="takeaway-content">
-              <i class="bi bi-star-fill takeaway-icon text-warning"></i>
-              <span>{{ point }}</span>
-            </div>
+          <li>
+            <span class="insight-number">{{ idx + 1 }}</span>
+            <i class="bi bi-star-fill insight-star"></i>
+            <span class="insight-text">{{ point }}</span>
           </li>
           }
         </ul>
       </div>
 
-      <div class="card-footer bg-transparent">
-        <button class="btn btn-outline-primary" (click)="downloadKeyPoints()">
-          <i class="bi bi-download me-2"></i>
+      <div class="insight-footer">
+        <button class="insight-btn secondary" (click)="downloadKeyPoints()">
+          <i class="bi bi-download"></i>
           Download Summary
         </button>
       </div>
@@ -263,8 +271,9 @@
   </section>
   }
 
-  <!-- Back to Top Button -->
 </div>
-<button class="back-to-top btn btn-primary rounded-circle shadow" title="Back to top" (click)="scrollToSection()">
+
+<!-- Back to Top Button -->
+<button class="back-to-top" [class.visible]="scrolled()" title="Back to top" (click)="scrollToSection()">
   <i class="bi bi-arrow-up"></i>
 </button>

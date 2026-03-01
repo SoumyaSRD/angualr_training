@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export interface SubTopic {
   title: string;
   route: string;
+  icon?: string;
 }
 
 export interface Topic {
@@ -18,89 +19,82 @@ export interface Topic {
 export class NavigationService {
   topics: Topic[] = [
     {
-      title: "Prerequisites (Foundation)",
-      icon: "school",
+      title: "Prerequisites",
+      icon: "bi bi-mortarboard-fill",
       subTopics: [
-        { title: "How Browsers Work", route: "/prerequisites/web-fundamentals/how-browsers-work" },
-        { title: "HTTP & HTTPS", route: "/prerequisites/web-fundamentals/http-https" },
-        { title: "REST APIs", route: "/prerequisites/web-fundamentals/rest-apis" },
-        { title: "JSON", route: "/prerequisites/web-fundamentals/json" },
-        { title: "CORS", route: "/prerequisites/web-fundamentals/cors" },
-        { title: "TypeScript vs JavaScript", route: "/prerequisites/typescript/typescript-vs-javascript" },
-        { title: "Data Types", route: "/prerequisites/typescript/data-types" },
-        { title: "Interfaces", route: "/prerequisites/typescript/interfaces" },
-        { title: "Enums", route: "/prerequisites/typescript/enums" },
-        { title: "Classes", route: "/prerequisites/typescript/classes" },
+        { title: "How Browsers Work", route: "/prerequisites/web-fundamentals/how-browsers-work", icon: "bi bi-display" },
+        { title: "HTTP & HTTPS", route: "/prerequisites/web-fundamentals/http-https", icon: "bi bi-shield-lock-fill" },
+        { title: "REST APIs", route: "/prerequisites/web-fundamentals/rest-apis", icon: "bi bi-arrow-left-right" },
+        { title: "JSON", route: "/prerequisites/web-fundamentals/json", icon: "bi bi-braces" },
+        { title: "CORS", route: "/prerequisites/web-fundamentals/cors", icon: "bi bi-globe" },
+        { title: "TypeScript", route: "/prerequisites/typescript/typescript-vs-javascript", icon: "bi bi-filetype-ts" },
       ],
     },
     {
-      title: "Angular Fundamentals",
-      icon: "code",
+      title: "Fundamentals",
+      icon: "bi bi-code-square",
       subTopics: [
-        { title: "What is Angular", route: "/fundamentals/introduction/what-is-angular" },
-        { title: "Angular vs React vs Vue", route: "/fundamentals/introduction/angular-vs-react-vue" },
-        { title: "Angular Architecture Overview", route: "/fundamentals/introduction/architecture-overview" },
-        { title: "Node.js & npm", route: "/fundamentals/setup/nodejs-npm" },
-        { title: "Angular CLI Installation", route: "/fundamentals/setup/cli-installation" },
-        { title: "Angular Application", route: "/fundamentals/setup/first-app" },
+        { title: "What is Angular", route: "/fundamentals/introduction/what-is-angular", icon: "bi bi-info-circle-fill" },
+        { title: "Architecture", route: "/fundamentals/introduction/architecture-overview", icon: "bi bi-diagram-3-fill" },
+        { title: "Setup & CLI", route: "/fundamentals/setup/cli-installation", icon: "bi bi-terminal-fill" },
+        { title: "First App", route: "/fundamentals/setup/first-app", icon: "bi bi-play-circle-fill" },
       ],
     },
     {
-      title: "Core Building Blocks",
-      icon: "widgets",
+      title: "Core Concepts",
+      icon: "bi bi-boxes",
       subTopics: [
-        { title: "Root, Feature, Shared & Core Modules", route: "/core/modules/module-types" },
-        { title: "Lazy-Loaded Modules", route: "/core/modules/lazy-loading" },
-        { title: "Standalone Components", route: "/core/modules/standalone-components" },
-        { title: "Module vs Standalone Comparison", route: "/core/modules/module-vs-standalone" },
-        { title: "Component", route: "/core/components/component" },
+        { title: "Modules", route: "/core/modules/module-types", icon: "bi bi-puzzle-fill" },
+        { title: "Components", route: "/core/components/component", icon: "bi bi-layers-fill" },
+        { title: "Templates", route: "/core/templates/data-binding", icon: "bi bi-file-earmark-code-fill" },
+        { title: "Directives", route: "/core/directives/structural-directives", icon: "bi bi-sliders2" },
       ],
     },
     {
-      title: "Templates & UI",
-      icon: "web",
+      title: "Templates & Rendering",
+      icon: "bi bi-layout-text-window-reverse",
       subTopics: [
-        { title: "Data Binding", route: "/templates/data-binding" },
-        { title: "Directives", route: "/templates/directives" },
-        { title: "Pipes", route: "/templates/pipes" },
+        { title: "Data Binding", route: "/templates/data-binding", icon: "bi bi-link-45deg" },
+        { title: "Directives", route: "/templates/directives", icon: "bi bi-sliders" },
+        { title: "Pipes", route: "/templates/pipes", icon: "bi bi-funnel-fill" },
       ],
     },
     {
       title: "Dependency Injection & Services",
-      icon: "settings",
+      icon: "bi bi-gear-wide-connected",
       subTopics: [
-        { title: "DI Concepts", route: "/services/di/concepts" },
-        { title: "Services", route: "/services/di/injectable-providers" },
+        { title: "DI Concepts", route: "/services/di/concepts", icon: "bi bi-bezier2" },
+        { title: "Injectable Services", route: "/services/di/injectable-providers", icon: "bi bi-plug-fill" },
       ],
     },
     {
-      title: "Routing & Decorators",
-      icon: "route",
+      title: "Routing & Navigation",
+      icon: "bi bi-signpost-2-fill",
       subTopics: [
-        { title: "Routing Basics", route: "/routing/basics" },
-        { title: "Guards", route: "/routing/basics/guard" },
-        { title: "Decorators", route: "/decorators" },
+        { title: "Routing Basics", route: "/routing/basics", icon: "bi bi-signpost-fill" },
+        { title: "Route Guards", route: "/routing/basics/guard", icon: "bi bi-shield-fill-check" },
+        { title: "Decorators", route: "/decorators", icon: "bi bi-at" },
       ],
     },
     {
       title: "Forms",
-      icon: "description",
+      icon: "bi bi-ui-checks-grid",
       subTopics: [
-        { title: "Forms Module", route: "/forms/form-module" },
-        { title: "Reactive Forms", route: "/forms/reactive-forms" },
-        { title: "Form Validation", route: "/forms/form-validation" },
+        { title: "Forms Module", route: "/forms/form-module", icon: "bi bi-card-checklist" },
+        { title: "Reactive Forms", route: "/forms/reactive-forms", icon: "bi bi-input-cursor-text" },
+        { title: "Form Validation", route: "/forms/form-validation", icon: "bi bi-check2-circle" },
       ],
     },
     {
-      title: "RxJS",
-      icon: "stream",
+      title: "RxJS & HTTP",
+      icon: "bi bi-activity",
       subTopics: [
-        { title: "Observables vs Promises", route: "/rxjs/core/observables-vs-promises" },
-        { title: "Subjects", route: "/rxjs/core/subjects" },
-        { title: "map, filter, tap", route: "/rxjs/operators/basic" },
-        { title: "mergeMap, switchMap, concatMap, exhaustMap", route: "/rxjs/operators/flattening" },
-        { title: "Interceptors", route: "/interceptor" },
-        { title: "Http Client", route: "/http-client" },
+        { title: "Observables vs Promises", route: "/rxjs/core/observables-vs-promises", icon: "bi bi-arrow-repeat" },
+        { title: "Subjects", route: "/rxjs/core/subjects", icon: "bi bi-broadcast" },
+        { title: "Basic Operators", route: "/rxjs/operators/basic", icon: "bi bi-funnel" },
+        { title: "Flattening Operators", route: "/rxjs/operators/flattening", icon: "bi bi-diagram-2-fill" },
+        { title: "HTTP Interceptors", route: "/interceptor", icon: "bi bi-shield-fill" },
+        { title: "HTTP Client", route: "/http-client", icon: "bi bi-cloud-arrow-up-fill" },
       ],
     },
   ];

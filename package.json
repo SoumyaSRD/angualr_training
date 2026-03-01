@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "dev": "ng serve --port 6000 --open",
     "build": "ng build"
   },
   "dependencies": {

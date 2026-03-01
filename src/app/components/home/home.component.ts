@@ -1,8 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { NavigationService } from '@app/core';
+import { NavigationService, type Topic } from '@app/core';
 import { SectionCardComponent } from '../../shared/components/section-card/section-card.component';
 
 @Component({
@@ -11,8 +11,10 @@ import { SectionCardComponent } from '../../shared/components/section-card/secti
   imports: [CommonModule, RouterLink, SectionCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
+  readonly trackByTopicTitle = (index: number, topic: Topic) => topic.title;
   readonly navigationService = inject(NavigationService);
 
   readonly searchTerm = signal('');

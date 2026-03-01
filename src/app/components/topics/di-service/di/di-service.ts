@@ -7,8 +7,7 @@ import { DI_SERVICE } from './di-service.const';
   selector: 'app-di-service',
   standalone: true,
   imports: [TopicTemplate,],
-  templateUrl: './di-service.html',
-  styleUrls: ['./di-service.scss']
+  templateUrl: './di-service.html'
 })
 export class DiServiceExample {
   content: ITopicContent | any = DI_SERVICE;

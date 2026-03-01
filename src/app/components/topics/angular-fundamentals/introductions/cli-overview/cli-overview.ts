@@ -8,7 +8,6 @@ import { ITopicContent } from '../../../../../interfaces/topic';
     selector: 'app-angular-cli-installation',
     imports: [TopicTemplate],
     templateUrl: './cli-overview.html',
-    styleUrl: './cli-overview.scss',
     standalone: true
 })
 export class AngularCliOverview implements OnInit {

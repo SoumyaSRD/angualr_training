@@ -7,8 +7,7 @@ import { ANGULAR_INTRODUCTION_TUTORIAL } from './angular-ist-app.const';
     selector: 'app-angular-ist-app',
     standalone: true,
     imports: [TopicTemplate],
-    templateUrl: './angular-ist-app.html',
-    styleUrl: './angular-ist-app.scss'
+    templateUrl: './angular-ist-app.html'
 })
 export class AngularIstApp {
     content: ITopicContent | any = ANGULAR_INTRODUCTION_TUTORIAL

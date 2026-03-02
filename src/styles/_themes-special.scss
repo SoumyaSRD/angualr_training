@@ -1,0 +1,379 @@
+/* ============================================================================
+   GLASS UI — SPECIAL THEMES v4.0
+   Batman · Neon Noir · Hologram · Galaxy · Sakura · Dragon Ball · Evangelion
+   ============================================================================ */
+
+/* ============================================================================
+   Batman Theme — Gotham Darkness
+   ============================================================================ */
+[data-theme="batman"],
+.theme-batman {
+  --bg-primary:      #080808;
+  --bg-secondary:    #0e0e0e;
+  --bg-tertiary:     #161616;
+  --bg-gradient:     linear-gradient(145deg, #080808 0%, #0e0e12 40%, #100e08 80%, #080808 100%);
+
+  --glass-bg:            rgba(20,18,12,0.70);
+  --glass-bg-hover:      rgba(32,28,16,0.85);
+  --glass-bg-active:     rgba(44,38,18,0.95);
+  --glass-bg-deep:       rgba(8,7,4,0.60);
+  --glass-border:        rgba(234,179,8,0.18);
+  --glass-border-strong: rgba(250,204,21,0.40);
+  --glass-border-subtle: rgba(234,179,8,0.08);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(250,204,21,0.10), inset 0 -1px 0 rgba(0,0,0,0.60);
+
+  --glass-refract-light: rgba(250,204,21,0.12);
+  --glass-refract-mid:   rgba(180,130,0,0.05);
+  --light-primary:       rgba(234,179,8,0.10);
+  --light-scatter:       rgba(113,63,18,0.04);
+
+  --text-primary:   #fefce8;
+  --text-secondary: #fde68a;
+  --text-muted:     #713f12;
+  --text-inverse:   #080808;
+  --text-on-accent: #080808;
+
+  --accent-primary:   #eab308;
+  --accent-secondary: #facc15;
+  --accent-tertiary:  #fde68a;
+  --accent-gradient:  linear-gradient(135deg, #713f12 0%, #92400e 25%, #eab308 70%, #facc15 100%);
+  --accent-glow:      rgba(234,179,8,0.55);
+
+  --success: #4ade80; --success-bg: rgba(74,222,128,0.10);
+  --warning: #fb923c; --warning-bg: rgba(251,146,60,0.10);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.10);
+  --info:    #facc15; --info-bg:    rgba(250,204,21,0.10);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(234,179,8,0.60);
+  --edge-glow-md: 0 0 24px -4px rgba(234,179,8,0.60), 0 0 48px -8px rgba(113,63,18,0.40);
+  --edge-glow-lg: 0 0 40px -6px rgba(234,179,8,0.65), 0 0 80px -12px rgba(113,63,18,0.45), 0 0 130px -20px rgba(250,204,21,0.22);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.80);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.80),  0 0 3px rgba(234,179,8,0.14);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.85), 0 0 8px rgba(234,179,8,0.18);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.90),0 0 20px rgba(234,179,8,0.24);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.95),0 0 40px rgba(234,179,8,0.30);
+  --shadow-glow:  0 0 0 1px rgba(234,179,8,0.32), 0 8px 40px rgba(234,179,8,0.60), 0 0 100px rgba(113,63,18,0.40);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.70);
+}
+
+/* ============================================================================
+   Neon Noir Theme — Cyberpunk Dark
+   ============================================================================ */
+[data-theme="neon-noir"],
+.theme-neon-noir {
+  --bg-primary:      #04010a;
+  --bg-secondary:    #080110;
+  --bg-tertiary:     #0d0218;
+  --bg-gradient:     linear-gradient(145deg, #04010a 0%, #08011a 30%, #0a0120 65%, #050015 100%);
+
+  --glass-bg:            rgba(18,2,35,0.65);
+  --glass-bg-hover:      rgba(30,4,55,0.80);
+  --glass-bg-active:     rgba(42,6,75,0.92);
+  --glass-bg-deep:       rgba(8,0,18,0.55);
+  --glass-border:        rgba(236,72,153,0.22);
+  --glass-border-strong: rgba(244,114,182,0.45);
+  --glass-border-subtle: rgba(236,72,153,0.10);
+  --glass-blur:          32px;
+  --glass-blur-heavy:    64px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(236,72,153,0.12), inset 0 -1px 0 rgba(0,0,0,0.50);
+
+  --glass-refract-light: rgba(232,121,249,0.14);
+  --glass-refract-mid:   rgba(34,211,238,0.08);
+  --light-primary:       rgba(232,121,249,0.12);
+  --light-scatter:       rgba(34,211,238,0.05);
+
+  --text-primary:   #fdf4ff;
+  --text-secondary: #f0abfc;
+  --text-muted:     #86198f;
+  --text-inverse:   #04010a;
+  --text-on-accent: #04010a;
+
+  --accent-primary:   #e879f9;
+  --accent-secondary: #22d3ee;
+  --accent-tertiary:  #818cf8;
+  --accent-gradient:  linear-gradient(135deg, #e879f9 0%, #818cf8 50%, #22d3ee 100%);
+  --accent-glow:      rgba(232,121,249,0.50);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.10);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.10);
+  --info:    #22d3ee; --info-bg:    rgba(34,211,238,0.12);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(232,121,249,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(232,121,249,0.55), 0 0 48px -8px rgba(34,211,238,0.28);
+  --edge-glow-lg: 0 0 40px -6px rgba(232,121,249,0.60), 0 0 80px -12px rgba(34,211,238,0.32), 0 0 120px -20px rgba(129,140,248,0.20);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.70);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.70),  0 0 6px rgba(232,121,249,0.18);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.75), 0 0 14px rgba(232,121,249,0.22);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.82),0 0 30px rgba(232,121,249,0.28);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.90),0 0 55px rgba(232,121,249,0.34);
+  --shadow-glow:  0 0 0 1px rgba(232,121,249,0.32), 0 8px 40px rgba(232,121,249,0.58), 0 0 90px rgba(34,211,238,0.22);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.55);
+}
+
+/* ============================================================================
+   Hologram Theme — Iridescent Prismatic
+   ============================================================================ */
+[data-theme="hologram"],
+.theme-hologram {
+  --bg-primary:      #f0f4ff;
+  --bg-secondary:    #e8edff;
+  --bg-tertiary:     #dde5ff;
+  --bg-gradient:     linear-gradient(145deg, #f0f4ff 0%, #e8d5ff 25%, #d5e8ff 50%, #d5ffd5 75%, #fff5d5 100%);
+
+  --glass-bg:            rgba(255,255,255,0.45);
+  --glass-bg-hover:      rgba(255,255,255,0.72);
+  --glass-bg-active:     rgba(255,255,255,0.95);
+  --glass-bg-deep:       rgba(200,200,255,0.20);
+  --glass-border:        rgba(168,85,247,0.22);
+  --glass-border-strong: rgba(139,92,246,0.50);
+  --glass-border-subtle: rgba(168,85,247,0.10);
+  --glass-blur:          24px;
+  --glass-blur-heavy:    48px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.90), inset 0 -1px 0 rgba(139,92,246,0.06), inset 1px 0 0 rgba(34,211,238,0.08), inset -1px 0 0 rgba(236,72,153,0.08);
+
+  --glass-refract-light: rgba(200,180,255,0.65);
+  --glass-refract-mid:   rgba(100,200,255,0.15);
+  --light-primary:       rgba(180,160,255,0.28);
+  --light-scatter:       rgba(100,200,255,0.12);
+
+  --text-primary:   #1e1b4b;
+  --text-secondary: #4338ca;
+  --text-muted:     #6366f1;
+  --text-inverse:   #ffffff;
+  --text-on-accent: #ffffff;
+
+  --accent-primary:   #8b5cf6;
+  --accent-secondary: #06b6d4;
+  --accent-tertiary:  #ec4899;
+  --accent-gradient:  linear-gradient(135deg, #8b5cf6 0%, #06b6d4 33%, #ec4899 66%, #f59e0b 100%);
+  --accent-glow:      rgba(139,92,246,0.35);
+
+  --shadow-sm:   0 2px 8px rgba(139,92,246,0.10),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(139,92,246,0.14), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(139,92,246,0.18),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(139,92,246,0.22),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(139,92,246,0.22),  0 8px 32px rgba(139,92,246,0.40), 0 0 60px rgba(6,182,212,0.20);
+}
+
+/* ============================================================================
+   Galaxy Theme — Deep Cosmos Starfield
+   ============================================================================ */
+[data-theme="galaxy"],
+.theme-galaxy {
+  --bg-primary:      #03001c;
+  --bg-secondary:    #06002e;
+  --bg-tertiary:     #0a0040;
+  --bg-gradient:     linear-gradient(145deg, #03001c 0%, #06002e 30%, #10004a 60%, #04001a 100%);
+
+  --glass-bg:            rgba(10,0,55,0.60);
+  --glass-bg-hover:      rgba(18,0,80,0.78);
+  --glass-bg-active:     rgba(25,0,105,0.90);
+  --glass-bg-deep:       rgba(4,0,28,0.55);
+  --glass-border:        rgba(165,180,252,0.18);
+  --glass-border-strong: rgba(199,210,254,0.38);
+  --glass-border-subtle: rgba(165,180,252,0.08);
+  --glass-blur:          32px;
+  --glass-blur-heavy:    64px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(199,210,254,0.12), inset 0 -1px 0 rgba(0,0,0,0.50);
+
+  --glass-refract-light: rgba(165,180,252,0.14);
+  --glass-refract-mid:   rgba(124,58,237,0.07);
+  --light-primary:       rgba(165,180,252,0.12);
+  --light-scatter:       rgba(79,70,229,0.05);
+
+  --text-primary:   #eef2ff;
+  --text-secondary: #c7d2fe;
+  --text-muted:     #4338ca;
+  --text-inverse:   #03001c;
+  --text-on-accent: #03001c;
+
+  --accent-primary:   #a5b4fc;
+  --accent-secondary: #818cf8;
+  --accent-tertiary:  #f0abfc;
+  --accent-gradient:  linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #a5b4fc 65%, #f0abfc 100%);
+  --accent-glow:      rgba(165,180,252,0.50);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.10);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.10);
+  --info:    #a5b4fc; --info-bg:    rgba(165,180,252,0.12);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(165,180,252,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(165,180,252,0.55), 0 0 48px -8px rgba(124,58,237,0.32);
+  --edge-glow-lg: 0 0 40px -6px rgba(165,180,252,0.60), 0 0 80px -12px rgba(124,58,237,0.38), 0 0 120px -20px rgba(240,171,252,0.20);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.70);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.65),  0 0 4px rgba(165,180,252,0.14);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.72), 0 0 14px rgba(165,180,252,0.20);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.80),0 0 30px rgba(165,180,252,0.26);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.88),0 0 55px rgba(165,180,252,0.32);
+  --shadow-glow:  0 0 0 1px rgba(165,180,252,0.28), 0 8px 40px rgba(165,180,252,0.55), 0 0 90px rgba(124,58,237,0.30);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.55);
+}
+
+/* ============================================================================
+   Sakura Theme — Cherry Blossom Shōjo
+   ============================================================================ */
+[data-theme="sakura"],
+.theme-sakura {
+  --bg-primary:      #fff1f5;
+  --bg-secondary:    #ffe4ec;
+  --bg-tertiary:     #ffd6e5;
+  --bg-gradient:     linear-gradient(145deg, #fff1f5 0%, #ffe4ec 30%, #fce7f3 60%, #fdf2ff 100%);
+
+  --glass-bg:            rgba(255,241,245,0.65);
+  --glass-bg-hover:      rgba(255,255,255,0.88);
+  --glass-bg-active:     rgba(255,255,255,0.97);
+  --glass-bg-deep:       rgba(252,207,232,0.25);
+  --glass-border:        rgba(244,114,182,0.28);
+  --glass-border-strong: rgba(236,72,153,0.50);
+  --glass-border-subtle: rgba(244,114,182,0.12);
+  --glass-blur:          22px;
+  --glass-blur-heavy:    44px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.80), inset 0 -1px 0 rgba(236,72,153,0.06);
+
+  --glass-refract-light: rgba(255,200,230,0.65);
+  --glass-refract-mid:   rgba(240,130,180,0.12);
+  --light-primary:       rgba(255,180,220,0.28);
+  --light-scatter:       rgba(220,80,140,0.10);
+
+  --text-primary:   #500724;
+  --text-secondary: #9d174d;
+  --text-muted:     #db2777;
+  --text-inverse:   #fff1f5;
+  --text-on-accent: #ffffff;
+
+  --accent-primary:   #ec4899;
+  --accent-secondary: #f472b6;
+  --accent-tertiary:  #a855f7;
+  --accent-gradient:  linear-gradient(135deg, #ec4899 0%, #f472b6 50%, #e879f9 100%);
+  --accent-glow:      rgba(236,72,153,0.40);
+
+  --success: #16a34a; --success-bg: rgba(22,163,74,0.10);
+  --warning: #d97706; --warning-bg: rgba(217,119,6,0.10);
+  --error:   #dc2626; --error-bg:   rgba(220,38,38,0.10);
+  --info:    #7c3aed; --info-bg:    rgba(124,58,237,0.10);
+
+  --shadow-sm:   0 2px 8px rgba(236,72,153,0.10),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(236,72,153,0.14), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(236,72,153,0.18),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(236,72,153,0.22),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(236,72,153,0.24),  0 8px 32px rgba(236,72,153,0.40);
+}
+
+/* ============================================================================
+   Dragon Ball Theme — SSJ Power Aura
+   ============================================================================ */
+[data-theme="dragonball"],
+.theme-dragonball {
+  --bg-primary:      #0e0800;
+  --bg-secondary:    #1a0e00;
+  --bg-tertiary:     #251400;
+  --bg-gradient:     linear-gradient(145deg, #0e0800 0%, #1c1000 35%, #2e1800 65%, #120a00 100%);
+
+  --glass-bg:            rgba(40,20,0,0.65);
+  --glass-bg-hover:      rgba(65,32,0,0.82);
+  --glass-bg-active:     rgba(85,42,0,0.92);
+  --glass-bg-deep:       rgba(18,9,0,0.55);
+  --glass-border:        rgba(251,146,60,0.22);
+  --glass-border-strong: rgba(253,186,116,0.45);
+  --glass-border-subtle: rgba(251,146,60,0.10);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(253,186,116,0.14), inset 0 -1px 0 rgba(0,0,0,0.55);
+
+  --glass-refract-light: rgba(255,180,50,0.16);
+  --glass-refract-mid:   rgba(220,100,0,0.08);
+  --light-primary:       rgba(249,115,22,0.14);
+  --light-scatter:       rgba(124,45,18,0.05);
+
+  --text-primary:   #fff7ed;
+  --text-secondary: #fdba74;
+  --text-muted:     #9a3412;
+  --text-inverse:   #0e0800;
+  --text-on-accent: #0e0800;
+
+  --accent-primary:   #f97316;
+  --accent-secondary: #fbbf24;
+  --accent-tertiary:  #ef4444;
+  --accent-gradient:  linear-gradient(135deg, #7c2d12 0%, #ea580c 30%, #f97316 55%, #fbbf24 80%, #fde68a 100%);
+  --accent-glow:      rgba(249,115,22,0.60);
+
+  --success: #4ade80; --success-bg: rgba(74,222,128,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.12);
+  --error:   #ef4444; --error-bg:   rgba(239,68,68,0.12);
+  --info:    #fb923c; --info-bg:    rgba(251,146,60,0.12);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(249,115,22,0.65);
+  --edge-glow-md: 0 0 24px -4px rgba(249,115,22,0.65), 0 0 48px -8px rgba(251,191,36,0.35);
+  --edge-glow-lg: 0 0 40px -6px rgba(249,115,22,0.70), 0 0 80px -12px rgba(251,191,36,0.40), 0 0 130px -20px rgba(239,68,68,0.25);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.75);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.72),  0 0 6px rgba(249,115,22,0.20);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.78), 0 0 16px rgba(249,115,22,0.26);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.84),0 0 32px rgba(249,115,22,0.32);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.92),0 0 60px rgba(249,115,22,0.38);
+  --shadow-glow:  0 0 0 1px rgba(249,115,22,0.40), 0 8px 40px rgba(249,115,22,0.65), 0 0 100px rgba(251,191,36,0.30);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.60);
+}
+
+/* ============================================================================
+   Evangelion Theme — NERV Clinical Dark
+   ============================================================================ */
+[data-theme="evangelion"],
+.theme-evangelion {
+  --bg-primary:      #060608;
+  --bg-secondary:    #0a0a0e;
+  --bg-tertiary:     #111118;
+  --bg-gradient:     linear-gradient(145deg, #060608 0%, #090912 35%, #100e18 65%, #060608 100%);
+
+  --glass-bg:            rgba(15,15,25,0.68);
+  --glass-bg-hover:      rgba(25,22,40,0.84);
+  --glass-bg-active:     rgba(35,30,55,0.94);
+  --glass-bg-deep:       rgba(8,6,14,0.58);
+  --glass-border:        rgba(255,100,20,0.20);
+  --glass-border-strong: rgba(255,140,60,0.42);
+  --glass-border-subtle: rgba(255,100,20,0.08);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(50,255,100,0.08), inset 0 -1px 0 rgba(0,0,0,0.50);
+
+  --glass-refract-light: rgba(255,100,20,0.12);
+  --glass-refract-mid:   rgba(50,255,80,0.06);
+  --light-primary:       rgba(255,99,20,0.10);
+  --light-scatter:       rgba(50,255,80,0.04);
+
+  --text-primary:   #f0ece4;
+  --text-secondary: #b8b0a0;
+  --text-muted:     #5a4e40;
+  --text-inverse:   #060608;
+  --text-on-accent: #060608;
+
+  --accent-primary:   #ff6314;
+  --accent-secondary: #32ff50;
+  --accent-tertiary:  #ff3232;
+  --accent-gradient:  linear-gradient(135deg, #7f2000 0%, #cc4400 30%, #ff6314 65%, #ff9a00 100%);
+  --accent-glow:      rgba(255,99,20,0.55);
+
+  --success: #32ff50; --success-bg: rgba(50,255,80,0.10);
+  --warning: #ff9a00; --warning-bg: rgba(255,154,0,0.12);
+  --error:   #ff3232; --error-bg:   rgba(255,50,50,0.12);
+  --info:    #32c8ff; --info-bg:    rgba(50,200,255,0.10);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(255,99,20,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(255,99,20,0.55), 0 0 48px -8px rgba(50,255,80,0.20);
+  --edge-glow-lg: 0 0 40px -6px rgba(255,99,20,0.60), 0 0 80px -12px rgba(50,255,80,0.24), 0 0 120px -20px rgba(255,50,50,0.18);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.75);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.72),  0 0 5px rgba(255,99,20,0.16);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.78), 0 0 12px rgba(255,99,20,0.20);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.85),0 0 28px rgba(255,99,20,0.26);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.92),0 0 50px rgba(255,99,20,0.32);
+  --shadow-glow:  0 0 0 1px rgba(255,99,20,0.35), 0 8px 40px rgba(255,99,20,0.58), 0 0 90px rgba(50,255,80,0.12);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.60);
+}

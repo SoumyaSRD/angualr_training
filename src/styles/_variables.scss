@@ -391,7 +391,7 @@ $aspect-ratio: (
 //
 // v4 ARCHITECTURE NOTE:
 // This :root block defines FALLBACK defaults that are superseded by
-// [data-theme="*"] overrides declared in _themes.scss.
+// [data-theme="*"] overrides declared in modular theme files.
 // All new v4 token groups are included here so components always have
 // a working fallback even if a theme omits them.
 // ============================================================================

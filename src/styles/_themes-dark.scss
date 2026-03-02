@@ -1,0 +1,344 @@
+/* ============================================================================
+   GLASS UI — DARK THEMES v4.0
+   Midnight · Aurora · Obsidian · Blood Moon · Ocean Deep · Lava
+   ============================================================================ */
+
+/* ============================================================================
+   Midnight Crystal Theme — Deep Space Luxury
+   ============================================================================ */
+[data-theme="midnight"],
+.theme-midnight {
+  --bg-primary:      #060b18;
+  --bg-secondary:    #0d1526;
+  --bg-tertiary:     #162040;
+  --bg-gradient:     linear-gradient(145deg, #060b18 0%, #0d1530 35%, #1a1456 70%, #200d3a 100%);
+
+  --glass-bg:            rgba(15,25,50,0.65);
+  --glass-bg-hover:      rgba(30,45,80,0.82);
+  --glass-bg-active:     rgba(45,60,100,0.92);
+  --glass-bg-deep:       rgba(10,15,35,0.50);
+  --glass-border:        rgba(139,92,246,0.22);
+  --glass-border-strong: rgba(167,139,250,0.46);
+  --glass-border-subtle: rgba(99,102,241,0.10);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.30);
+
+  --glass-refract-light: rgba(180,160,255,0.14);
+  --glass-refract-mid:   rgba(100,80,200,0.06);
+  --light-primary:       rgba(140,100,255,0.14);
+  --light-scatter:       rgba(80,60,180,0.06);
+
+  --text-primary:   #f0f4ff;
+  --text-secondary: #c4cfef;
+  --text-muted:     #6b7db3;
+  --text-inverse:   #060b18;
+  --text-on-accent: #fff;
+
+  --accent-primary:   #8b5cf6;
+  --accent-secondary: #a78bfa;
+  --accent-tertiary:  #38bdf8;
+  --accent-gradient:  linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #c4b5fd 100%);
+  --accent-glow:      rgba(139,92,246,0.45);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.12);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.12);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.12);
+  --info:    #60a5fa; --info-bg:    rgba(96,165,250,0.12);
+
+  --scatter-dark: 0 1px 0 rgba(180,160,255,0.14) inset,
+                  0 -1px 0 rgba(0,0,0,0.40) inset,
+                  1px 0 0 rgba(140,120,240,0.07) inset,
+                  -1px 0 0 rgba(0,0,0,0.08) inset;
+
+  --elev-3: 0 8px 24px rgba(0,0,0,0.50), 0 4px 8px rgba(0,0,0,0.30), 0 0 0 1px rgba(139,92,246,0.18), 0 1px 0 rgba(255,255,255,0.07) inset;
+  --elev-5: 0 28px 64px rgba(0,0,0,0.70),0 12px 24px rgba(0,0,0,0.40), 0 0 0 1px rgba(167,139,250,0.25), 0 1px 0 rgba(255,255,255,0.09) inset;
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.40);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.40),  0 0 1px rgba(139,92,246,0.20);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.50), 0 0 1px rgba(139,92,246,0.20);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.60),0 0 2px rgba(139,92,246,0.25);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.70),0 0 3px rgba(139,92,246,0.30);
+  --shadow-glow:  0 0 0 1px rgba(139,92,246,0.30), 0 8px 40px rgba(139,92,246,0.50), 0 0 80px rgba(99,102,241,0.20);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.40);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(139,92,246,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(139,92,246,0.55), 0 0 48px -8px rgba(99,102,241,0.30);
+  --edge-glow-lg: 0 0 40px -6px rgba(139,92,246,0.60), 0 0 80px -12px rgba(99,102,241,0.35), 0 0 120px -20px rgba(99,102,241,0.20);
+}
+
+/* ============================================================================
+   Aurora Frost Theme — Hyperreal Dark
+   ============================================================================ */
+[data-theme="aurora"],
+.theme-aurora {
+  --bg-primary:      #0a0a1a;
+  --bg-secondary:    #0f0f2a;
+  --bg-tertiary:     #141428;
+  --bg-gradient:     linear-gradient(145deg, #0a0a1a 0%, #0d0f28 25%, #1a0a2e 50%, #0a1a28 75%, #0a0a1a 100%);
+
+  --glass-bg:            rgba(255,255,255,0.05);
+  --glass-bg-hover:      rgba(255,255,255,0.09);
+  --glass-bg-active:     rgba(255,255,255,0.14);
+  --glass-bg-deep:       rgba(0,0,0,0.30);
+  --glass-border:        rgba(255,255,255,0.10);
+  --glass-border-strong: rgba(255,255,255,0.22);
+  --glass-border-subtle: rgba(255,255,255,0.05);
+  --glass-blur:          32px;
+  --glass-blur-heavy:    64px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.30);
+
+  --glass-refract-light: rgba(0,245,255,0.14);
+  --glass-refract-mid:   rgba(191,90,242,0.07);
+  --light-primary:       rgba(0,245,255,0.10);
+  --light-scatter:       rgba(191,90,242,0.05);
+
+  --text-primary:   #ffffff;
+  --text-secondary: rgba(255,255,255,0.70);
+  --text-muted:     rgba(255,255,255,0.40);
+  --text-inverse:   #0a0a1a;
+  --text-on-accent: #0a0a1a;
+
+  --accent-primary:   #00f5ff;
+  --accent-secondary: #bf5af2;
+  --accent-tertiary:  #32d74b;
+  --accent-gradient:  linear-gradient(135deg, #00f5ff 0%, #bf5af2 50%, #ff6b6b 100%);
+  --accent-glow:      rgba(0,245,255,0.40);
+
+  --success: #32d74b; --success-bg: rgba(50,215,75,0.12);
+  --warning: #ffd60a; --warning-bg: rgba(255,214,10,0.12);
+  --error:   #ff453a; --error-bg:   rgba(255,69,58,0.12);
+  --info:    #0a84ff; --info-bg:    rgba(10,132,255,0.12);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(0,245,255,0.50);
+  --edge-glow-md: 0 0 24px -4px rgba(0,245,255,0.50), 0 0 48px -8px rgba(191,90,242,0.28);
+  --edge-glow-lg: 0 0 40px -6px rgba(0,245,255,0.55), 0 0 80px -12px rgba(191,90,242,0.32), 0 0 120px -20px rgba(50,215,75,0.18);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.50);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.50);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.60),  0 0 12px rgba(0,245,255,0.08);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.70), 0 0 24px rgba(0,245,255,0.12);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.80), 0 0 40px rgba(0,245,255,0.15);
+  --shadow-glow:  0 0 0 1px rgba(0,245,255,0.30), 0 8px 40px rgba(0,245,255,0.50), 0 0 80px rgba(191,90,242,0.25);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.50);
+}
+
+/* ============================================================================
+   Obsidian Theme — Pure Refined Black
+   ============================================================================ */
+[data-theme="obsidian"],
+.theme-obsidian {
+  --bg-primary:      #0a0a0a;
+  --bg-secondary:    #111111;
+  --bg-tertiary:     #1a1a1a;
+  --bg-gradient:     linear-gradient(145deg, #0a0a0a 0%, #111118 50%, #0f0f18 100%);
+
+  --glass-bg:            rgba(255,255,255,0.04);
+  --glass-bg-hover:      rgba(255,255,255,0.08);
+  --glass-bg-active:     rgba(255,255,255,0.13);
+  --glass-bg-deep:       rgba(0,0,0,0.40);
+  --glass-border:        rgba(255,255,255,0.08);
+  --glass-border-strong: rgba(255,255,255,0.18);
+  --glass-border-subtle: rgba(255,255,255,0.04);
+  --glass-blur:          32px;
+  --glass-blur-heavy:    64px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.40);
+
+  --glass-refract-light: rgba(255,255,255,0.08);
+  --glass-refract-mid:   rgba(255,255,255,0.03);
+  --light-primary:       rgba(255,255,255,0.06);
+  --light-scatter:       rgba(255,255,255,0.02);
+
+  --text-primary:   #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted:     #525252;
+  --text-inverse:   #0a0a0a;
+  --text-on-accent: #fff;
+
+  --accent-primary:   #e2e8f0;
+  --accent-secondary: #cbd5e1;
+  --accent-tertiary:  #94a3b8;
+  --accent-gradient:  linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+  --accent-glow:      rgba(226,232,240,0.20);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.10);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.10);
+  --info:    #60a5fa; --info-bg:    rgba(96,165,250,0.10);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.60);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.60);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.70);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.80);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.90);
+  --shadow-glow:  0 0 0 1px rgba(226,232,240,0.12), 0 8px 32px rgba(226,232,240,0.15);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.60);
+}
+
+/* ============================================================================
+   Blood Moon Theme — Crimson Dark
+   ============================================================================ */
+[data-theme="blood-moon"],
+.theme-blood-moon {
+  --bg-primary:      #0d0305;
+  --bg-secondary:    #160408;
+  --bg-tertiary:     #200608;
+  --bg-gradient:     linear-gradient(145deg, #0d0305 0%, #1a0408 35%, #2d0510 65%, #150310 100%);
+
+  --glass-bg:            rgba(60,5,15,0.55);
+  --glass-bg-hover:      rgba(90,8,22,0.75);
+  --glass-bg-active:     rgba(120,10,28,0.90);
+  --glass-bg-deep:       rgba(20,3,8,0.60);
+  --glass-border:        rgba(220,38,38,0.22);
+  --glass-border-strong: rgba(248,113,113,0.40);
+  --glass-border-subtle: rgba(220,38,38,0.10);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,100,100,0.10), inset 0 -1px 0 rgba(0,0,0,0.50);
+
+  --glass-refract-light: rgba(255,80,80,0.12);
+  --glass-refract-mid:   rgba(200,20,20,0.06);
+  --light-primary:       rgba(240,60,60,0.12);
+  --light-scatter:       rgba(160,20,20,0.05);
+
+  --text-primary:   #fff1f2;
+  --text-secondary: #fca5a5;
+  --text-muted:     #9f1239;
+  --text-inverse:   #0d0305;
+  --text-on-accent: #fff1f2;
+
+  --accent-primary:   #ef4444;
+  --accent-secondary: #f87171;
+  --accent-tertiary:  #fb923c;
+  --accent-gradient:  linear-gradient(135deg, #7f1d1d 0%, #ef4444 50%, #fb923c 100%);
+  --accent-glow:      rgba(239,68,68,0.50);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.10);
+  --warning: #fb923c; --warning-bg: rgba(251,146,60,0.12);
+  --error:   #ef4444; --error-bg:   rgba(239,68,68,0.14);
+  --info:    #f87171; --info-bg:    rgba(248,113,113,0.10);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(239,68,68,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(239,68,68,0.55), 0 0 48px -8px rgba(127,29,29,0.35);
+  --edge-glow-lg: 0 0 40px -6px rgba(239,68,68,0.60), 0 0 80px -12px rgba(127,29,29,0.40), 0 0 120px -20px rgba(239,68,68,0.20);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.70);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.70),  0 0 4px rgba(239,68,68,0.15);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.75), 0 0 8px rgba(239,68,68,0.18);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.80),0 0 20px rgba(239,68,68,0.22);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.90),0 0 40px rgba(239,68,68,0.28);
+  --shadow-glow:  0 0 0 1px rgba(239,68,68,0.35), 0 8px 40px rgba(239,68,68,0.55), 0 0 80px rgba(127,29,29,0.35);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.60);
+}
+
+/* ============================================================================
+   Ocean Deep Theme — Dark Teal Abyss
+   ============================================================================ */
+[data-theme="ocean-deep"],
+.theme-ocean-deep {
+  --bg-primary:      #020e1a;
+  --bg-secondary:    #051523;
+  --bg-tertiary:     #082030;
+  --bg-gradient:     linear-gradient(145deg, #020e1a 0%, #041828 35%, #062535 65%, #020e20 100%);
+
+  --glass-bg:            rgba(2,20,40,0.60);
+  --glass-bg-hover:      rgba(4,35,65,0.78);
+  --glass-bg-active:     rgba(6,50,90,0.90);
+  --glass-bg-deep:       rgba(1,10,22,0.55);
+  --glass-border:        rgba(6,182,212,0.18);
+  --glass-border-strong: rgba(34,211,238,0.38);
+  --glass-border-subtle: rgba(6,182,212,0.08);
+  --glass-blur:          30px;
+  --glass-blur-heavy:    60px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(34,211,238,0.10), inset 0 -1px 0 rgba(0,0,0,0.40);
+
+  --glass-refract-light: rgba(34,211,238,0.12);
+  --glass-refract-mid:   rgba(6,182,212,0.05);
+  --light-primary:       rgba(6,182,212,0.10);
+  --light-scatter:       rgba(3,105,161,0.04);
+
+  --text-primary:   #e0f7ff;
+  --text-secondary: #7dd3fc;
+  --text-muted:     #075985;
+  --text-inverse:   #020e1a;
+  --text-on-accent: #020e1a;
+
+  --accent-primary:   #06b6d4;
+  --accent-secondary: #22d3ee;
+  --accent-tertiary:  #0ea5e9;
+  --accent-gradient:  linear-gradient(135deg, #0c4a6e 0%, #0369a1 30%, #06b6d4 70%, #22d3ee 100%);
+  --accent-glow:      rgba(6,182,212,0.50);
+
+  --success: #34d399; --success-bg: rgba(52,211,153,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.10);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.10);
+  --info:    #22d3ee; --info-bg:    rgba(34,211,238,0.12);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(6,182,212,0.55);
+  --edge-glow-md: 0 0 24px -4px rgba(6,182,212,0.55), 0 0 48px -8px rgba(3,105,161,0.32);
+  --edge-glow-lg: 0 0 40px -6px rgba(6,182,212,0.60), 0 0 80px -12px rgba(3,105,161,0.38), 0 0 120px -20px rgba(14,165,233,0.20);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.60);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.55),  0 0 4px rgba(6,182,212,0.12);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.65), 0 0 12px rgba(6,182,212,0.16);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.75),0 0 28px rgba(6,182,212,0.20);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.85),0 0 48px rgba(6,182,212,0.24);
+  --shadow-glow:  0 0 0 1px rgba(6,182,212,0.30), 0 8px 40px rgba(6,182,212,0.55), 0 0 80px rgba(3,105,161,0.30);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.50);
+}
+
+/* ============================================================================
+   Lava Theme — Volcanic Ash Surface
+   ============================================================================ */
+[data-theme="lava"],
+.theme-lava {
+  --bg-primary:      #0c0500;
+  --bg-secondary:    #180900;
+  --bg-tertiary:     #250d00;
+  --bg-gradient:     linear-gradient(145deg, #0c0500 0%, #1a0800 35%, #2d1000 65%, #1a0600 100%);
+
+  --glass-bg:            rgba(35,12,0,0.62);
+  --glass-bg-hover:      rgba(60,20,0,0.80);
+  --glass-bg-active:     rgba(80,28,0,0.92);
+  --glass-bg-deep:       rgba(15,5,0,0.55);
+  --glass-border:        rgba(234,88,12,0.22);
+  --glass-border-strong: rgba(251,146,60,0.42);
+  --glass-border-subtle: rgba(234,88,12,0.10);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(251,146,60,0.12), inset 0 -1px 0 rgba(0,0,0,0.50);
+
+  --glass-refract-light: rgba(255,140,40,0.14);
+  --glass-refract-mid:   rgba(200,60,0,0.06);
+  --light-primary:       rgba(234,88,12,0.12);
+  --light-scatter:       rgba(124,45,18,0.05);
+
+  --text-primary:   #fff7ed;
+  --text-secondary: #fed7aa;
+  --text-muted:     #9a3412;
+  --text-inverse:   #0c0500;
+  --text-on-accent: #fff7ed;
+
+  --accent-primary:   #ea580c;
+  --accent-secondary: #fb923c;
+  --accent-tertiary:  #fbbf24;
+  --accent-gradient:  linear-gradient(135deg, #7c2d12 0%, #ea580c 40%, #fb923c 70%, #fbbf24 100%);
+  --accent-glow:      rgba(234,88,12,0.55);
+
+  --success: #4ade80; --success-bg: rgba(74,222,128,0.10);
+  --warning: #fbbf24; --warning-bg: rgba(251,191,36,0.12);
+  --error:   #f87171; --error-bg:   rgba(248,113,113,0.12);
+  --info:    #fb923c; --info-bg:    rgba(251,146,60,0.10);
+
+  --edge-glow-sm: 0 0 12px -2px rgba(234,88,12,0.60);
+  --edge-glow-md: 0 0 24px -4px rgba(234,88,12,0.60), 0 0 48px -8px rgba(124,45,18,0.38);
+  --edge-glow-lg: 0 0 40px -6px rgba(234,88,12,0.65), 0 0 80px -12px rgba(124,45,18,0.44), 0 0 120px -20px rgba(251,146,60,0.22);
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.70);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.70),  0 0 4px rgba(234,88,12,0.18);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.75), 0 0 12px rgba(234,88,12,0.22);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.82),0 0 28px rgba(234,88,12,0.28);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.90),0 0 48px rgba(234,88,12,0.34);
+  --shadow-glow:  0 0 0 1px rgba(234,88,12,0.38), 0 8px 40px rgba(234,88,12,0.60), 0 0 80px rgba(124,45,18,0.40);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.55);
+}

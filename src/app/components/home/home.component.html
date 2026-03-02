@@ -16,7 +16,7 @@
       </p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" [routerLink]="navigationService.topics[0].subTopics[0].route">
+        <a class="btn btn--primary" [routerLink]="navigationService.topics()[0].subTopics[0].route">
           <i class="bi bi-rocket-takeoff"></i>
           Start learning
         </a>
@@ -42,7 +42,7 @@
   <section class="section section--highlights">
     <app-section-card title="Comprehensive Curriculum" subtitle="From web fundamentals to advanced Angular 21 patterns."
       icon="school" badge="Start here" variant="accent"
-      [route]="navigationService.topics[0].subTopics[0].route"></app-section-card>
+      [route]="navigationService.topics()[0].subTopics[0].route"></app-section-card>
 
     <app-section-card title="Real Code Examples" subtitle="Every topic ships with code you can paste into real apps."
       icon="code"></app-section-card>

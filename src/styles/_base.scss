@@ -1,0 +1,47 @@
+/* ============================================================================
+   BASE STYLES - CSS RESET AND FOUNDATION
+   ============================================================================ */
+
+/* ── Box sizing ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Core HTML elements ────────────────────────────────────────────────────── */
+html, body { margin: 0; padding: 0; }
+
+/* ── Lists ─────────────────────────────────────────────────────────────────── */
+ol, ul { list-style: none; margin: 0; padding: 0; }
+
+/* ── Text elements ─────────────────────────────────────────────────────────── */
+li { line-height: var(--type-leading-normal, 1.55); margin-bottom: var(--space-xs, 4px); }
+
+/* ── Blockquotes ───────────────────────────────────────────────────────────── */
+blockquote { margin: 0; }
+
+/* ── Horizontal rules ──────────────────────────────────────────────────────── */
+hr { margin: var(--space-lg, 24px) 0; }
+
+/* ── Images ────────────────────────────────────────────────────────────────── */
+img { max-width: 100%; height: auto; display: block; }
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+button { border: none; margin: 0; padding: 0; width: auto; overflow: visible; 
+  background: transparent; color: inherit; font: inherit; line-height: normal; 
+  cursor: pointer; }
+
+/* ── Forms ─────────────────────────────────────────────────────────────────── */
+input, textarea, select { font: inherit; color: inherit; }
+
+/* ── Focus ─────────────────────────────────────────────────────────────────── */
+:focus { outline: none; }
+
+/* ── Body defaults ─────────────────────────────────────────────────────────── */
+body {
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: var(--type-base, 1rem);
+  line-height: var(--type-leading-normal, 1.55);
+  color: var(--text-primary, #1e293b);
+  background: var(--bg-primary, #f8fafc);
+  min-height: 100vh;
+  transition: background var(--duration-slow, 400ms) var(--ease-smooth),
+              color var(--duration-slow, 400ms) var(--ease-smooth);
+}

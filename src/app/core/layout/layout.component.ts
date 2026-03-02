@@ -135,8 +135,8 @@ export class LayoutComponent implements OnInit {
     readonly currentPageTitle = toSignal(
         this.router.events.pipe(
             filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-            startWith(null),
             map(() => this.resolvePageTitle()),
+            startWith(this.resolvePageTitle()),
         ),
         { initialValue: this.resolvePageTitle() },
     );

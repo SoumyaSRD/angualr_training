@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 export interface SubTopic {
   title: string;
@@ -17,7 +17,7 @@ export interface Topic {
   providedIn: 'root',
 })
 export class NavigationService {
-  topics: Topic[] = [
+  private topicsData: Topic[] = [
     {
       title: "Prerequisites",
       icon: "bi bi-mortarboard-fill",
@@ -99,7 +99,62 @@ export class NavigationService {
     },
   ];
 
+  // Make topics a signal for reactivity
+  topics = signal<Topic[]>(this.topicsData.map(topic => ({
+    ...topic,
+    expanded: false, // Add expanded state to each topic
+    subTopics: topic.subTopics
+  })));
+
+  // Computed property for all routes
+  allRoutes = computed(() =>
+    this.topics().flatMap((t) => t.subTopics.map((s) => s.route))
+  );
+
+  // Method to toggle topic expansion
+  toggleTopic(index: number): void {
+    const currentTopics = this.topics();
+    const updatedTopics = [...currentTopics];
+    updatedTopics[index] = {
+      ...updatedTopics[index],
+      expanded: !updatedTopics[index].expanded
+    };
+    this.topics.set(updatedTopics);
+  }
+
+  // Method to expand a specific topic
+  expandTopic(index: number): void {
+    const currentTopics = this.topics();
+    const updatedTopics = [...currentTopics];
+    updatedTopics[index] = {
+      ...updatedTopics[index],
+      expanded: true
+    };
+    this.topics.set(updatedTopics);
+  }
+
+  // Method to collapse a specific topic
+  collapseTopic(index: number): void {
+    const currentTopics = this.topics();
+    const updatedTopics = [...currentTopics];
+    updatedTopics[index] = {
+      ...updatedTopics[index],
+      expanded: false
+    };
+    this.topics.set(updatedTopics);
+  }
+
+  // Method to collapse all topics
+  collapseAll(): void {
+    const updatedTopics = this.topics().map(topic => ({
+      ...topic,
+      expanded: false
+    }));
+    this.topics.set(updatedTopics);
+  }
+
+  // Getter for all routes (maintains backward compatibility)
   getAllRoutes(): string[] {
-    return this.topics.flatMap((t) => t.subTopics.map((s) => s.route));
+    return this.allRoutes();
   }
 }

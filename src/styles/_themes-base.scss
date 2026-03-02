@@ -1,0 +1,195 @@
+/* ============================================================================
+   GLASS UI — BASE THEMING TOKENS v4.0
+   Global variables, fonts, and root theme definitions
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+/* ============================================================================
+   :root — GLOBAL TOKENS + DEFAULT (Arctic Minimal fallback — MUST stay first)
+   ============================================================================ */
+:root {
+
+  /* ── Backgrounds ────────────────────────────────────── */
+  --bg-primary:   #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary:  #e2e8f0;
+  --bg-gradient:  linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #ede9fe 100%);
+
+  /* ── Glass Surface ──────────────────────────────────── */
+  --glass-bg:            rgba(255, 255, 255, 0.55);
+  --glass-bg-hover:      rgba(255, 255, 255, 0.80);
+  --glass-bg-active:     rgba(255, 255, 255, 0.95);
+  --glass-bg-deep:       rgba(255, 255, 255, 0.25);
+  --glass-border:        rgba(255, 255, 255, 0.50);
+  --glass-border-strong: rgba(255, 255, 255, 0.85);
+  --glass-border-subtle: rgba(255, 255, 255, 0.20);
+  --glass-blur:          20px;
+  --glass-blur-heavy:    40px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.04);
+
+  /* ── Glass Refraction Layer (v4 NEW) ─────────────────
+     Prismatic edge shimmer applied via ::before pseudo    */
+  --glass-refract-angle:  145deg;
+  --glass-refract-light:  rgba(255,255,255,0.55);
+  --glass-refract-mid:    rgba(255,255,255,0.08);
+  --glass-refract-dark:   rgba(0,0,0,0.03);
+  --glass-specular:       rgba(255,255,255,0.90);
+  --glass-specular-size:  30%;
+
+  /* ── Prism Border (v4 NEW) ───────────────────────────
+     Rainbow-edge shimmer for premium .glass-card--prism  */
+  --prism-border: linear-gradient(
+    var(--glass-refract-angle),
+    rgba(255,100,100,0.50) 0%,
+    rgba(255,180,50,0.40)  14%,
+    rgba(200,255,60,0.35)  28%,
+    rgba(50,230,255,0.45)  42%,
+    rgba(120,100,255,0.50) 56%,
+    rgba(240,80,200,0.45)  70%,
+    rgba(255,100,100,0.50) 100%
+  );
+
+  /* ── Depth Lighting System (v4 NEW) ─────────────────
+     Light source position for dynamic illumination       */
+  --light-x:        50%;
+  --light-y:        50%;
+  --light-intensity: 0.7;
+  --light-radius:    200px;
+  --light-strength:  0.3;
+  --light-color:     rgba(255,255,255,0.4);
+  --light-shadow:    0 8px 32px rgba(0,0,0,0.12);
+  --light-ambient:   rgba(255,255,255,0.05);
+  --light-specular:  rgba(255,255,255,0.15);
+
+  /* ── Colors ─────────────────────────────────────────── */
+  --primary:        #6366f1;
+  --primary-hover:  #4f46e5;
+  --primary-active: #4338ca;
+  --secondary:      #64748b;
+  --accent-primary: #8b5cf6;
+  --accent-secondary: #06b6d4;
+  --success:        #10b981;
+  --warning:        #f59e0b;
+  --error:          #ef4444;
+  --info:           #3b82f6;
+
+  /* ── Text ───────────────────────────────────────────── */
+  --text-primary:   #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary:  #94a3b8;
+  --text-inverse:   #ffffff;
+  --text-muted:     #6b7280;
+  --text-disabled:  #9ca3af;
+
+  /* ── Shadows & Depth ────────────────────────────────── */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ── Z-depth layers ─────────────────────────────────── */
+  --elev-0: 0;
+  --elev-1: 1px;
+  --elev-2: 8px;
+  --elev-3: 16px;
+  --elev-4: 24px;
+  --elev-5: 32px;
+
+  /* ── Border Radius ──────────────────────────────────── */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 3rem;
+  --radius-full: 9999px;
+
+  /* ── Spacing ────────────────────────────────────────── */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ── Transitions ────────────────────────────────────── */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Typography ─────────────────────────────────────── */
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  --type-leading-tight: 1.10;
+  --type-leading-normal: 1.55;
+  --type-leading-loose: 1.80;
+  --type-tracking-tight: -0.03em;
+  --type-tracking-normal: 0;
+  --type-tracking-wide: 0.04em;
+
+  /* ── Glassmorphism Effects ──────────────────────────── */
+  --glass-blur: blur(12px);
+  --glass-backdrop: saturate(180%) blur(20px);
+  --glass-refraction: contrast(1.1) saturate(1.2) brightness(1.05);
+  --glass-edge-glow: 0 0 15px rgba(255, 255, 255, 0.15);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  --glass-outer-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* ── Animation States ───────────────────────────────── */
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-bounce: bounce 1s infinite;
+  --animate-spin: spin 1s linear infinite;
+  --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+
+  /* ── Breakpoints ────────────────────────────────────── */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ============================================================================
+   Theme Import Index - Import all theme files
+   ============================================================================ */
+@import 'themes-light';
+@import 'themes-dark';
+@import 'themes-special';

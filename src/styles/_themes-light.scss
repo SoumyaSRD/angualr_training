@@ -1,0 +1,198 @@
+/* ============================================================================
+   GLASS UI — LIGHT THEMES v4.0
+   Arctic · Sunset · Emerald · Cyber
+   ============================================================================ */
+
+/* ============================================================================
+   Arctic Theme — Minimal Light Glass
+   ============================================================================ */
+[data-theme="arctic"] {
+  --bg-primary:      #f8fafc;
+  --bg-secondary:    #f1f5f9;
+  --bg-tertiary:     #e2e8f0;
+  --bg-gradient:     linear-gradient(145deg, #f8fafc 0%, #e8edf5 40%, #ede9fe 100%);
+
+  --glass-bg:            rgba(255,255,255,0.55);
+  --glass-bg-hover:      rgba(255,255,255,0.82);
+  --glass-bg-active:     rgba(255,255,255,0.96);
+  --glass-bg-deep:       rgba(241,245,249,0.35);
+  --glass-border:        rgba(255,255,255,0.55);
+  --glass-border-strong: rgba(255,255,255,0.92);
+  --glass-border-subtle: rgba(148,163,184,0.14);
+  --glass-blur:          24px;
+  --glass-blur-heavy:    48px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.72), inset 0 -1px 0 rgba(100,116,139,0.04);
+
+  --glass-refract-light: rgba(255,255,255,0.70);
+  --glass-refract-mid:   rgba(255,255,255,0.12);
+  --light-primary:       rgba(255,255,255,0.30);
+  --light-scatter:       rgba(255,255,255,0.12);
+
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --text-inverse:   #ffffff;
+  --text-on-accent: #ffffff;
+
+  --accent-primary:   #6366f1;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary:  #ec4899;
+  --accent-gradient:  linear-gradient(135deg, #6366f1 0%, #8b5cf6 60%, #a78bfa 100%);
+  --accent-glow:      rgba(99,102,241,0.30);
+
+  --elev-3: 0 8px 24px rgba(99,102,241,0.08), 0 4px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.80), 0 1px 0 rgba(255,255,255,0.90) inset;
+  --elev-5: 0 28px 64px rgba(99,102,241,0.14),0 12px 24px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.90), 0 1px 0 rgba(255,255,255,0.95) inset;
+
+  --shadow-sm:   0 2px 8px rgba(99,102,241,0.06),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(99,102,241,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(99,102,241,0.12),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(99,102,241,0.16),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(99,102,241,0.20),  0 8px 32px rgba(99,102,241,0.30);
+}
+
+/* ============================================================================
+   Sunset Theme — Warm Orange Glass
+   ============================================================================ */
+[data-theme="sunset"] {
+  --bg-primary:      #fff7ed;
+  --bg-secondary:    #fff1dc;
+  --bg-tertiary:     #fed7aa;
+  --bg-gradient:     linear-gradient(145deg, #fff7ed 0%, #fde8d0 30%, #fbcfe8 70%, #fce7ff 100%);
+
+  --glass-bg:            rgba(255,249,240,0.60);
+  --glass-bg-hover:      rgba(255,255,255,0.86);
+  --glass-bg-active:     rgba(255,255,255,0.96);
+  --glass-bg-deep:       rgba(253,186,116,0.18);
+  --glass-border:        rgba(251,146,60,0.25);
+  --glass-border-strong: rgba(249,115,22,0.45);
+  --glass-border-subtle: rgba(251,146,60,0.12);
+  --glass-blur:          22px;
+  --glass-blur-heavy:    44px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.65), inset 0 -1px 0 rgba(249,115,22,0.06);
+
+  --glass-refract-light: rgba(255,220,180,0.60);
+  --glass-refract-mid:   rgba(255,200,140,0.10);
+  --light-primary:       rgba(255,240,200,0.28);
+  --light-scatter:       rgba(255,200,120,0.10);
+
+  --text-primary:   #431407;
+  --text-secondary: #9a3412;
+  --text-muted:     #c2410c;
+  --text-inverse:   #fff7ed;
+  --text-on-accent: #fff;
+
+  --accent-primary:   #f97316;
+  --accent-secondary: #fb923c;
+  --accent-tertiary:  #f43f5e;
+  --accent-gradient:  linear-gradient(135deg, #f97316 0%, #fb923c 50%, #fbbf24 100%);
+  --accent-glow:      rgba(249,115,22,0.35);
+
+  --success: #16a34a; --success-bg: rgba(22,163,74,0.10);
+  --warning: #d97706; --warning-bg: rgba(217,119,6,0.10);
+  --error:   #dc2626; --error-bg:   rgba(220,38,38,0.10);
+  --info:    #f97316; --info-bg:    rgba(249,115,22,0.10);
+
+  --shadow-sm:   0 2px 8px rgba(249,115,22,0.08),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(249,115,22,0.12), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(249,115,22,0.16),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(249,115,22,0.20),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(249,115,22,0.22),  0 8px 32px rgba(249,115,22,0.36);
+}
+
+/* ============================================================================
+   Emerald Theme — Nature Green Glass
+   ============================================================================ */
+[data-theme="emerald"] {
+  --bg-primary:      #f0fdf4;
+  --bg-secondary:    #ecfdf5;
+  --bg-tertiary:     #a7f3d0;
+  --bg-gradient:     linear-gradient(145deg, #f0fdf4 0%, #d1fae5 30%, #a7f3d0 70%, #6ee7b7 100%);
+
+  --glass-bg:            rgba(240,253,244,0.60);
+  --glass-bg-hover:      rgba(236,253,245,0.86);
+  --glass-bg-active:     rgba(220,252,231,0.96);
+  --glass-bg-deep:       rgba(167,243,208,0.20);
+  --glass-border:        rgba(34,197,94,0.28);
+  --glass-border-strong: rgba(22,163,74,0.50);
+  --glass-border-subtle: rgba(34,197,94,0.15);
+  --glass-blur:          22px;
+  --glass-blur-heavy:    44px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.68), inset 0 -1px 0 rgba(22,163,74,0.06);
+
+  --glass-refract-light: rgba(200,255,220,0.60);
+  --glass-refract-mid:   rgba(150,240,180,0.10);
+  --light-primary:       rgba(200,250,220,0.30);
+  --light-scatter:       rgba(150,240,180,0.12);
+
+  --text-primary:   #064e3b;
+  --text-secondary: #065f46;
+  --text-muted:     #047857;
+  --text-inverse:   #f0fdf4;
+  --text-on-accent: #fff;
+
+  --accent-primary:   #10b981;
+  --accent-secondary: #34d399;
+  --accent-tertiary:  #059669;
+  --accent-gradient:  linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+  --accent-glow:      rgba(16,185,129,0.35);
+
+  --success: #10b981; --success-bg: rgba(16,185,129,0.10);
+  --warning: #f59e0b; --warning-bg: rgba(245,158,11,0.10);
+  --error:   #dc2626; --error-bg:   rgba(220,38,38,0.10);
+  --info:    #0ea5e9; --info-bg:    rgba(14,165,233,0.10);
+
+  --shadow-sm:   0 2px 8px rgba(16,185,129,0.08),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(16,185,129,0.12), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(16,185,129,0.16),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(16,185,129,0.20),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(16,185,129,0.22),  0 8px 32px rgba(16,185,129,0.36);
+}
+
+/* ============================================================================
+   Cyber Theme — Cyber Ice
+   ============================================================================ */
+[data-theme="cyber"] {
+  --bg-primary:      #f0fdff;
+  --bg-secondary:    #e0f9ff;
+  --bg-tertiary:     #cff6ff;
+  --bg-gradient:     linear-gradient(145deg, #f0fdff 0%, #e0f7fe 35%, #ccf7ff 65%, #e8f4ff 100%);
+
+  --glass-bg:            rgba(240,253,255,0.65);
+  --glass-bg-hover:      rgba(255,255,255,0.86);
+  --glass-bg-active:     rgba(255,255,255,0.97);
+  --glass-bg-deep:       rgba(6,182,212,0.10);
+  --glass-border:        rgba(6,182,212,0.28);
+  --glass-border-strong: rgba(8,145,178,0.55);
+  --glass-border-subtle: rgba(6,182,212,0.12);
+  --glass-blur:          18px;
+  --glass-blur-heavy:    36px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(255,255,255,0.76), inset 0 -1px 0 rgba(6,182,212,0.06);
+
+  --glass-refract-light: rgba(200,250,255,0.70);
+  --glass-refract-mid:   rgba(100,230,255,0.12);
+  --light-primary:       rgba(180,245,255,0.28);
+  --light-scatter:       rgba(50,220,255,0.10);
+
+  --text-primary:   #082f49;
+  --text-secondary: #164e63;
+  --text-muted:     #0891b2;
+  --text-inverse:   #f0fdff;
+  --text-on-accent: #fff;
+
+  --accent-primary:   #06b6d4;
+  --accent-secondary: #22d3ee;
+  --accent-tertiary:  #7c3aed;
+  --accent-gradient:  linear-gradient(135deg, #06b6d4 0%, #22d3ee 50%, #67e8f9 100%);
+  --accent-glow:      rgba(6,182,212,0.40);
+
+  --success: #0d9488; --success-bg: rgba(13,148,136,0.10);
+  --warning: #d97706; --warning-bg: rgba(217,119,6,0.10);
+  --error:   #dc2626; --error-bg:   rgba(220,38,38,0.10);
+  --info:    #06b6d4; --info-bg:    rgba(6,182,212,0.10);
+
+  --shadow-sm:   0 2px 8px rgba(6,182,212,0.10),  0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 8px 24px rgba(6,182,212,0.14), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 20px 48px rgba(6,182,212,0.18),0 4px 12px rgba(0,0,0,0.05);
+  --shadow-xl:   0 32px 80px rgba(6,182,212,0.22),0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 1px rgba(6,182,212,0.25),  0 8px 32px rgba(6,182,212,0.45);
+}

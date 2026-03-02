@@ -243,15 +243,28 @@ export class ThemeService {
   private applyTheme(theme: Theme): void {
     const root = this.document.documentElement;
 
+    // Remove previous theme classes
+    this.themes.forEach((t) => {
+      root.classList.remove(`theme-${t.id}`);
+    });
+
     // Set data attribute - this triggers CSS variable changes
     root.setAttribute('data-theme', theme);
 
-    // Remove previous theme-* classes
+    // Add theme class for additional styling
+    root.classList.add(`theme-${theme}`);
+
+    // Debug: Check if attribute is set correctly
+    console.log('[ThemeService] Setting data-theme to:', theme);
+    console.log('[ThemeService] Current data-theme value:', root.getAttribute('data-theme'));
+    console.log('[ThemeService] Current theme classes:', root.classList.toString());
+
+    // Remove previous theme-* classes from body (for backward compatibility)
     this.themes.forEach((t) => {
       this.document.body.classList.remove(`theme-${t.id}`);
     });
 
-    // Add current theme class
+    // Add current theme class to body (for backward compatibility)
     this.document.body.classList.add(`theme-${theme}`);
 
     // Debug log

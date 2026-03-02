@@ -53,7 +53,7 @@ import { NavigationService, type Topic } from '@app/core';
                 </a>
 
                 <!-- Topics -->
-                @for (topic of navigationService.topics; track topic.title) {
+                @for (topic of navigationService.topics(); track topic.title) {
                     <div class="nav-group" [attr.data-topic]="topic.title">
 
                         @if (!isCollapsed()) {
@@ -214,16 +214,17 @@ export class SidebarComponent implements OnInit {
 
     private expandTopicForRoute(url: string): void {
         // Find which topic contains the current route
-        for (const topic of this.navigationService.topics) {
+        for (const topic of this.navigationService.topics()) {
             const hasMatchingSubtopic = topic.subTopics.some(sub =>
                 url.startsWith(sub.route) || sub.route === url
             );
             if (hasMatchingSubtopic) {
-                this.expandedTopics.update(set => {
-                    const next = new Set(set);
-                    next.add(topic.title);
-                    return next;
-                });
+                // Use the new navigation service method to expand the topic
+                const topicIndex = this.navigationService.topics().findIndex(t => t.title === topic.title);
+                if (topicIndex !== -1) {
+                    this.navigationService.expandTopic(topicIndex);
+                }
+
                 // Scroll to the topic after a short delay to allow rendering
                 setTimeout(() => this.scrollToTopic(topic.title), 100);
                 break;
@@ -248,15 +249,18 @@ export class SidebarComponent implements OnInit {
     }
 
     toggleTopic(title: string): void {
-        this.expandedTopics.update(set => {
-            const next = new Set(set);
-            next.has(title) ? next.delete(title) : next.add(title);
-            return next;
-        });
+        const topicIndex = this.navigationService.topics().findIndex(t => t.title === title);
+        if (topicIndex !== -1) {
+            this.navigationService.toggleTopic(topicIndex);
+        }
     }
 
     isTopicExpanded(title: string): boolean {
-        return this.expandedTopics().has(title);
+        const topicIndex = this.navigationService.topics().findIndex(t => t.title === title);
+        if (topicIndex !== -1) {
+            return this.navigationService.topics()[topicIndex].expanded || false;
+        }
+        return false;
     }
 
     // ── Tooltip ──────────────────────────────────────────────────────────────

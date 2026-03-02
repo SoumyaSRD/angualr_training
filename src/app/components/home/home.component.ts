@@ -20,9 +20,9 @@ export class HomeComponent {
   readonly searchTerm = signal('');
   readonly filteredTopics = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
-    if (!term) return this.navigationService.topics;
+    if (!term) return this.navigationService.topics();
 
-    return this.navigationService.topics.filter(
+    return this.navigationService.topics().filter(
       (topic) =>
         topic.title.toLowerCase().includes(term) ||
         topic.subTopics.some((sub) => sub.title.toLowerCase().includes(term))

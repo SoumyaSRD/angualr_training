@@ -1,7 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, computed, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, computed, inject, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationService } from '@app/core';
+
+// Web Speech API types
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 interface ChatMessage {
   type: 'user' | 'bot';
@@ -109,6 +117,18 @@ interface SearchResult {
 
         <!-- Input -->
         <div class="chatbot-input">
+          <button 
+            class="voice-btn" 
+            (click)="toggleVoiceSearch()" 
+            [class.listening]="isListening()"
+            [title]="isSpeechSupported() ? 'Click to speak' : 'Voice not supported'"
+            [disabled]="!isSpeechSupported()"
+          >
+            <i class="bi" 
+               [class.bi-mic-fill]="!isListening()" 
+               [class.bi-mic-mute-fill]="isListening()">
+            </i>
+          </button>
           <input
             type="text"
             [(ngModel)]="currentMessage"
@@ -142,6 +162,11 @@ export class ChatbotComponent {
     }
   ]);
   unreadCount = signal(0);
+
+  // Voice search state
+  isListening = signal(false);
+  isSpeechSupported = signal(false);
+  private recognition: any;
 
   // Dragging state
   isDragging = signal(false);
@@ -179,6 +204,84 @@ export class ChatbotComponent {
     });
 
     return knowledge;
+  }
+
+  ngAfterViewInit() {
+    this.initSpeechRecognition();
+  }
+
+  ngOnDestroy() {
+    if (this.recognition) {
+      this.recognition.stop();
+    }
+  }
+
+  private initSpeechRecognition() {
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      this.isSpeechSupported.set(true);
+      this.recognition = new SpeechRecognition();
+      this.recognition.continuous = false;
+      this.recognition.interimResults = true;
+      this.recognition.lang = 'en-US';
+
+      this.recognition.onstart = () => {
+        this.isListening.set(true);
+      };
+
+      this.recognition.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+
+        // Update current message with speech input
+        if (finalTranscript) {
+          this.currentMessage.set(finalTranscript);
+        } else if (interimTranscript) {
+          this.currentMessage.set(interimTranscript);
+        }
+      };
+
+      this.recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        this.isListening.set(false);
+
+        if (event.error === 'not-allowed') {
+          alert('Microphone permission denied. Please allow microphone access to use voice search.');
+        }
+      };
+
+      this.recognition.onend = () => {
+        this.isListening.set(false);
+      };
+    } else {
+      this.isSpeechSupported.set(false);
+      console.warn('Web Speech API is not supported in this browser.');
+    }
+  }
+
+  toggleVoiceSearch() {
+    if (!this.isSpeechSupported()) return;
+
+    if (this.isListening()) {
+      this.recognition.stop();
+    } else {
+      try {
+        this.recognition.start();
+      } catch (error) {
+        console.error('Error starting speech recognition:', error);
+        this.isListening.set(false);
+      }
+    }
   }
 
   toggleChat() {

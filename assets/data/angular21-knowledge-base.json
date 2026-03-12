@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "version": "Angular 21",
+    "released": "November 2025",
+    "description": "Angular 21 knowledge base covering all core features, APIs, and best practices."
+  },
+  "topics": [
+    {
+      "id": "signals",
+      "title": "Signals",
+      "keywords": ["signal", "signals", "writablesignal", "reactive", "fine-grained", "set", "update", "mutate"],
+      "shortAnswer": "Signals are Angular 21's primary reactivity primitive — lightweight wrappers around a value that notify dependents on change.",
+      "fullAnswer": "In Angular 21, Signals are the default reactivity system. A signal holds a value and notifies all its consumers whenever it changes. Create with `signal(initialValue)`, read by calling it like a function, and write with `.set()`, `.update()`, or `.mutate()`. Signals enable fine-grained change detection without Zone.js, resulting in dramatically better performance. They replace most use cases of BehaviorSubject and properties-based change detection.",
+      "codeExample": "import { signal, computed, effect } from '@angular/core';\n\nconst count = signal(0);\nconst doubled = computed(() => count() * 2);\n\neffect(() => console.log('Count is:', count()));\n\ncount.set(5);       // sets to 5\ncount.update(n => n + 1); // increment",
+      "suggestions": ["Computed Signals", "Effects", "Signal vs Observable", "Signal Stores"]
+    },
+    {
+      "id": "computed",
+      "title": "Computed Signals",
+      "keywords": ["computed", "derived", "memo", "memoized", "derive"],
+      "shortAnswer": "Computed signals derive their value from other signals and automatically re-evaluate when dependencies change.",
+      "fullAnswer": "Use `computed()` to create a read-only signal whose value is derived from one or more other signals. Angular 21 tracks dependencies automatically — no need to declare them. Computed values are lazily evaluated and memoized, so they only recompute when a dependency actually changes. They are ideal for derived state like filtered lists, formatted strings, or aggregated values.",
+      "codeExample": "import { signal, computed } from '@angular/core';\n\nconst firstName = signal('Ada');\nconst lastName  = signal('Lovelace');\nconst fullName  = computed(() => `${firstName()} ${lastName()}`);\n\nconsole.log(fullName()); // 'Ada Lovelace'\nfirstName.set('Grace');  // fullName auto-updates",
+      "suggestions": ["Signals", "Effects", "Signal Stores", "Zoneless Change Detection"]
+    },
+    {
+      "id": "effects",
+      "title": "Effects",
+      "keywords": ["effect", "side effect", "watch", "reaction", "afterrender"],
+      "shortAnswer": "Effects run side-effects in response to signal changes — think logging, DOM writes, or external system sync.",
+      "fullAnswer": "An `effect()` in Angular 21 runs a function whenever any signal it reads changes. Unlike computed, effects are for side effects — syncing to localStorage, logging, calling external APIs, or imperative DOM manipulation. Effects run in an injection context and are automatically cleaned up when the component is destroyed. Use `afterRenderEffect()` for effects that need to run after rendering.",
+      "codeExample": "import { signal, effect } from '@angular/core';\n\nexport class MyComponent {\n  count = signal(0);\n\n  constructor() {\n    effect(() => {\n      // Runs whenever count() changes\n      localStorage.setItem('count', String(this.count()));\n    });\n  }\n}",
+      "suggestions": ["Signals", "Computed Signals", "afterRenderEffect", "Cleanup in Effects"]
+    },
+    {
+      "id": "zoneless",
+      "title": "Zoneless Change Detection",
+      "keywords": ["zoneless", "zone", "zone.js", "change detection", "ngsignals", "provideexperimentalzonelesschangedetection"],
+      "shortAnswer": "Angular 21 defaults to zoneless change detection — no Zone.js, faster rendering, smaller bundles, and simpler debugging.",
+      "fullAnswer": "Zoneless change detection is the default for new Angular 21 apps. Without Zone.js, Angular only updates the UI when signals change or you explicitly trigger it. This results in: smaller bundle sizes (no zone.js), faster initial load, much simpler async debugging, and native compatibility with async/await without patching. Existing apps can migrate using `provideZonelessChangeDetection()` in `app.config.ts`.",
+      "codeExample": "// app.config.ts\nimport { provideZonelessChangeDetection } from '@angular/core';\nimport { ApplicationConfig } from '@angular/core';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [\n    provideZonelessChangeDetection(), // No more Zone.js!\n    provideRouter(routes)\n  ]\n};",
+      "suggestions": ["Signals", "Signal Stores", "Migration Guide", "OnPush Strategy"]
+    },
+    {
+      "id": "signal-forms",
+      "title": "Signal Forms",
+      "keywords": ["signal forms", "signalform", "formfield", "form signal", "new forms", "signal based forms"],
+      "shortAnswer": "Signal Forms is Angular 21's next-generation forms API — fully signal-based, simpler, and composable.",
+      "fullAnswer": "Signal Forms replace traditional Reactive Forms in Angular 21 for most use cases. They use `signalForm()` to define a form, `formField()` for individual controls, and validators work as simple functions. The entire form state (value, validity, dirty, touched) is exposed as signals, so templates reactively update without subscriptions or change detection hacks. Much less boilerplate than `FormGroup` + `FormControl`.",
+      "codeExample": "import { signalForm, formField, Validators } from '@angular/forms';\n\nexport class LoginComponent {\n  form = signalForm({\n    email:    formField('', [Validators.required, Validators.email]),\n    password: formField('', [Validators.required, Validators.minLength(8)])\n  });\n\n  submit() {\n    if (this.form.valid()) {\n      console.log(this.form.value()); // reactive signal value\n    }\n  }\n}",
+      "suggestions": ["Signals", "Reactive Forms", "Validation", "Form Builders"]
+    },
+    {
+      "id": "components",
+      "title": "Components",
+      "keywords": ["component", "standalone", "selector", "template", "input signal", "output", "viewchild", "contentchild"],
+      "shortAnswer": "Components are Angular's core building block. In v21 all components are standalone by default with signal-based inputs.",
+      "fullAnswer": "Angular 21 components are always standalone — no more NgModule declarations. The `input()` function replaces the `@Input()` decorator, giving you signal-based inputs that integrate with change detection. `output()` replaces `@Output()` + EventEmitter. `viewChild()` and `contentChild()` are now signal-based too. Use `@defer` for lazy loading parts of your template without route-level lazy loading.",
+      "codeExample": "import { Component, input, output } from '@angular/core';\n\n@Component({\n  selector: 'app-card',\n  standalone: true,\n  template: `\n    <h2>{{ title() }}</h2>\n    <button (click)=\"clicked.emit()\">Click</button>\n  `\n})\nexport class CardComponent {\n  title  = input.required<string>(); // signal-based input\n  clicked = output<void>();          // typed output\n}",
+      "suggestions": ["Signal Inputs", "Deferrable Views (@defer)", "Content Projection", "Lifecycle Hooks"]
+    },
+    {
+      "id": "routing",
+      "title": "Routing",
+      "keywords": ["router", "routing", "route", "lazy", "guard", "resolver", "navigate", "routerlink"],
+      "shortAnswer": "Angular 21 Router supports signal-based route data, lazy loading, server-side route config, and functional guards.",
+      "fullAnswer": "The Angular Router in v21 is fully signal-compatible. Route guards and resolvers are now plain functions (no classes needed). Route data and params can be injected as signals using `injectRouteData()` and `injectParams()`. Lazy loading routes works with `loadComponent` and `loadChildren`. Server-side route configuration lets you define SSR/prerender strategies per-route.",
+      "codeExample": "// routes.ts\nexport const routes: Routes = [\n  {\n    path: 'dashboard',\n    loadComponent: () => import('./dashboard.component').then(m => m.DashboardComponent),\n    canActivate: [() => inject(AuthService).isLoggedIn()] // functional guard\n  }\n];\n\n// In component:\nconst params = injectParams(); // returns signal\nconsole.log(params()['id']);",
+      "suggestions": ["Lazy Loading", "Functional Guards", "Route Resolvers", "Signal Route Data"]
+    },
+    {
+      "id": "dependency-injection",
+      "title": "Dependency Injection",
+      "keywords": ["inject", "di", "dependency injection", "service", "injection token", "providein", "providers"],
+      "shortAnswer": "Angular 21 DI uses the `inject()` function everywhere — in components, services, guards, and interceptors.",
+      "fullAnswer": "The `inject()` function is the preferred DI mechanism in Angular 21, usable in any injection context. Services use `providedIn: 'root'` for singletons or scoped providers. Injection tokens replace opaque constants. `DestroyRef` replaces ngOnDestroy in many patterns. Functional services (plain functions using inject()) are great for lightweight utilities.",
+      "codeExample": "import { inject, Injectable, InjectionToken } from '@angular/core';\n\nexport const API_URL = new InjectionToken<string>('API_URL');\n\n@Injectable({ providedIn: 'root' })\nexport class DataService {\n  private http  = inject(HttpClient);\n  private apiUrl = inject(API_URL);\n\n  getData() {\n    return this.http.get(`${this.apiUrl}/data`);\n  }\n}",
+      "suggestions": ["Services", "Injection Tokens", "Tree-shaking", "Functional Guards"]
+    },
+    {
+      "id": "httpclient",
+      "title": "HttpClient",
+      "keywords": ["http", "httpclient", "api", "fetch", "request", "interceptor", "get", "post", "put", "delete"],
+      "shortAnswer": "HttpClient in Angular 21 is fully signal-ready with `toSignal()`, functional interceptors, and typed responses.",
+      "fullAnswer": "Angular 21's HttpClient uses functional interceptors (no classes), supports `withFetch()` to use the native Fetch API instead of XHR, and integrates seamlessly with signals via `toSignal()`. Use `httpResource()` (new in v21) for declarative data fetching that exposes loading, error, and data as signals. Typed HTTP responses with generics prevent runtime errors.",
+      "codeExample": "import { httpResource } from '@angular/common/http';\nimport { toSignal } from '@angular/core/rxjs-interop';\n\nexport class UsersComponent {\n  // Declarative, signal-based HTTP\n  usersResource = httpResource<User[]>('/api/users');\n\n  // Access as signals\n  users   = this.usersResource.value;   // signal\n  loading = this.usersResource.isLoading; // signal\n  error   = this.usersResource.error;   // signal\n}",
+      "suggestions": ["httpResource", "toSignal()", "Functional Interceptors", "Error Handling"]
+    },
+    {
+      "id": "rxjs",
+      "title": "RxJS & Observables",
+      "keywords": ["observable", "rxjs", "tosignal", "fromsignal", "subscribe", "pipe", "operator", "subject", "behavioursubject"],
+      "shortAnswer": "RxJS is fully supported in Angular 21. Use `toSignal()` and `toObservable()` to bridge the signal/Observable worlds.",
+      "fullAnswer": "Angular 21 provides `toSignal()` to convert any Observable into a signal and `toObservable()` for the reverse. This lets you keep existing RxJS logic while adopting signals incrementally. Common RxJS operators (switchMap, debounceTime, takeUntilDestroyed) still work great. `takeUntilDestroyed()` with `DestroyRef` replaces the Subject-based unsubscribe pattern elegantly.",
+      "codeExample": "import { toSignal, toObservable } from '@angular/core/rxjs-interop';\nimport { takeUntilDestroyed } from '@angular/core/rxjs-interop';\n\nexport class SearchComponent {\n  query = signal('');\n\n  // Convert signal → observable → back to signal (with operators)\n  results = toSignal(\n    toObservable(this.query).pipe(\n      debounceTime(300),\n      switchMap(q => this.http.get(`/api/search?q=${q}`)),\n      takeUntilDestroyed()\n    ),\n    { initialValue: [] }\n  );\n}",
+      "suggestions": ["toSignal()", "takeUntilDestroyed()", "Signals vs Observables", "RxJS Operators"]
+    },
+    {
+      "id": "control-flow",
+      "title": "Built-in Control Flow",
+      "keywords": ["@if", "@else", "@for", "@switch", "@case", "@empty", "@defer", "control flow", "ngif", "ngfor"],
+      "shortAnswer": "Angular 21 uses `@if`, `@for`, `@switch`, and `@defer` — no more structural directives like *ngIf or *ngFor.",
+      "fullAnswer": "The built-in control flow syntax (stable since v17, optimized in v21) replaces all structural directives. `@if` / `@else if` / `@else` replaces `*ngIf`. `@for` with mandatory `track` replaces `*ngFor` and is significantly faster. `@switch` / `@case` / `@default` replaces `ngSwitch`. `@defer` enables lazy rendering of template blocks with loading, placeholder, and error states.",
+      "codeExample": "@if (user()) {\n  <p>Welcome, {{ user()!.name }}</p>\n} @else {\n  <p>Please log in.</p>\n}\n\n@for (item of items(); track item.id) {\n  <li>{{ item.name }}</li>\n} @empty {\n  <li>No items found.</li>\n}\n\n@defer (on viewport) {\n  <app-heavy-chart />\n} @placeholder {\n  <div class=\"skeleton\"></div>\n}",
+      "suggestions": ["@defer Triggers", "@for track", "Deferred Loading", "Template Performance"]
+    },
+    {
+      "id": "defer",
+      "title": "Deferrable Views (@defer)",
+      "keywords": ["defer", "@defer", "lazy template", "on viewport", "on interaction", "on idle", "placeholder", "loading"],
+      "shortAnswer": "@defer lazily loads parts of a template based on triggers — viewport, interaction, idle, timer, or custom.",
+      "fullAnswer": "`@defer` in Angular 21 is the most powerful lazy loading primitive. You can defer entire template blocks (including their component dependencies) until specific triggers fire. Triggers include: `on viewport` (intersection observer), `on interaction` (user clicks/focusses), `on idle` (browser idle), `on timer(2s)`, `when condition()` (signal expression), or `on immediate`. Combine with `@loading`, `@placeholder`, and `@error` blocks for full UX control.",
+      "codeExample": "@defer (on viewport; prefetch on idle) {\n  <app-analytics-dashboard />\n} @loading (minimum 300ms) {\n  <app-skeleton-loader />\n} @placeholder (minimum 200ms) {\n  <div class=\"placeholder-box\"></div>\n} @error {\n  <p>Failed to load. <button (click)=\"retry()\">Retry</button></p>\n}",
+      "suggestions": ["@defer Triggers", "Prefetch Strategies", "Lazy Loading Routes", "Performance"]
+    },
+    {
+      "id": "ssr",
+      "title": "Server-Side Rendering & Hydration",
+      "keywords": ["ssr", "server side rendering", "hydration", "prerender", "incremental hydration", "angular universal"],
+      "shortAnswer": "Angular 21 SSR features incremental hydration, server route configuration, and full zoneless SSR support.",
+      "fullAnswer": "Angular 21 SSR (formerly Angular Universal, now `@angular/ssr`) supports incremental hydration — only hydrate what's needed on the client, leaving the rest as static HTML. Define SSR/prerender/client-only strategies per route in `app.routes.server.ts`. Zoneless SSR is faster and simpler. `@defer` blocks can be configured to defer hydration until triggered.",
+      "codeExample": "// app.routes.server.ts\nimport { RenderMode, ServerRoute } from '@angular/ssr';\n\nexport const serverRoutes: ServerRoute[] = [\n  { path: 'home',           renderMode: RenderMode.Prerender },\n  { path: 'dashboard',      renderMode: RenderMode.Server },\n  { path: 'settings',       renderMode: RenderMode.Client },\n  { path: 'blog/:id',       renderMode: RenderMode.Prerender,\n    getPrerenderParams: async () => [{ id: '1' }, { id: '2' }] }\n];",
+      "suggestions": ["Incremental Hydration", "Prerendering", "Zoneless SSR", "CSP & SSR"]
+    },
+    {
+      "id": "signal-store",
+      "title": "Signal Store (NgRx)",
+      "keywords": ["signal store", "ngrx signal store", "store", "state management", "withstate", "withcomputed", "withmethods"],
+      "shortAnswer": "NgRx SignalStore is the modern, lightweight state management solution for Angular 21 — no actions, no reducers.",
+      "fullAnswer": "NgRx SignalStore in Angular 21 uses a composable, signal-based API. Define state with `withState()`, derived values with `withComputed()`, and methods with `withMethods()`. No actions or reducers needed for most cases. Plugins like `withEntities()` give normalized entity management. Stores are injectable services and integrate naturally with components.",
+      "codeExample": "import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';\nimport { computed } from '@angular/core';\n\nexport const CounterStore = signalStore(\n  withState({ count: 0, step: 1 }),\n  withComputed(({ count, step }) => ({\n    doubled: computed(() => count() * 2),\n    canDecrement: computed(() => count() > 0)\n  })),\n  withMethods(({ count, step, ...store }) => ({\n    increment: () => store.patchState({ count: count() + step() }),\n    decrement: () => store.patchState({ count: count() - step() }),\n    reset:     () => store.patchState({ count: 0 })\n  }))\n);",
+      "suggestions": ["withEntities()", "NgRx vs Signals", "State Management", "Injectable Stores"]
+    },
+    {
+      "id": "aria",
+      "title": "Angular ARIA",
+      "keywords": ["aria", "accessibility", "a11y", "angular aria", "keyboard", "focus", "screen reader", "wcag"],
+      "shortAnswer": "New in Angular 21: the Angular ARIA package delivers headless, accessible components with built-in ARIA and keyboard support.",
+      "fullAnswer": "Angular ARIA (`@angular/aria`) provides headless, accessible UI primitives: Dialog, Listbox, Combobox, Menu, Tabs, and more. Each component handles ARIA roles, keyboard navigation, focus management, and screen reader announcements out of the box. Fully styleable — bring your own CSS. WCAG 2.2 AA compliant. Use with Angular CDK for advanced overlays.",
+      "codeExample": "import { AriaDialog, AriaDialogPanel, AriaDialogTitle } from '@angular/aria';\n\n@Component({\n  imports: [AriaDialog, AriaDialogPanel, AriaDialogTitle],\n  template: `\n    <button (click)=\"open.set(true)\">Open Dialog</button>\n    <aria-dialog [open]=\"open()\" (closed)=\"open.set(false)\">\n      <aria-dialog-panel>\n        <aria-dialog-title>Confirm Action</aria-dialog-title>\n        <p>Are you sure?</p>\n      </aria-dialog-panel>\n    </aria-dialog>\n  `\n})\nexport class MyComp {\n  open = signal(false);\n}",
+      "suggestions": ["CDK Overlay", "Focus Management", "WCAG 2.2", "Keyboard Navigation"]
+    },
+    {
+      "id": "pipes",
+      "title": "Pipes",
+      "keywords": ["pipe", "async pipe", "date pipe", "currency", "uppercase", "lowercase", "custom pipe", "transform"],
+      "shortAnswer": "Pipes transform template data. In Angular 21 the `async` pipe is less needed thanks to `toSignal()`, but all built-in pipes still work.",
+      "fullAnswer": "Angular 21 ships the same built-in pipes: `date`, `currency`, `number`, `percent`, `uppercase`, `lowercase`, `titlecase`, `json`, `slice`, `keyvalue`. Create custom pipes with `@Pipe({ standalone: true })`. With signals, the `async` pipe is often replaced by `toSignal()`, but it still works with observables. Pipes are pure by default (memoized) for performance.",
+      "codeExample": "import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({ name: 'truncate', standalone: true, pure: true })\nexport class TruncatePipe implements PipeTransform {\n  transform(value: string, limit = 50): string {\n    return value.length > limit\n      ? value.slice(0, limit) + '…'\n      : value;\n  }\n}\n\n// Template usage:\n// {{ longText | truncate:100 }}\n// {{ today | date:'mediumDate' }}\n// {{ price | currency:'USD' }}",
+      "suggestions": ["Async Pipe vs toSignal()", "Custom Pipes", "Pure vs Impure", "Built-in Pipes"]
+    },
+    {
+      "id": "mcp-server",
+      "title": "Angular MCP Server",
+      "keywords": ["mcp", "mcp server", "ai", "ai tools", "ai coding", "copilot", "agent"],
+      "shortAnswer": "Angular 21 ships an official MCP Server for AI-powered code generation, scaffolding, and debugging in your IDE.",
+      "fullAnswer": "The Angular MCP Server (Model Context Protocol) integrates Angular's full knowledge — components, signals, routing, DI — into AI coding assistants like GitHub Copilot, Cursor, and Claude. It provides schematic-aware code generation, migration tools, and context-aware Angular advice. Install via `ng add @angular/mcp` and configure in your IDE's MCP settings.",
+      "codeExample": "// Install the Angular MCP Server:\n// ng add @angular/mcp\n\n// .vscode/mcp.json\n{\n  \"servers\": {\n    \"angular\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@angular/mcp@latest\", \"--project\", \"./tsconfig.json\"]\n    }\n  }\n}\n\n// Now your AI assistant knows Angular 21 APIs,\n// runs schematics, and helps migrate your code!",
+      "suggestions": ["AI Code Generation", "Schematic Tools", "Migration Assistant", "IDE Setup"]
+    },
+    {
+      "id": "directives",
+      "title": "Directives",
+      "keywords": ["directive", "custom directive", "attribute directive", "host", "hostlistener", "hostbinding", "ng-template"],
+      "shortAnswer": "Directives add behavior to elements. Angular 21 uses signal-based host bindings and functional directive composition.",
+      "fullAnswer": "Angular 21 directives are standalone by default. Use `@Directive` with `host` property for static bindings, or `HostAttributeToken` for injecting host element attributes. The `hostDirectives` API lets you compose behaviors onto components. Directive inputs are now signal-based with `input()`. Structural directives still work but `@if` / `@for` are preferred.",
+      "codeExample": "import { Directive, ElementRef, inject, input } from '@angular/core';\n\n@Directive({\n  selector: '[appHighlight]',\n  standalone: true,\n  host: { '[style.backgroundColor]': 'color()' }\n})\nexport class HighlightDirective {\n  color = input('yellow');  // signal input\n  private el = inject(ElementRef);\n\n  constructor() {\n    effect(() => {\n      this.el.nativeElement.style.transition = 'background 0.3s';\n    });\n  }\n}",
+      "suggestions": ["Host Directives", "Structural Directives", "Directive Composition", "Attribute Directives"]
+    },
+    {
+      "id": "testing",
+      "title": "Testing",
+      "keywords": ["test", "testing", "jest", "jasmine", "testbed", "spec", "unit test", "component testing"],
+      "shortAnswer": "Angular 21 testing supports Jest natively, signal testing utilities, and lightweight component harnesses.",
+      "fullAnswer": "Angular 21 adds first-class Jest support via `@angular/build:jest`. Signal testing is straightforward — signals are synchronous and don't need fakeAsync or TestBed trickery. Use `TestBed.flushEffects()` to flush pending effects. Component harnesses (CDK) make UI testing resilient to markup changes. The new `provideZonelessTesting()` provider removes flushMicrotasks() boilerplate.",
+      "codeExample": "import { TestBed } from '@angular/core/testing';\nimport { provideZonelessTesting } from '@angular/core/testing';\n\ndescribe('CounterComponent', () => {\n  beforeEach(() => {\n    TestBed.configureTestingModule({\n      imports: [CounterComponent],\n      providers: [provideZonelessTesting()]\n    });\n  });\n\n  it('increments the count', () => {\n    const fixture = TestBed.createComponent(CounterComponent);\n    const comp    = fixture.componentInstance;\n    comp.increment();\n    expect(comp.count()).toBe(1); // signal — just call it!\n  });\n});",
+      "suggestions": ["Jest Setup", "Signal Testing", "Component Harnesses", "E2E with Playwright"]
+    },
+    {
+      "id": "performance",
+      "title": "Performance",
+      "keywords": ["performance", "optimise", "optimize", "bundle", "tree shake", "lazy", "fast", "benchmark"],
+      "shortAnswer": "Angular 21 is the fastest Angular ever — zoneless, signal-driven, smaller bundles, and native lazy rendering with @defer.",
+      "fullAnswer": "Angular 21 performance best practices: (1) Use zoneless change detection to eliminate Zone.js overhead. (2) Prefer signals over full component re-renders. (3) Use `@defer` for lazy template rendering. (4) Use `track` in `@for` for efficient list diffing. (5) Use `httpResource()` for reactive data fetching with built-in caching. (6) Enable build-time component hydration with incremental SSR. (7) Use `input()` signals to avoid unnecessary child renders.",
+      "codeExample": "// 1. Zoneless\nprovideZonelessChangeDetection()\n\n// 2. Efficient list rendering\n@for (item of items(); track item.id) { ... }\n\n// 3. Lazy heavy components\n@defer (on idle) { <app-chart /> }\n\n// 4. Signal-based inputs skip re-renders\ntitle = input.required<string>();\n\n// 5. httpResource — no subscription needed\ndata = httpResource('/api/items');",
+      "suggestions": ["Zoneless", "@defer", "Bundle Analysis", "SSR Hydration"]
+    },
+    {
+      "id": "getting-started",
+      "title": "Getting Started with Angular 21",
+      "keywords": ["getting started", "install", "new project", "create app", "ng new", "cli", "start", "begin", "setup", "hello world"],
+      "shortAnswer": "Create an Angular 21 app with the CLI: `npm install -g @angular/cli@21` then `ng new my-app`.",
+      "fullAnswer": "To get started with Angular 21: (1) Install the CLI globally with `npm install -g @angular/cli@21`. (2) Create a new app: `ng new my-app --style scss`. (3) The app is standalone and zoneless by default. (4) Run with `ng serve`. The new project uses signal-based everything out of the box — no NgModules, no Zone.js, all standalone components.",
+      "codeExample": "# Install Angular CLI v21\nnpm install -g @angular/cli@21\n\n# Create a new app (zoneless + standalone by default)\nng new my-app --style scss\n\n# Serve locally\ncd my-app && ng serve\n\n# Generate a standalone component\nng generate component features/home\n\n# Add SSR\nng add @angular/ssr",
+      "suggestions": ["Project Structure", "Standalone Components", "First Component", "Angular CLI Commands"]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Should I still use NgModules?",
+      "answer": "No. Angular 21 is fully standalone. NgModules are still supported for legacy codebases but are not needed for new code. Use standalone components, directives, and pipes instead.",
+      "suggestions": ["Standalone Components", "Migration Guide"]
+    },
+    {
+      "question": "Is RxJS still needed in Angular 21?",
+      "answer": "Not always. Signals handle most reactive state. But RxJS is still great for complex async workflows — use `toSignal()` to bridge them. HttpClient still returns Observables (or use `httpResource()`).",
+      "suggestions": ["RxJS & Observables", "toSignal()", "httpResource"]
+    },
+    {
+      "question": "What replaced NgRx in Angular 21?",
+      "answer": "NgRx SignalStore is the modern replacement. It's lighter, requires no actions/reducers for simple cases, and is fully signal-based. For simple apps, component signals or a signal service are often enough.",
+      "suggestions": ["Signal Store (NgRx)", "Signal Services", "State Management"]
+    }
+  ]
+}

@@ -60,6 +60,9 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 9);
 }
 
+// bg  = continuous background wake-word listener
+// active = continuous user dictation (stopped manually or by silence timer)
+// idle = recognition fully stopped between mode switches
 type VoiceMode = 'bg' | 'active' | 'idle';
 
 @Component({
@@ -76,14 +79,16 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
   private msgContainer = viewChild<ElementRef>('messagesContainer');
   private inputRef = viewChild<ElementRef>('inputRef');
 
+  // ── Knowledge base ────────────────────────────────────────────────────────
   kb = signal<KnowledgeBase | null>(null);
   kbError = signal(false);
 
+  // ── Chat state ────────────────────────────────────────────────────────────
   isOpen = signal(false);
   isTyping = signal(false);
   currentMessage = signal('');
   unreadCount = signal(0);
-  lastHeard = signal(''); // debug: shows what bg mode heard
+  lastHeard = signal(''); // debug label — remove once wake words confirmed
   messages = signal<ChatMessage[]>([{
     id: uid(),
     type: 'bot',
@@ -92,6 +97,7 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
     suggestions: ['What are Signals?', 'Zoneless Change Detection', 'Signal Forms', 'Getting Started']
   }]);
 
+  // ── Voice state ───────────────────────────────────────────────────────────
   isListening = signal(false);
   isBackgroundListening = signal(false);
   isSpeechSupported = signal(false);
@@ -104,22 +110,24 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
   private voiceMode: VoiceMode = 'idle';
   private pendingMode: VoiceMode = 'idle';
 
-  // ── Wake words ────────────────────────────────────────────────────────────
-  // IMPORTANT: "ngAI" is not a real word — Chrome mis-transcribes it wildly.
-  // Use real English phrases Chrome reliably recognises.
-  // The debug bar above will show you exactly what Chrome heard so you can
-  // tune this list yourself.
+  // Silence timer: stops active recording after 2.5 s of no new final speech
+  private silenceTimer: ReturnType<typeof setTimeout> | null = null;
+  // Accumulates all final speech during an active session
+  private activeTranscript = '';
+
+  // Wake words — real English phrases Chrome transcribes reliably
   private readonly WAKE_WORDS: string[] = [
-    // Primary (real English — highest accuracy)
     'hey angular',
     'ok angular',
     'ok google',
-    'okay angular',
     'okay google',
-    'hello angular'
-
+    'ok ng',
+    'okay angular',
+    'hello angular',
+    'hi angular',
   ];
 
+  // ── Drag state ────────────────────────────────────────────────────────────
   private _dragging = false;
   iconPos = signal({ x: window.innerWidth - 100, y: window.innerHeight - 100 });
   winPos = signal({ x: 0, y: 0 });
@@ -135,6 +143,7 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.clearSilenceTimer();
     this.voiceMode = 'idle';
     this.pendingMode = 'idle';
     try { this.sr?.stop(); } catch (_) { }
@@ -155,8 +164,19 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SPEECH  — single instance, two modes (bg ↔ active)
+  // SPEECH — single instance, two modes
+  //
+  // KEY FIX: Both modes use continuous = true.
+  //
+  // Why? Chrome's non-continuous mode ends the session after the FIRST final
+  // result — even mid-sentence — making recording appear to "stop instantly".
+  // With continuous = true the session stays alive until .stop() is called.
+  //
+  // Active mode auto-stops via a silence timer: if no new final speech arrives
+  // within SILENCE_MS milliseconds, the session ends and the message is sent.
   // ═══════════════════════════════════════════════════════════════════════════
+
+  private readonly SILENCE_MS = 2500; // stop recording after 2.5 s of silence
 
   private initSpeech(): void {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -165,12 +185,17 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
     this.isSpeechSupported.set(true);
     this.sr = new SR();
     this.sr.lang = 'en-US';
+    // Both modes are continuous — mode-specific settings applied in startMode()
+    this.sr.continuous = true;
 
     // ── onstart ──────────────────────────────────────────────────────────
     this.sr.onstart = () => {
       if (this.voiceMode === 'active') {
         this.isListening.set(true);
         this.isBackgroundListening.set(false);
+        this.activeTranscript = '';
+        // Start silence timer immediately — resets each time speech arrives
+        this.resetSilenceTimer();
       } else if (this.voiceMode === 'bg') {
         this.isBackgroundListening.set(true);
         this.isListening.set(false);
@@ -180,9 +205,8 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
     // ── onresult ─────────────────────────────────────────────────────────
     this.sr.onresult = (e: any) => {
 
+      // ── Background mode: check for wake words ─────────────────────────
       if (this.voiceMode === 'bg') {
-        // Collect ALL alternatives from ALL results in this event
-        // Chrome might put the best match in alt[1] or alt[2], not always alt[0]
         const transcripts: string[] = [];
         for (let r = 0; r < e.results.length; r++) {
           for (let a = 0; a < e.results[r].length; a++) {
@@ -191,95 +215,120 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
           }
         }
 
-        // Show the first alternative in the debug bar
         if (transcripts.length > 0) {
           this.lastHeard.set(transcripts[0]);
-          // Auto-clear the debug label after 4 s
           setTimeout(() => this.lastHeard.set(''), 4000);
-          // Log ALL alternatives so you can see exactly what Chrome heard
           console.log('[Chatbot bg] heard:', transcripts);
         }
 
-        // Check every collected transcript for wake words
         if (transcripts.some(t => this.isWakeWord(t))) {
           this.handleWakeWord();
         }
         return;
       }
 
-      // ── Active mode: collect interim + final speech ─────────────────
+      // ── Active mode: accumulate speech, show live in input ────────────
       if (this.voiceMode === 'active') {
-        let finalText = '';
         let interimText = '';
+
         for (let i = e.resultIndex; i < e.results.length; i++) {
-          if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
-          else interimText += e.results[i][0].transcript;
+          if (e.results[i].isFinal) {
+            // Append final result to accumulated transcript
+            this.activeTranscript += e.results[i][0].transcript;
+            // Reset silence timer on every final result — user is still speaking
+            this.resetSilenceTimer();
+          } else {
+            interimText += e.results[i][0].transcript;
+          }
         }
-        this.currentMessage.set(finalText || interimText);
+
+        // Show accumulated finals + current interim in the input field
+        this.currentMessage.set(
+          (this.activeTranscript + ' ' + interimText).trim()
+        );
       }
     };
 
     // ── onerror ──────────────────────────────────────────────────────────
     this.sr.onerror = (e: any) => {
-      console.warn('[Chatbot] Speech error:', e.error, '| mode:', this.voiceMode);
+      // 'no-speech' in bg mode is completely normal — Chrome fires this
+      // after a long pause. onend will restart bg automatically.
       if (e.error === 'not-allowed' || e.error === 'permission-denied') {
-        alert('Microphone access denied. Please allow it in your browser settings to use voice.');
+        alert('Microphone access denied. Please allow it in your browser settings.');
         this.isSpeechSupported.set(false);
+        return;
       }
-      // 'aborted' and 'no-speech' are normal — handled by onend
+      // Log everything else for debugging but don't crash
+      if (e.error !== 'no-speech' && e.error !== 'aborted') {
+        console.warn('[Chatbot] Speech error:', e.error, '| mode:', this.voiceMode);
+      }
     };
 
     // ── onend ────────────────────────────────────────────────────────────
-    // Fires whenever the session ends — naturally or via .stop()
+    // Fires when the session ends for any reason.
     this.sr.onend = () => {
+      this.clearSilenceTimer();
+
       const wasActive = this.voiceMode === 'active';
       this.isListening.set(false);
       this.isBackgroundListening.set(false);
       this.voiceMode = 'idle';
 
-      // Auto-send message when active recording finishes
-      if (wasActive) {
-        const msg = this.currentMessage().trim();
-        if (msg) setTimeout(() => this.sendMessage(), 80);
+      // Send accumulated transcript when active session ends
+      if (wasActive && this.activeTranscript.trim()) {
+        // currentMessage already has the transcript — just send it
+        setTimeout(() => this.sendMessage(), 80);
       }
+      this.activeTranscript = '';
 
-      // Switch to next requested mode, or default back to bg
+      // Switch to the next requested mode, or default to bg
       const next = this.pendingMode;
       this.pendingMode = 'idle';
 
-      // Chrome needs a small pause between sessions — 200 ms is reliable
       setTimeout(() => {
-        if (next === 'active') {
-          this.startMode('active');
-        } else {
-          // Always return to bg after any session ends
-          this.startMode('bg');
-        }
+        this.startMode(next === 'active' ? 'active' : 'bg');
       }, 200);
     };
 
-    // Boot: start background listening on init
+    // Boot into background listening
     this.startMode('bg');
   }
 
-  // ── Configure the instance for the requested mode and call .start() ───────
+  // ── Silence timer helpers ─────────────────────────────────────────────────
+  private resetSilenceTimer(): void {
+    this.clearSilenceTimer();
+    this.silenceTimer = setTimeout(() => {
+      // Silence detected — stop active recording and send the message
+      if (this.voiceMode === 'active' && this.isListening()) {
+        console.log('[Chatbot] Silence detected — ending recording');
+        this.pendingMode = 'bg';
+        try { this.sr.stop(); } catch (_) { }
+      }
+    }, this.SILENCE_MS);
+  }
+
+  private clearSilenceTimer(): void {
+    if (this.silenceTimer !== null) {
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = null;
+    }
+  }
+
+  // ── Configure and start the recognition instance in the given mode ────────
   private startMode(mode: VoiceMode): void {
     if (!this.sr || !this.isSpeechSupported() || mode === 'idle') return;
-    if (mode === 'bg' && this.isListening()) return;
-    if (mode === 'active' && this.isBackgroundListening()) return; // safety
 
     this.voiceMode = mode;
 
+    // Both modes are continuous — the difference is in interimResults
+    this.sr.continuous = true;
+
     if (mode === 'bg') {
-      // Continuous, no interim — we only care about final transcripts for wake words
-      // maxAlternatives = 5 gives Chrome room to return phonetically close matches
-      this.sr.continuous = true;
+      // No interim results — only final transcripts matter for wake words
       this.sr.interimResults = false;
-      this.sr.maxAlternatives = 5;
+      this.sr.maxAlternatives = 5; // more alternatives = better wake-word coverage
     } else {
-      // Non-continuous — ends naturally when user stops speaking,
-      // which triggers onend → auto-send.  interimResults shows live text.
-      this.sr.continuous = false;
+      // Show interim results so the user sees live transcription
       this.sr.interimResults = true;
       this.sr.maxAlternatives = 1;
     }
@@ -288,44 +337,36 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
       this.sr.start();
     } catch (e: any) {
       if (e?.name === 'InvalidStateError') {
-        // Already running — stop it and retry once it ends
+        // Already running — queue the mode switch and stop current session
         this.pendingMode = mode;
         try { this.sr.stop(); } catch (_) { }
       }
     }
   }
 
-  // ── Wake-word matching ────────────────────────────────────────────────────
+  // ── Wake-word detection ───────────────────────────────────────────────────
   private isWakeWord(transcript: string): boolean {
-    console.log(transcript)
-    // Exact / substring match against the wake-word list
     if (this.WAKE_WORDS.some(w => transcript.includes(w))) return true;
-
-    // Fuzzy fallback: transcript starts with "hey" or "ok" AND contains "ang"
-    // Catches: "hey angle", "ok angle", "hey ankle", "hey engle" etc.
-    if (/^(hey|ok|hi|hello)\s/.test(transcript) && transcript.includes('ang')) return true;
-
+    // Fuzzy: "hey/ok/hi/hello" + "ang" catches mis-transcriptions like
+    // "hey angle", "ok angst", "hey ankle" etc.
+    if (/^(hey|ok|okay|hi|hello)\s/.test(transcript) && transcript.includes('ang')) return true;
     return false;
   }
 
   private handleWakeWord(): void {
-    console.log('[Chatbot] Wake word detected! Opening active recording…');
-    if (this.isOpen()) {
-      this.pendingMode = 'active';
-      try { this.sr.stop(); } catch (_) { }
-    } else {
-      this.toggleChat();
-      this.pendingMode = 'active';
-      try { this.sr.stop(); } catch (_) { }
-    }
+    console.log('[Chatbot] Wake word detected!');
+    this.pendingMode = 'active';
+    if (!this.isOpen()) this.toggleChat();
+    try { this.sr.stop(); } catch (_) { }
   }
 
-  // ── Public: mic button click ──────────────────────────────────────────────
+  // ── Public: mic button ────────────────────────────────────────────────────
   toggleVoice(): void {
     if (!this.isSpeechSupported()) return;
 
     if (this.isListening()) {
-      // Stop active listening → onend will restart bg
+      // Manually stop — send whatever was captured, then return to bg
+      this.clearSilenceTimer();
       this.pendingMode = 'bg';
       try { this.sr.stop(); } catch (_) { }
     } else {
@@ -377,6 +418,7 @@ export class ChatbotComponent implements AfterViewInit, OnDestroy {
     this.unreadCount.set(0);
   }
 
+  // ── Response engine ───────────────────────────────────────────────────────
   private buildResponse(query: string): Omit<ChatMessage, 'id' | 'timestamp'> {
     const kb = this.kb();
 

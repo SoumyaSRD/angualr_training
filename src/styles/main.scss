@@ -20,19 +20,14 @@
 // ▸ Reduced-motion safety block
 // ============================================================================
 
-// ── Sass modules (must be @use before @import) ────────────────────────────────
+// ── Sass modules (must be @use before any CSS rules) ────────────────────────────────
 @use 'variables';
 @use 'mixins' as *;
 @use 'themes-base';
 @use 'animations';
 @use 'utilities';
-
-// ── Regular imports (after @use rules) ───────────────────────────────────────
-@import 'base';
-@import 'typography';
-
-
-
+@use 'base';
+@use 'typography';
 
 // ============================================================================
 // LINKS — premium underline slide treatment

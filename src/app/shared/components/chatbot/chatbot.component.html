@@ -1,0 +1,141 @@
+<!-- Draggable launcher icon -->
+<div class="chatbot-icon" [class.open]="isOpen()" [style.left.px]="iconPos().x" [style.top.px]="iconPos().y"
+    (mousedown)="onIconMousedown($event)" (click)="toggleChat()" title="Angular 21 AI Assistant" role="button"
+    [attr.aria-label]="isOpen() ? 'Close chat' : 'Open Angular 21 assistant'">
+    <div class="icon-pulse"></div>
+    <i class="bi" [class.bi-robot]="!isOpen()" [class.bi-x-lg]="isOpen()"></i>
+    @if (unreadCount() > 0) {
+    <span class="badge" [attr.aria-label]="unreadCount() + ' unread messages'">
+        {{ unreadCount() > 9 ? '9+' : unreadCount() }}
+    </span>
+    }
+</div>
+
+<!-- Chat window -->
+@if (isOpen()) {
+<div class="chat-window" [style.left.px]="winPos().x" [style.top.px]="winPos().y" role="dialog"
+    aria-label="Angular 21 AI Assistant">
+    <!-- Header -->
+    <div class="chat-header">
+        <div class="header-left">
+            <div class="avatar">
+                <i class="bi bi-robot"></i>
+                <span class="online-dot"></span>
+            </div>
+            <div class="header-meta">
+                <h4>Angular 21 Assistant</h4>
+                <span class="subtitle">
+                    @if (isListening()) { 🎙️ Listening… stop speaking to send }
+                    <!-- @else if (isBackgroundListening()) { 👂 Say "Hey Angular" or "OK Angular"… } -->
+                    @else if (isTyping()) { Typing… }
+                    @else { {{ kb()?.meta?.version ?? 'Loading knowledge base…' }} }
+                </span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" (click)="clearChat()" title="Clear conversation">
+                <i class="bi bi-trash3"></i>
+            </button>
+            <button class="icon-btn" (click)="toggleChat()" title="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    @if (kbError()) {
+    <div class="error-banner" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Could not load knowledge base. Using built-in fallback answers.
+    </div>
+    }
+
+    <!-- Messages -->
+    <div class="chat-messages" #messagesContainer role="log" aria-live="polite">
+        @for (msg of messages(); track msg.id) {
+        <div class="msg-row" [class.user-row]="msg.type === 'user'" [class.bot-row]="msg.type === 'bot'">
+            <div class="msg-avatar">
+                <i class="bi" [class.bi-person-fill]="msg.type === 'user'" [class.bi-robot]="msg.type === 'bot'">
+                </i>
+            </div>
+            <div class="msg-bubble">
+                <p class="msg-text">{{ msg.text }}</p>
+                @if (msg.code) {
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>TypeScript / Angular</span>
+                        <button class="copy-btn" (click)="copyCode(msg.code!)">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+                    <pre><code>{{ msg.code }}</code></pre>
+                </div>
+                }
+                @if (msg.suggestions && msg.suggestions.length > 0) {
+                <div class="chips">
+                    @for (s of msg.suggestions; track $index) {
+                    <button class="chip" (click)="sendMessage(s)">{{ s }}</button>
+                    }
+                </div>
+                }
+                <time class="msg-time" [title]="msg.timestamp | date:'medium'">
+                    {{ msg.timestamp | date:'shortTime' }}
+                </time>
+            </div>
+        </div>
+        }
+        @if (isTyping()) {
+        <div class="msg-row bot-row">
+            <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+            <div class="typing-bubble" aria-label="Assistant is typing">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Wake-word status bar -->
+    @if (isBackgroundListening()) {
+    <!-- <div class="voice-bar" role="status">
+        <span class="voice-dot"></span>
+        <span>Say <strong>"Hey Angular"</strong> or <strong>"OK Angular"</strong> to activate…</span>
+    </div> -->
+    }
+
+    <!-- Last heard (debug) — remove after confirming wake words work -->
+    @if (lastHeard()) {
+    <div class="debug-bar">
+        🎤 Heard: <em>{{ lastHeard() }}</em>
+    </div>
+    }
+
+    <!-- Quick topics -->
+    <div class="quick-btns">
+        <button class="quick-btn" (click)="sendMessage('What are Signals?')">Signals</button>
+        <button class="quick-btn" (click)="sendMessage('Zoneless Change Detection')">Zoneless</button>
+        <button class="quick-btn" (click)="sendMessage('Signal Forms')">Signal Forms</button>
+        <button class="quick-btn" (click)="sendMessage('Getting Started with Angular 21')">Get Started</button>
+        <button class="quick-btn" (click)="sendMessage('Angular ARIA')">ARIA</button>
+        <button class="quick-btn" (click)="sendMessage('show me a @defer example')">@ defer</button>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+        <button class="voice-btn" [class.listening]="isListening()" [class.bg-listening]="isBackgroundListening()"
+            [disabled]="!isSpeechSupported()" (click)="toggleVoice()" [title]="voiceBtnTitle()">
+            <i class="bi" [class.bi-mic-fill]="!isListening() && !isBackgroundListening()"
+                [class.bi-record-circle-fill]="isListening()"
+                [class.bi-ear-fill]="isBackgroundListening() && !isListening()">
+            </i>
+        </button>
+
+        <input #inputRef type="text" class="chat-input" [value]="currentMessage()"
+            (input)="currentMessage.set($any($event.target).value)" (keyup.enter)="sendMessage()"
+            placeholder="Ask about Angular 21…" aria-label="Chat message" autocomplete="off" />
+
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!currentMessage().trim() || isTyping()"
+            aria-label="Send message">
+            <i class="bi bi-send-fill"></i>
+        </button>
+    </div>
+</div>
+}

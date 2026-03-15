@@ -27,9 +27,7 @@ jobs:
 
       - name: Build (production)
         run: |
-          npm run build -- \
-          --configuration production \
-          --base-href "/${{ github.event.repository.name }}/"
+          npx ng build --configuration production --base-href "/${{ github.event.repository.name }}/"
 
       - name: Create 404 fallback
         run: |

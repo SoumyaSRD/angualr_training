@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { GUARD } from './guard-eg.const';
+import { GUARD } from '../../../../constants/guard-eg.const';
 
 @Component({
   selector: 'app-guard-eg',

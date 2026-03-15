@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { LAZY_MODULES } from './lazy-module.const';
+import { LAZY_MODULES } from 'src/app/constants/lazy-module.const';
+
 
 
 

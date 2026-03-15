@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { RXJS_SUBJECT } from "./rxjs-subject.const";
+import { RXJS_SUBJECT } from "../../../../constants/rxjs-subject.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({

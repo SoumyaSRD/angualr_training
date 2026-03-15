@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { DI_SERVICE } from './di-service.const';
+import { DI_SERVICE } from '../../../../constants/di-service.const';
 
 @Component({
   selector: 'app-di-service',

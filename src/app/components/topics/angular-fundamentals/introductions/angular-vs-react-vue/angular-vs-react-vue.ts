@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../../interfaces/topic';
 import { TopicTemplate } from '../../../../topic-template/topic-template';
-import { FRAMEWORK_COMPARISON } from './angular-react-vue.const';
+import { FRAMEWORK_COMPARISON } from 'src/app/constants/angular-react-vue.const';
 
 
 @Component({

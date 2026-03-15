@@ -4,7 +4,8 @@
 // ANGULAR CLI: INSTALLATION & OVERVIEW
 // ============================================================================
 
-import { ITopicContent } from "../../../../../interfaces/topic";
+import { ITopicContent } from "@app/shared";
+
 
 export const ANGULAR_CLI_OVERVIEW: ITopicContent = {
     title: "Angular CLI: Your Development Assistant",

@@ -1,0 +1,642 @@
+{
+  "meta": {
+    "version": "2.0",
+    "title": "Angular 21 Chatbot Content — Modular & Standalone",
+    "description": "Complete Angular 21 topic content for a chatbot using rich content types. Covers both NgModule-based and Standalone architecture."
+  },
+
+  "messages": [
+
+    {
+      "id": "msg-ng-001",
+      "sender": "bot",
+      "keywords": ["welcome", "getting started", "introduction", "angular 21", "overview", "beginner"],
+      "suggestions": [
+        { "type": "example", "label": "Show me a quick start example", "action": "show_quickstart" },
+        { "type": "read_more", "label": "What's new in Angular 21?", "action": "show_changelog" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "Welcome to Angular 21 Learning",
+          "subtitle": "Modular & Standalone architecture covered",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Angular 21 supports two architectural styles. Choose the one that matches your project:"
+            },
+            {
+              "type": "table",
+              "headers": ["Style", "Best For", "Bootstrap Function", "Status"],
+              "rows": [
+                ["NgModule-based", "Legacy / enterprise projects", "bootstrapModule(AppModule)", "Stable, maintained"],
+                ["Standalone", "New projects, modern code", "bootstrapApplication(AppComponent)", "Recommended by Angular team"]
+              ],
+              "striped": true
+            },
+            {
+              "type": "quote",
+              "text": "Angular's docs currently recommend standalone components for new code, while NgModules remain important for existing and legacy projects.",
+              "author": "Angular Team",
+              "citation": "angular.dev"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-002",
+      "sender": "bot",
+      "keywords": ["fundamentals", "basics", "main.ts", "bootstrap", "project structure", "typescript", "spa"],
+      "suggestions": [
+        { "type": "code", "label": "Show standalone bootstrap code", "action": "show_standalone_bootstrap" },
+        { "type": "example", "label": "Show NgModule bootstrap example", "action": "show_module_bootstrap" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "1. Angular Fundamentals",
+          "subtitle": "Applies to both Modular and Standalone Angular",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Every Angular project — regardless of module or standalone style — shares these core fundamentals."
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                "What Angular is — a platform for building web and mobile apps",
+                "SPA (Single Page Application) architecture",
+                "TypeScript basics — types, interfaces, decorators",
+                "Angular project structure — src/, app/, assets/",
+                "Entry files — main.ts, index.html, angular.json"
+              ]
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "main.ts (Standalone bootstrap)",
+              "code": "import { bootstrapApplication } from '@angular/platform-browser';\nimport { AppComponent } from './app/app.component';\nimport { appConfig } from './app/app.config';\n\nbootstrapApplication(AppComponent, appConfig)\n  .catch(err => console.error(err));"
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "main.ts (NgModule bootstrap)",
+              "code": "import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';\nimport { AppModule } from './app/app.module';\n\nplatformBrowserDynamic()\n  .bootstrapModule(AppModule)\n  .catch(err => console.error(err));"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-003",
+      "sender": "bot",
+      "keywords": ["components", "templates", "@component", "input", "output", "data binding", "interpolation", "standalone"],
+      "suggestions": [
+        { "type": "code", "label": "See component example", "action": "show_component_code" },
+        { "type": "example", "label": "Show data binding examples", "action": "show_binding_examples" },
+        { "type": "practice", "label": "Try a component exercise", "action": "component_exercise" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "2. Components & Templates",
+          "subtitle": "The building blocks of every Angular app",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Components are the primary building block in Angular 21. A component controls a portion of the screen (a view) via its template."
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "user-card.component.ts (Standalone)",
+              "code": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { NgIf } from '@angular/common';\n\n@Component({\n  standalone: true,\n  selector: 'app-user-card',\n  imports: [NgIf],\n  template: `\n    <div class=\"card\">\n      <h2>{{ user.name }}</h2>\n      <p *ngIf=\"user.bio\">{{ user.bio }}</p>\n      <button (click)=\"onSelect()\">Select</button>\n    </div>\n  `\n})\nexport class UserCardComponent {\n  @Input() user!: { name: string; bio?: string };\n  @Output() selected = new EventEmitter<void>();\n\n  onSelect() {\n    this.selected.emit();\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Concept", "Syntax", "Direction"],
+              "rows": [
+                ["Interpolation", "{{ value }}", "Component → Template"],
+                ["Property Binding", "[property]=\"value\"", "Component → Template"],
+                ["Event Binding", "(event)=\"handler()\"", "Template → Component"],
+                ["Two-way Binding", "[(ngModel)]=\"value\"", "Both directions"],
+                ["Input", "@Input() prop", "Parent → Child"],
+                ["Output", "@Output() emit = new EventEmitter()", "Child → Parent"]
+              ],
+              "striped": true
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                "Lifecycle hooks: ngOnInit, ngOnChanges, ngOnDestroy, ngAfterViewInit",
+                "Content projection with ng-content",
+                "View encapsulation: Emulated, ShadowDom, None",
+                "Template reference variables: #myRef",
+                "View queries: @ViewChild, @ViewChildren",
+                "Content queries: @ContentChild, @ContentChildren",
+                "Dynamic component loading with ViewContainerRef"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-004",
+      "sender": "bot",
+      "keywords": ["directives", "*ngIf", "*ngFor", "ngClass", "ngStyle", "@directive", "structural", "attribute", "custom directives"],
+      "suggestions": [
+        { "type": "example", "label": "Show structural directive examples", "action": "show_structural_directives" },
+        { "type": "code", "label": "See custom directive code", "action": "show_custom_directive" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "3. Directives",
+          "subtitle": "Structural and attribute directives",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Directives extend HTML behaviour. Angular 21 has built-in directives and supports custom ones in both modular and standalone styles."
+            },
+            {
+              "type": "code",
+              "language": "html",
+              "filename": "built-in-directives.html",
+              "code": "<!-- Structural directives -->\n<p *ngIf=\"isLoggedIn\">Welcome back!</p>\n\n<ul>\n  <li *ngFor=\"let item of items; trackBy: trackById\">{{ item.name }}</li>\n</ul>\n\n<!-- Attribute directives -->\n<div [ngClass]=\"{ active: isActive, disabled: isDisabled }\">...</div>\n<p [ngStyle]=\"{ color: textColor, fontSize: fontSize + 'px' }\">Styled</p>"
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "highlight.directive.ts (Standalone)",
+              "code": "import { Directive, ElementRef, HostListener, Input } from '@angular/core';\n\n@Directive({\n  standalone: true,\n  selector: '[appHighlight]'\n})\nexport class HighlightDirective {\n  @Input() appHighlight = 'yellow';\n\n  constructor(private el: ElementRef) {}\n\n  @HostListener('mouseenter') onMouseEnter() {\n    this.el.nativeElement.style.backgroundColor = this.appHighlight;\n  }\n\n  @HostListener('mouseleave') onMouseLeave() {\n    this.el.nativeElement.style.backgroundColor = '';\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Directive", "Type", "Use Case"],
+              "rows": [
+                ["*ngIf", "Structural", "Conditionally add/remove elements"],
+                ["*ngFor", "Structural", "Repeat elements over a list"],
+                ["*ngSwitch", "Structural", "Switch between views"],
+                ["ngClass", "Attribute", "Dynamically set CSS classes"],
+                ["ngStyle", "Attribute", "Dynamically set inline styles"],
+                ["Custom structural", "Structural", "Build own *appUnless-style logic"],
+                ["Custom attribute", "Attribute", "Add DOM behavior to any element"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-005",
+      "sender": "bot",
+      "keywords": ["pipes", "pipe", "transform", "date pipe", "currency pipe", "async pipe", "custom pipe", "filter", "format"],
+      "suggestions": [
+        { "type": "example", "label": "Show built-in pipe examples", "action": "show_builtin_pipes" },
+        { "type": "code", "label": "See custom pipe code", "action": "show_custom_pipe" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "4. Pipes",
+          "subtitle": "Transform values in templates",
+          "contents": [
+            {
+              "type": "code",
+              "language": "html",
+              "filename": "pipes-usage.html",
+              "code": "<!-- Built-in pipes -->\n<p>{{ today | date:'fullDate' }}</p>\n<p>{{ price | currency:'INR':'symbol':'1.2-2' }}</p>\n<p>{{ name | uppercase }}</p>\n<p>{{ longText | slice:0:100 }}...</p>\n<p>{{ data | json }}</p>\n<p>{{ 0.75 | percent }}</p>"
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "truncate.pipe.ts (Standalone)",
+              "code": "import { Pipe, PipeTransform } from '@angular/core';\n\n@Pipe({\n  standalone: true,\n  name: 'truncate'\n})\nexport class TruncatePipe implements PipeTransform {\n  transform(value: string, limit = 50, trail = '...'): string {\n    return value.length > limit\n      ? value.substring(0, limit) + trail\n      : value;\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Pipe Type", "Re-runs When", "Performance"],
+              "rows": [
+                ["Pure (default)", "Input reference changes", "Fast — cached"],
+                ["Impure (pure: false)", "Every change detection cycle", "Slower — use sparingly"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-006",
+      "sender": "bot",
+      "keywords": ["dependency injection", "DI", "injectable", "providedIn", "inject()", "service", "singleton", "tree-shakable"],
+      "suggestions": [
+        { "type": "code", "label": "Show service with inject() example", "action": "show_inject_service" },
+        { "type": "example", "label": "Provider scope examples", "action": "show_provider_scopes" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "5. Dependency Injection",
+          "subtitle": "Angular's powerful DI system",
+          "contents": [
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "auth.service.ts",
+              "code": "import { Injectable, inject } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\n\n@Injectable({\n  providedIn: 'root'   // tree-shakable, app-wide singleton\n})\nexport class AuthService {\n  private http = inject(HttpClient);  // inject() function — Angular 21 preferred\n\n  login(credentials: { email: string; password: string }) {\n    return this.http.post('/api/login', credentials);\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Provider Scope", "Where Declared", "Lifetime"],
+              "rows": [
+                ["providedIn: 'root'", "Service decorator", "App-wide singleton"],
+                ["providers in AppModule", "AppModule", "App-wide singleton"],
+                ["providers in Component", "@Component({ providers: [] })", "Component instance lifetime"],
+                ["providers in Route", "route.providers", "Lazy module lifetime"],
+                ["InjectionToken", "const TOKEN = new InjectionToken()", "Scope depends on where provided"]
+              ],
+              "striped": true
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                "Use inject() function in Angular 21 — cleaner than constructor injection",
+                "InjectionToken for non-class dependencies (config, primitives)",
+                "Optional injection with inject(TOKEN, { optional: true })",
+                "Multi providers for plugin-style extensibility",
+                "Injector hierarchy: Platform → Root → Environment → Element"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-007",
+      "sender": "bot",
+      "keywords": ["routing", "router", "routerLink", "router outlet", "lazy loading", "guards", "canActivate", "routes", "navigation"],
+      "suggestions": [
+        { "type": "example", "label": "Show routing setup examples", "action": "show_routing_examples" },
+        { "type": "code", "label": "See functional guard code", "action": "show_guard_code" },
+        { "type": "related", "label": "Lazy loading patterns", "action": "show_lazy_loading" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "6. Routing",
+          "subtitle": "Navigation for both NgModule and Standalone apps",
+          "contents": [
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "app.routes.ts (Standalone)",
+              "code": "import { Routes } from '@angular/router';\n\nexport const routes: Routes = [\n  { path: '', redirectTo: '/home', pathMatch: 'full' },\n  { path: 'home', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },\n  {\n    path: 'admin',\n    canActivate: [authGuard],\n    loadChildren: () => import('./admin/admin.routes').then(m => m.adminRoutes)\n  },\n  { path: '**', loadComponent: () => import('./not-found/not-found.component').then(m => m.NotFoundComponent) }\n];"
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "app-routing.module.ts (NgModule)",
+              "code": "import { NgModule } from '@angular/core';\nimport { RouterModule, Routes } from '@angular/router';\nimport { HomeComponent } from './home/home.component';\n\nconst routes: Routes = [\n  { path: '', component: HomeComponent },\n  {\n    path: 'admin',\n    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)\n  }\n];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule]\n})\nexport class AppRoutingModule {}"
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "auth.guard.ts (functional guard — Angular 21)",
+              "code": "import { inject } from '@angular/core';\nimport { CanActivateFn, Router } from '@angular/router';\nimport { AuthService } from './auth.service';\n\nexport const authGuard: CanActivateFn = (route, state) => {\n  const auth = inject(AuthService);\n  const router = inject(Router);\n\n  if (auth.isLoggedIn()) return true;\n\n  return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });\n};"
+            },
+            {
+              "type": "table",
+              "headers": ["Feature", "NgModule App", "Standalone App"],
+              "rows": [
+                ["Route config", "RouterModule.forRoot(routes)", "provideRouter(routes) in appConfig"],
+                ["Lazy loading", "loadChildren → NgModule", "loadComponent or loadChildren → routes array"],
+                ["Guards", "Class-based CanActivate", "Functional CanActivateFn (preferred)"],
+                ["Outlet", "<router-outlet>", "<router-outlet> (same)"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-008",
+      "sender": "bot",
+      "keywords": ["forms", "reactive forms", "template-driven forms", "formGroup", "formControl", "validators", "ngModel", "form builder"],
+      "suggestions": [
+        { "type": "code", "label": "Show reactive form example", "action": "show_reactive_form" },
+        { "type": "example", "label": "Form validation examples", "action": "show_form_validation" },
+        { "type": "practice", "label": "Try a form exercise", "action": "form_exercise" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "7. Forms",
+          "subtitle": "Template-driven, Reactive, and Signal Forms",
+          "contents": [
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "reactive-form.component.ts",
+              "code": "import { Component, inject } from '@angular/core';\nimport { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';\n\n@Component({\n  standalone: true,\n  imports: [ReactiveFormsModule],\n  template: `\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <input formControlName=\"email\" placeholder=\"Email\" />\n      <span *ngIf=\"form.get('email')?.errors?.['required']\">Required</span>\n\n      <input formControlName=\"password\" type=\"password\" />\n\n      <button type=\"submit\" [disabled]=\"form.invalid\">Login</button>\n    </form>\n  `\n})\nexport class LoginFormComponent {\n  private fb = inject(FormBuilder);\n\n  form = this.fb.group({\n    email: ['', [Validators.required, Validators.email]],\n    password: ['', [Validators.required, Validators.minLength(8)]]\n  });\n\n  onSubmit() {\n    if (this.form.valid) console.log(this.form.value);\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Forms Type", "Driven By", "Best For", "Module Needed"],
+              "rows": [
+                ["Template-driven", "Template directives (ngModel)", "Simple forms, quick setup", "FormsModule"],
+                ["Reactive", "FormGroup / FormControl in class", "Complex, dynamic, testable forms", "ReactiveFormsModule"],
+                ["Signal Forms", "Signals (experimental)", "Reactive + signals integration", "No extra module (experimental API)"]
+              ],
+              "striped": true
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                "Typed reactive forms — FormControl<string>, FormGroup<{email: FormControl<string>}>",
+                "Custom validators — return ValidationErrors | null",
+                "Async validators — return Observable<ValidationErrors | null>",
+                "FormArray for dynamic field lists",
+                "Nested FormGroups for address / sub-objects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-009",
+      "sender": "bot",
+      "keywords": ["signals", "signal", "computed", "effect", "reactivity", "writable signal", "toSignal", "toObservable", "state management"],
+      "suggestions": [
+        { "type": "code", "label": "Show signals example", "action": "show_signals_example" },
+        { "type": "example", "label": "Signals vs RxJS comparison", "action": "compare_signals_rxjs" },
+        { "type": "practice", "label": "Try a signals exercise", "action": "signals_exercise" }
+      ],
+      "contents": [
+        {
+          "type": "section",
+          "title": "8. Angular Signals",
+          "subtitle": "The new reactivity primitive in Angular 21",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Signals are the recommended state management primitive in Angular 21. They give fine-grained reactivity without Zone.js and integrate directly with templates and OnPush."
+            },
+            {
+              "type": "code",
+              "language": "typescript",
+              "filename": "signals-demo.component.ts",
+              "code": "import { Component, signal, computed, effect } from '@angular/core';\n\n@Component({\n  standalone: true,\n  selector: 'app-cart',\n  template: `\n    <p>Items: {{ itemCount() }}</p>\n    <p>Total: {{ total() | currency }}</p>\n    <button (click)=\"addItem()\">Add Item</button>\n  `\n})\nexport class CartComponent {\n  items = signal<{ name: string; price: number }[]>([]);\n\n  // Derived state — auto-updates when items changes\n  itemCount = computed(() => this.items().length);\n  total = computed(() => this.items().reduce((sum, i) => sum + i.price, 0));\n\n  constructor() {\n    // Side effect — runs when dependency changes\n    effect(() => {\n      console.log(`Cart updated: ${this.itemCount()} items`);\n    });\n  }\n\n  addItem() {\n    this.items.update(list => [...list, { name: 'Product', price: 499 }]);\n  }\n}"
+            },
+            {
+              "type": "table",
+              "headers": ["Signal API", "Purpose", "Example"],
+              "rows": [
+                ["signal(value)", "Create writable signal", "const count = signal(0)"],
+                ["count()", "Read signal value", "console.log(count())"],
+                ["Unit test — service", "Jest + TestBed", "Logic, HTTP calls (mocked)"],
+                ["Unit test — pipe", "Jest (no TestBed needed)", "Transform function"],
+                ["Component test", "TestBed + ComponentFixture", "Template, inputs, outputs, DOM"],
+                ["Directive test", "TestBed with host component", "DOM behavior changes"],
+                ["HTTP test", "HttpClientTestingModule", "API call correctness"],
+                ["Routing test", "RouterTestingModule", "Navigation and guards"],
+                ["E2E test", "Cypress or Playwright", "Full user flows in browser"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-017",
+      "sender": "bot",
+      "contents": [
+        {
+          "type": "section",
+          "title": "16. Angular CLI Cheatsheet",
+          "subtitle": "Most-used commands in Angular 21 projects",
+          "contents": [
+            {
+              "type": "code",
+              "language": "bash",
+              "filename": "angular-cli-commands.sh",
+              "code": "# Create new project (standalone by default in Angular 21)\nng new my-app --standalone\n\n# Generate artifacts\nng generate component features/user-list   # or ng g c\nng generate service core/auth             # or ng g s\nng generate guard core/auth               # functional guard\nng generate pipe shared/truncate\nng generate directive shared/highlight\nng generate interface models/user\n\n# Serve and build\nng serve                   # dev server\nng serve --port 4300       # custom port\nng build                   # dev build\nng build --configuration production   # prod build\n\n# Testing\nng test                    # unit tests (Karma/Jest)\nng e2e                     # end-to-end tests\n\n# Code quality\nng lint\n\n# Add libraries\nng add @angular/material\nng add @ngrx/store"
+            },
+            {
+              "type": "table",
+              "headers": ["Flag", "Purpose"],
+              "rows": [
+                ["--standalone", "Generate standalone component (default in Angular 21)"],
+                ["--skip-tests / -S", "Skip spec file generation"],
+                ["--inline-template / -t", "Put template in .ts file"],
+                ["--inline-style / -s", "Put styles in .ts file"],
+                ["--dry-run / -d", "Preview what would be generated without writing files"],
+                ["--flat", "Don't create a sub-folder"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-018",
+      "sender": "bot",
+      "contents": [
+        {
+          "type": "section",
+          "title": "17. Real-World Architecture Patterns",
+          "subtitle": "Folder structure, smart/dumb components, auth flow",
+          "contents": [
+            {
+              "type": "code",
+              "language": "bash",
+              "filename": "recommended-folder-structure",
+              "code": "src/app/\n├── core/                    # singletons, guards, interceptors\n│   ├── services/\n│   ├── guards/\n│   ├── interceptors/\n│   └── models/\n├── features/                # feature-based modules/components\n│   ├── auth/\n│   │   ├── login/\n│   │   ├── register/\n│   │   └── auth.routes.ts\n│   ├── dashboard/\n│   └── products/\n├── shared/                  # reusable UI, pipes, directives\n│   ├── components/\n│   ├── directives/\n│   ├── pipes/\n│   └── ui/\n├── app.component.ts\n├── app.config.ts            # standalone app config\n└── app.routes.ts"
+            },
+            {
+              "type": "table",
+              "headers": ["Pattern", "Description", "Benefit"],
+              "rows": [
+                ["Smart component", "Fetches data, holds state, passes down via @Input", "Separation of concerns"],
+                ["Dumb/Presentational", "Receives data via @Input, emits via @Output, no services", "Reusable, testable, OnPush-friendly"],
+                ["Feature-based folders", "Group files by feature, not type", "Scalable, easy to lazy-load"],
+                ["API service layer", "One service per API resource", "Centralised HTTP logic"],
+                ["Environment config", "environment.ts / environment.prod.ts", "No hardcoded URLs"],
+                ["Role-based routing", "canActivate guards check roles", "Secure navigation"],
+                ["Error handling strategy", "Global HttpInterceptor + error service", "Consistent UX on failures"]
+              ],
+              "striped": true
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-019",
+      "sender": "bot",
+      "contents": [
+        {
+          "type": "section",
+          "title": "18. Interview-Ready Quick Reference",
+          "subtitle": "Key Angular 21 concepts grouped by category",
+          "contents": [
+            {
+              "type": "section",
+              "title": "Common Angular (Both styles)",
+              "contents": [
+                {
+                  "type": "list",
+                  "ordered": false,
+                  "items": [
+                    "Components, data binding (interpolation, property, event, two-way)",
+                    "Directives: *ngIf, *ngFor, ngClass, ngStyle, custom",
+                    "Pipes: built-in, custom, pure vs impure",
+                    "Dependency Injection: inject(), providedIn: 'root', InjectionToken",
+                    "Routing: lazy loading, guards (functional), route resolvers",
+                    "Forms: reactive (FormBuilder), template-driven, typed forms",
+                    "HTTP: HttpClient, functional interceptors, error handling",
+                    "RxJS: switchMap, combineLatest, takeUntilDestroyed",
+                    "Signals: signal(), computed(), effect(), toSignal()",
+                    "Change detection: Default vs OnPush vs Signals",
+                    "Lifecycle hooks: ngOnInit, ngOnChanges, ngOnDestroy"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "section",
+              "title": "NgModule-specific",
+              "contents": [
+                {
+                  "type": "list",
+                  "ordered": false,
+                  "items": [
+                    "AppModule, declarations, imports, exports, providers, bootstrap",
+                    "Feature modules, Core module, Shared module pattern",
+                    "Lazy-loaded modules with loadChildren",
+                    "RouterModule.forRoot() and RouterModule.forChild()",
+                    "Migration path to standalone using ng generate @angular/core:standalone"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "section",
+              "title": "Standalone-specific",
+              "contents": [
+                {
+                  "type": "list",
+                  "ordered": false,
+                  "items": [
+                    "standalone: true in @Component, @Directive, @Pipe",
+                    "Component-level imports[] instead of NgModule declarations",
+                    "bootstrapApplication(AppComponent, appConfig)",
+                    "ApplicationConfig with provideRouter, provideHttpClient, provideAnimationsAsync",
+                    "Functional guards (CanActivateFn) and functional interceptors (HttpInterceptorFn)",
+                    "Lazy loading with loadComponent and loadChildren: () => routes",
+                    "input() signal-based inputs (Angular 17+), output() emitter"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "msg-ng-020",
+      "sender": "bot",
+      "contents": [
+        {
+          "type": "section",
+          "title": "19. Recommended Learning Order",
+          "subtitle": "Practical sequence for mastering Angular 21",
+          "contents": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                "TypeScript basics — types, interfaces, generics, decorators",
+                "Components & templates — interpolation, property/event binding",
+                "Directives & pipes — built-in first, then custom",
+                "Services & Dependency Injection — inject(), providedIn",
+                "Routing — basic routes, lazy loading, guards",
+                "Forms — reactive forms with typed FormGroup/FormControl",
+                "HTTP — HttpClient, interceptors, error handling",
+                "RxJS — key operators: switchMap, debounceTime, combineLatest",
+                "Signals — signal(), computed(), effect(), toSignal()",
+                "Change detection — OnPush + Signals combination",
+                "Testing — unit tests, component tests with TestBed",
+                "Standalone Angular — bootstrapApplication, appConfig, component imports",
+                "NgModules & legacy modular architecture — for enterprise/legacy projects",
+                "Performance — @defer, trackBy, profiling, bundle analysis",
+                "Advanced — SSR, Angular Elements, i18n, custom decorators"
+              ]
+            }
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "title": "Angular Official Docs — Components",
+          "url": "https://angular.dev/guide/components",
+          "section_title": "Anatomy of components"
+        },
+        {
+          "title": "Angular Official Docs — Signals",
+          "url": "https://angular.dev/guide/signals",
+          "section_title": "Signals Overview"
+        },
+        {
+          "title": "Angular Official Docs — NgModules",
+          "url": "https://angular.dev/guide/ngmodules/overview",
+          "section_title": "NgModules Overview"
+        },
+        {
+          "title": "Angular Official Docs — Standalone",
+          "url": "https://angular.dev/api/platform-browser/bootstrapApplication",
+          "section_title": "bootstrapApplication"
+        },
+        {
+          "title": "Angular Official Docs — Routing",
+          "url": "https://angular.dev/guide/routing/read-route-state",
+          "section_title": "Read Route State"
+        },
+        {
+          "title": "Angular Official Docs — Performance",
+          "url": "https://angular.dev/best-practices/runtime-performance",
+          "section_title": "Runtime Performance"
+        },
+        {
+          "title": "Angular Official Docs — DI Debugging",
+          "url": "https://angular.dev/guide/di/debugging-and-troubleshooting-di",
+          "section_title": "Debugging DI"
+        }
+      ]
+    }
+
+  ]
+}

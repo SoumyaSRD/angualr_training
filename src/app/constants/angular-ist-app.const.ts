@@ -1,6 +1,6 @@
 // src/app/data/first-angular-app-content.ts
 
-import { ITopicContent } from "../../../../../interfaces/topic";
+import { ITopicContent } from "../interfaces/topic";
 
 export const ANGULAR_INTRODUCTION_TUTORIAL: ITopicContent = {
   title: 'Angular Application Architecture: A Comprehensive Guide to Modern Folder Structure',

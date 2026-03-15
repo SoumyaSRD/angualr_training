@@ -2,7 +2,7 @@ import { Component, computed, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { DIRECTIVE } from './directive.const';
+import { DIRECTIVE } from '../../../../constants/directive.const';
 import { VisibleIfDirective } from '../../../../directives/visible-if.directive';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ITopicContent } from "../../../../interfaces/topic";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { RXJS_FLATTENING } from "./rxjs-flattening.const";
+import { RXJS_FLATTENING } from "../../../../constants/rxjs-flattening.const";
 
 @Component({
   selector: 'app-rxjs-flattening',

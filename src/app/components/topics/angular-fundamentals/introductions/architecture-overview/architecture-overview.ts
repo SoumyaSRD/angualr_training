@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../../interfaces/topic';
 import { TopicTemplate } from '../../../../topic-template/topic-template';
-import { ANGULAR_ARCHITECTURE_OVERVIEW } from './architecture-overview.const';
+import { ANGULAR_ARCHITECTURE_OVERVIEW } from 'src/app/constants/architecture-overview.const';
 
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { RXJS_OPERATOR } from "./rxjs-operator.const";
+import { RXJS_OPERATOR } from "../../../../constants/rxjs-operator.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({

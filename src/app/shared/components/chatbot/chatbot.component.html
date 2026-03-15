@@ -1,141 +1,374 @@
-<!-- Draggable launcher icon -->
-<div class="chatbot-icon" [class.open]="isOpen()" [style.left.px]="iconPos().x" [style.top.px]="iconPos().y"
-    (mousedown)="onIconMousedown($event)" (click)="toggleChat()" title="Angular 21 AI Assistant" role="button"
-    [attr.aria-label]="isOpen() ? 'Close chat' : 'Open Angular 21 assistant'">
-    <div class="icon-pulse"></div>
-    <i class="bi" [class.bi-robot]="!isOpen()" [class.bi-x-lg]="isOpen()"></i>
-    @if (unreadCount() > 0) {
-    <span class="badge" [attr.aria-label]="unreadCount() + ' unread messages'">
-        {{ unreadCount() > 9 ? '9+' : unreadCount() }}
-    </span>
-    }
-</div>
+<!-- ============================================================
+     NEXUS — Neural Expert Understanding System
+     Glass UI v4 · Signal-based · Angular 21
+     ============================================================ -->
 
-<!-- Chat window -->
+<!-- ── Toggle Button ──────────────────────────────────────────── -->
+<button class="nexus-toggle glass-button-primary rounded-full lift-md z-modal" type="button" draggable="true"
+    [class.dragging]="isToggleDragging()" [style]="getToggleStyle()"
+    [attr.aria-label]="isOpen() ? 'Close NEXUS' : 'Open NEXUS'" (click)="onIconClick()"
+    (dragstart)="onToggleDragStart($event)" (drag)="onToggleDrag($event)" (dragend)="onToggleDragEnd()">
+    <i [class]="isOpen() ? 'bi bi-x-lg' : 'bi bi-cpu-fill'" class="toggle-icon"></i>
+</button>
+
+<!-- ── Chat Panel ─────────────────────────────────────────────── -->
 @if (isOpen()) {
-<div class="chat-window" [style.left.px]="winPos().x" [style.top.px]="winPos().y" role="dialog"
-    aria-label="Angular 21 AI Assistant">
+<div class="nexus-panel glass-card rounded-xl d-flex flex-column overflow-hidden animate-scale-in elev-5 z-modal"
+    role="dialog" [attr.aria-label]="config().title || 'NEXUS Chat'" [class.nexus-panel--expanded]="expanded()"
+    [class.dragging]="isDragging()" [style]="getContainerStyle()">
+
     <!-- Header -->
-    <div class="chat-header">
-        <div class="header-left">
-            <div class="avatar">
-                <i class="bi bi-robot"></i>
-                <span class="online-dot"></span>
+    <header class="nexus-header glass-sm d-flex align-center gap-sm px-md border-b select-none" draggable="true"
+        (dragstart)="onDragStart($event)" (drag)="onDrag($event)" (dragend)="onDragEnd()">
+
+        <!-- Brand -->
+        <div class="d-flex align-center gap-sm flex-1">
+            <div class="nexus-avatar">
+                <i class="bi bi-cpu-fill"></i>
+                <span class="nexus-avatar__dot"></span>
             </div>
-            <div class="header-meta">
-                <h4>Angular 21 Assistant</h4>
-                <span class="subtitle">
-                    @if (isListening()) { 🎙️ Listening… stop speaking to send }
-                    <!-- @else if (isBackgroundListening()) { 👂 Say "Hey Angular" or "OK Angular"… } -->
-                    @else if (isTyping()) { Typing… }
-                    @else { {{ kb()?.meta?.version ?? 'Loading knowledge base…' }} }
-                </span>
+            <div>
+                <div class="nexus-brand text-gradient font-bold tracking-wide">
+                    {{ config().title || 'NEXUS' }}
+                </div>
+                <div class="d-flex align-center gap-xs">
+                    <i class="bi bi-circle-fill text-success" style="font-size:6px"></i>
+                    <span class="text-xs text-muted">Angular 21 · Online</span>
+                </div>
             </div>
         </div>
-        <div class="header-actions">
-            <button class="icon-btn" (click)="clearChat()" title="Clear conversation">
+
+        <!-- Drag hint -->
+        <i class="bi bi-grip-horizontal text-muted nexus-drag-grip"></i>
+
+        <!-- Actions -->
+        <div class="d-flex gap-xs">
+            <button class="glass-button nexus-hbtn lift-sm rounded-md" type="button" title="Search topics"
+                [class.bg-accent]="showSearch()" (click)="toggleSearch()">
+                <i class="bi bi-search"></i>
+            </button>
+
+            @if (hasMessages()) {
+            <button class="glass-button nexus-hbtn lift-sm rounded-md" type="button" title="Clear chat"
+                (click)="deleteHistory()">
                 <i class="bi bi-trash3"></i>
             </button>
-            <button class="icon-btn" (click)="toggleChat()" title="Close">
+            }
+
+            <button class="glass-button nexus-hbtn lift-sm rounded-md" type="button"
+                [title]="expanded() ? 'Collapse' : 'Expand'" (click)="toggleExpand()">
+                <i [class]="expanded() ? 'bi bi-arrows-angle-contract' : 'bi bi-arrows-angle-expand'"></i>
+            </button>
+
+            <button class="glass-button nexus-hbtn nexus-hbtn--close lift-sm rounded-md" type="button" title="Close"
+                (click)="toggleChat()">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-    </div>
+    </header>
 
-    @if (kbError()) {
-    <div class="error-banner" role="alert">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        Could not load knowledge base. Using built-in fallback answers.
+    <!-- Search Panel -->
+    @if (showSearch()) {
+    <div class="glass-sm d-flex align-center gap-sm px-md border-b animate-fade-up"
+        style="padding-top:10px;padding-bottom:10px">
+        <i class="bi bi-search text-muted text-sm"></i>
+        <input #searchInput class="nexus-search-input flex-1 text-sm text-primary" type="text"
+            [value]="chatbotService.searchQuery()" placeholder="Search Angular topics…" autocomplete="off"
+            (input)="onSearchInput($event)" />
+        <span class="text-xs text-muted">{{ chatbotService.topSearchResults().length }} results</span>
+        @if (chatbotService.searchQuery()) {
+        <button class="glass-button nexus-hbtn rounded-md text-xs" type="button" (click)="clearSearch()">
+            <i class="bi bi-x"></i>
+        </button>
+        }
     </div>
     }
 
-    <!-- Messages -->
-    <div class="chat-messages" #messagesContainer role="log" aria-live="polite">
-        @for (msg of messages(); track msg.id) {
-        <div class="msg-row" [class.user-row]="msg.type === 'user'" [class.bot-row]="msg.type === 'bot'">
-            <div class="msg-avatar">
-                <i class="bi" [class.bi-person-fill]="msg.type === 'user'" [class.bi-robot]="msg.type === 'bot'">
-                </i>
+    <!-- AI Suggestions Panel -->
+    @if (chatbotService.isSearching() && chatbotService.currentSuggestions().length > 0) {
+    <div class="glass-sm border-b px-md" style="padding-top:8px;padding-bottom:8px">
+        <div class="d-flex align-center gap-xs text-xs text-muted font-semibold mb-xs">
+            <i class="bi bi-stars text-accent" style="font-size:11px"></i> Suggestions
+        </div>
+        <div class="d-flex flex-wrap gap-xs">
+            @for (s of chatbotService.currentSuggestions(); track s.action) {
+            <button class="nexus-chip lift-sm rounded-full text-xs" type="button"
+                [class.nexus-chip--code]="s.type === 'code'" (click)="onSuggestionClick(s)">
+                {{ s.label }}
+            </button>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Error Banner -->
+    @if (loadError()) {
+    <div class="d-flex align-center gap-sm px-md py-sm text-sm"
+        style="background:var(--error-bg);border-bottom:1px solid var(--error);color:var(--error)">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span class="flex-1">{{ loadError() }}</span>
+        <button class="glass-button nexus-hbtn rounded-md text-xs" type="button" (click)="chatbotService.reload()">
+            <i class="bi bi-arrow-clockwise"></i> Retry
+        </button>
+    </div>
+    }
+
+    <!-- Chat Body -->
+    <div class="nexus-body flex-1 overflow-y-auto p-md d-flex flex-column gap-md" #chatBody>
+
+        @if (!hasMessages() && !loading()) {
+        <div class="d-flex flex-column align-center justify-center text-muted p-2xl" style="flex:1">
+            <i class="bi bi-chat-square-dots text-4xl opacity-40 mb-sm"></i>
+            <p class="m-0 text-sm">Start a conversation…</p>
+        </div>
+        }
+
+        @for (msg of visibleMessages(); track trackByMsgId($index, msg)) {
+        <div class="nexus-msg d-flex gap-sm" [class.nexus-msg--user]="msg.sender === 'user'"
+            [class.nexus-msg--bot]="msg.sender === 'bot'">
+
+            <!-- Avatar -->
+            <div class="nexus-msg__avatar rounded-full d-flex align-center justify-center flex-shrink-0"
+                [class.nexus-msg__avatar--user]="msg.sender === 'user'">
+                <i [class]="msg.sender === 'user' ? 'bi bi-person-fill' : 'bi bi-cpu-fill'"></i>
             </div>
-            <div class="msg-bubble">
-                <p class="msg-text">{{ msg.text }}</p>
-                @if (msg.code) {
-                <div class="code-block">
-                    <div class="code-header">
-                        <span>TypeScript / Angular</span>
-                        <button class="copy-btn" (click)="copyCode(msg.code!)">
-                            <i class="bi bi-clipboard"></i> Copy
-                        </button>
-                    </div>
-                    <pre><code>{{ msg.code }}</code></pre>
-                </div>
+
+            <!-- Bubble -->
+            <div class="nexus-bubble rounded-lg p-sm px-md text-sm leading-normal"
+                [class.nexus-bubble--user]="msg.sender === 'user'" [class.nexus-bubble--bot]="msg.sender === 'bot'">
+
+                @if (msg.text) {
+                <p class="m-0" [innerHTML]="msg.text"></p>
                 }
-                @if (msg.suggestions && msg.suggestions.length > 0) {
-                <div class="chips">
-                    @for (s of msg.suggestions; track $index) {
-                    <button class="chip" (click)="sendMessage(s)">{{ s }}</button>
+
+                @if (msg.contents) {
+                <div class="nexus-rich d-flex flex-column gap-sm mt-xs">
+                    @for (block of msg.contents; track $index) {
+                    <ng-container [ngTemplateOutlet]="contentTpl"
+                        [ngTemplateOutletContext]="{ $implicit: block, depth: 0 }">
+                    </ng-container>
                     }
                 </div>
                 }
-                <time class="msg-time" [title]="msg.timestamp | date:'medium'">
-                    {{ msg.timestamp | date:'shortTime' }}
-                </time>
+
+                @if (msg.suggestions?.length) {
+                <div class="d-flex flex-wrap gap-xs mt-sm">
+                    @for (s of msg.suggestions!; track s.action) {
+                    <button class="nexus-chip lift-sm rounded-full text-xs" type="button"
+                        (click)="onSuggestionClick(s)">
+                        {{ s.label }}
+                    </button>
+                    }
+                </div>
+                }
+
             </div>
         </div>
         }
-        @if (isTyping()) {
-        <div class="msg-row bot-row">
-            <div class="msg-avatar"><i class="bi bi-robot"></i></div>
-            <div class="typing-bubble" aria-label="Assistant is typing">
-                <span></span><span></span><span></span>
+
+        <!-- Typing Indicator -->
+        @if (loading()) {
+        <div class="nexus-msg nexus-msg--bot d-flex gap-sm">
+            <div class="nexus-msg__avatar rounded-full d-flex align-center justify-center flex-shrink-0">
+                <i class="bi bi-cpu-fill"></i>
+            </div>
+            <div class="nexus-typing glass rounded-lg p-sm px-md d-flex gap-xs align-center">
+                <span class="nexus-dot"></span>
+                <span class="nexus-dot"></span>
+                <span class="nexus-dot"></span>
             </div>
         </div>
         }
+
     </div>
 
-    <!-- Wake-word status bar -->
-    @if (isBackgroundListening()) {
-    <!-- <div class="voice-bar" role="status">
-        <span class="voice-dot"></span>
-        <span>Say <strong>"Hey Angular"</strong> or <strong>"OK Angular"</strong> to activate…</span>
-    </div> -->
-    }
+    <!-- Footer -->
+    <footer class="glass-sm border-t p-md d-flex flex-column gap-sm flex-shrink-0">
 
-    <!-- Last heard (debug) — remove after confirming wake words work -->
-    @if (lastHeard()) {
-    <div class="debug-bar">
-        🎤 Heard: <em>{{ lastHeard() }}</em>
-    </div>
-    }
+        @if (listeningError()) {
+        <div class="d-flex align-center gap-xs text-xs rounded-md px-sm py-xs"
+            style="background:var(--error-bg);color:var(--error)">
+            <i class="bi bi-exclamation-circle"></i> {{ listeningError() }}
+        </div>
+        }
 
-    <!-- Quick topics -->
-    <div class="quick-btns">
-        <button class="quick-btn" (click)="sendMessage('What are Signals?')">Signals</button>
-        <button class="quick-btn" (click)="sendMessage('Zoneless Change Detection')">Zoneless</button>
-        <button class="quick-btn" (click)="sendMessage('Signal Forms')">Signal Forms</button>
-        <button class="quick-btn" (click)="sendMessage('Getting Started with Angular 21')">Get Started</button>
-        <button class="quick-btn" (click)="sendMessage('Angular ARIA')">ARIA</button>
-        <button class="quick-btn" (click)="sendMessage('show me a @defer example')">@ defer</button>
-    </div>
+        <div class="d-flex gap-sm align-end">
+            <textarea #textarea
+                class="nexus-textarea glass flex-1 rounded-lg p-sm px-md text-sm font-body leading-normal" rows="1"
+                [placeholder]="config().placeholder || 'Ask about signals, routing, components…'"
+                [(ngModel)]="userInput" (input)="autoResize($event)" (keydown)="handleEnter($event)">
+        </textarea>
 
-    <!-- Input bar -->
-    <div class="input-bar">
-        <button class="voice-btn" [class.listening]="isListening()" [class.bg-listening]="isBackgroundListening()"
-            [disabled]="!isSpeechSupported()" (click)="toggleVoice()" [title]="voiceBtnTitle()">
-            <i class="bi" [class.bi-mic-fill]="!isListening() && !isBackgroundListening()"
-                [class.bi-record-circle-fill]="isListening()"
-                [class.bi-ear-fill]="isBackgroundListening() && !isListening()">
-            </i>
-        </button>
+            <!-- Voice button -->
+            <button class="nexus-icon-btn glass-button rounded-full lift-sm position-relative flex-shrink-0"
+                type="button" [class.nexus-icon-btn--recording]="isListening()"
+                [attr.aria-label]="isListening() ? 'Stop voice input' : 'Start voice input'" (click)="toggleVoice()">
+                @if (isListening()) {
+                <span class="nexus-record-ring"></span>
+                <i class="bi bi-stop-circle-fill"></i>
+                } @else {
+                <i class="bi bi-mic-fill"></i>
+                }
+            </button>
 
-        <input #inputRef type="text" class="chat-input" [value]="currentMessage()"
-            (input)="currentMessage.set($any($event.target).value)" (keyup.enter)="sendMessage()"
-            placeholder="Ask about Angular 21…" aria-label="Chat message" autocomplete="off" />
+            <!-- Send button -->
+            <button class="nexus-icon-btn nexus-icon-btn--send glass-button-primary rounded-full flex-shrink-0"
+                type="button" [disabled]="!userInput().trim() || loading()" (click)="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
 
-        <button class="send-btn" (click)="sendMessage()" [disabled]="!currentMessage().trim() || isTyping()"
-            aria-label="Send message">
-            <i class="bi bi-send-fill"></i>
-        </button>
-    </div>
+        <small class="text-xs text-muted text-center d-flex align-center justify-center gap-xs">
+            <i class="bi bi-keyboard" style="font-size:11px"></i>
+            Shift+Enter for new line &nbsp;·&nbsp; Partial keywords work
+        </small>
+    </footer>
+
 </div>
 }
+
+<!-- ============================================================
+     CONTENT BLOCK TEMPLATE (recursive)
+     ============================================================ -->
+<ng-template #contentTpl let-block let-depth="depth">
+
+    <!-- TEXT -->
+    @if (isTextContent(block)) {
+    <p class="m-0 text-secondary text-sm leading-normal">{{ block.text }}</p>
+    }
+
+    <!-- CODE -->
+    @if (isCodeBlock(block)) {
+    <div class="nexus-code glass-deep rounded-md overflow-hidden">
+        <div class="nexus-code__head d-flex align-center gap-sm px-sm" style="padding-top:6px;padding-bottom:6px">
+            <i class="bi bi-code-slash text-accent" style="font-size:12px"></i>
+            @if (block.filename) {
+            <span class="font-mono text-muted nexus-code__file text-xs flex-1 text-truncate">{{ block.filename }}</span>
+            }
+            <span class="nexus-code__lang rounded text-xs uppercase tracking-wide">{{ block.language }}</span>
+            <button class="glass-button nexus-hbtn rounded text-xs" type="button"
+                [title]="isCopied(block.filename || block.language) ? 'Copied!' : 'Copy'"
+                (click)="copyToClipboard(block.code, block.filename || block.language)">
+                <i
+                    [class]="isCopied(block.filename || block.language) ? 'bi bi-check2 text-success' : 'bi bi-clipboard'"></i>
+            </button>
+        </div>
+        <pre class="nexus-code__pre m-0 font-mono overflow-x-auto"><code>{{ block.code }}</code></pre>
+    </div>
+    }
+
+    <!-- TABLE -->
+    @if (isTableContent(block)) {
+    <div class="glass rounded-md overflow-hidden overflow-x-auto">
+        <table class="w-full nexus-table">
+            <thead>
+                <tr>
+                    @for (h of block.headers; track h) {
+                    <th class="text-xs text-left px-sm font-semibold" style="padding-top:7px;padding-bottom:7px">{{ h }}
+                    </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (row of block.rows; track $index) {
+                <tr class="nexus-table__row">
+                    @for (cell of row; track $index) {
+                    <td class="text-xs text-secondary px-sm border-t" style="padding-top:6px;padding-bottom:6px">{{ cell
+                        }}</td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- LIST -->
+    @if (isListContent(block)) {
+    <div class="nexus-list">
+        @if (!block.ordered) {
+        <ul class="d-flex flex-column gap-xs m-0" style="padding:0;list-style:none">
+            @for (item of block.items; track item) {
+            <li class="d-flex gap-xs align-start text-sm text-secondary">
+                <i class="bi bi-chevron-right text-accent flex-shrink-0" style="font-size:10px;margin-top:4px"></i>
+                {{ item }}
+            </li>
+            }
+        </ul>
+        } @else {
+        <ol class="nexus-list__ol d-flex flex-column gap-xs m-0">
+            @for (item of block.items; track item) {
+            <li class="d-flex gap-xs align-start text-sm text-secondary">{{ item }}</li>
+            }
+        </ol>
+        }
+    </div>
+    }
+
+    <!-- QUOTE -->
+    @if (isQuoteContent(block)) {
+    <blockquote class="nexus-quote glass rounded-md px-md position-relative"
+        style="padding-top:10px;padding-bottom:10px">
+        <i class="bi bi-quote nexus-quote__icon text-accent"></i>
+        <p class="m-0 text-secondary text-sm leading-normal" style="font-style:italic">{{ block.text }}</p>
+        @if (block.author || block.citation) {
+        <footer class="text-xs text-muted mt-xs">
+            @if (block.author) { <cite class="font-medium" style="font-style:normal">— {{ block.author }}</cite> }
+            @if (block.citation) { <span class="ml-xs">({{ block.citation }})</span> }
+        </footer>
+        }
+    </blockquote>
+    }
+
+    <!-- IMAGE -->
+    @if (isImageContent(block)) {
+    <figure class="m-0">
+        <img class="w-full rounded-md" [src]="block.src" [alt]="block.alt" loading="lazy" />
+        @if (block.caption) {
+        <figcaption class="text-xs text-muted text-center mt-xs">{{ block.caption }}</figcaption>
+        }
+    </figure>
+    }
+
+    <!-- LINK -->
+    @if (isLinkContent(block)) {
+    <a class="glass-button d-flex align-center gap-xs rounded-md px-sm text-sm lift-sm"
+        style="padding-top:6px;padding-bottom:6px;display:inline-flex" [href]="block.url"
+        [target]="block.external ? '_blank' : '_self'" rel="noopener noreferrer">
+        @if (block.icon) { <span>{{ block.icon }}</span> }
+        <span>{{ block.text }}</span>
+        @if (block.external) { <i class="bi bi-box-arrow-up-right" style="font-size:11px;opacity:.7"></i> }
+    </a>
+    }
+
+    <!-- VIDEO -->
+    @if (isVideoContent(block)) {
+    <div class="nexus-video rounded-md overflow-hidden">
+        <iframe [src]="block.url" [title]="block.title || 'Video'" allowfullscreen loading="lazy"
+            style="border:none"></iframe>
+    </div>
+    }
+
+    <!-- SECTION (recursive) -->
+    @if (isSectionContent(block)) {
+    <section class="nexus-section" [class.nexus-section--nested]="depth > 0">
+        @if (block.title) {
+        <h4 class="d-flex align-center gap-xs text-sm font-bold text-primary m-0 mb-xs">
+            <i class="bi bi-bookmark-fill text-accent" style="font-size:10px"></i>
+            {{ block.title }}
+        </h4>
+        }
+        @if (block.subtitle) {
+        <p class="text-xs text-muted m-0 mb-sm">{{ block.subtitle }}</p>
+        }
+        <div class="d-flex flex-column gap-sm">
+            @for (child of block.contents; track $index) {
+            <ng-container [ngTemplateOutlet]="contentTpl"
+                [ngTemplateOutletContext]="{ $implicit: child, depth: depth + 1 }">
+            </ng-container>
+            }
+        </div>
+    </section>
+    }
+
+</ng-template>

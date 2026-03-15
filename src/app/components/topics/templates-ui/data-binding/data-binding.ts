@@ -1,7 +1,7 @@
 import { Component, computed, model, signal } from '@angular/core';
 import { TopicTemplate } from '../../../topic-template/topic-template';
 import { ITopicContent } from '../../../../interfaces/topic';
-import { ANGULAR_DATA_BINDING_GUIDE } from './data-binding.const';
+import { ANGULAR_DATA_BINDING_GUIDE } from '../../../../constants/data-binding.const';
 import { FormsModule } from '@angular/forms';
 
 @Component({

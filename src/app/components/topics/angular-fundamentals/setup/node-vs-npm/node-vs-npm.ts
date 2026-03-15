@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TopicTemplate } from '../../../../topic-template/topic-template';
-import { NODEJS_VS_NPM } from './node-vs-npm.const';
+import { NODEJS_VS_NPM } from 'src/app/constants/node-vs-npm.const';
 
 
 @Component({

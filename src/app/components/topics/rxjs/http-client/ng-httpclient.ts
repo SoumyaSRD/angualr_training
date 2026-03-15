@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { _HTTP_CLIENT } from "./ng-httpclient.const";
+import { _HTTP_CLIENT } from "../../../../constants/ng-httpclient.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({

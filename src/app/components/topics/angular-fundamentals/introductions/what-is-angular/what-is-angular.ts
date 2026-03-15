@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularIntroduction } from '../../../../../constants/angular_intro.const';
+import { AngularIntroduction } from 'src/app/constants/angular_intro.const';
 import { TopicTemplate } from '../../../../topic-template/topic-template';
 
 

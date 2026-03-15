@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { INTERCEPTOR } from "./ng-interceptor.const";
+import { INTERCEPTOR } from "../../../../constants/ng-interceptor.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({

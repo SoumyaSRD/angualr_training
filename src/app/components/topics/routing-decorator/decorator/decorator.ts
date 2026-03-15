@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { DECORATOR } from './decorator.const';
+import { DECORATOR } from '../../../../constants/decorator.const';
 
 @Component({
   selector: 'app-decorator',

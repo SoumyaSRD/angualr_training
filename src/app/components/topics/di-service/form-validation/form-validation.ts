@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { FORM_VALIDATION_COMPLETE } from './form-validation.const';
+import { FORM_VALIDATION_COMPLETE } from '../../../../constants/form-validation.const';
 
 @Component({
   selector: 'app-form-validation',

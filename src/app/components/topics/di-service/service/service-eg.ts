@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { SERVICE_EG } from './service-eg.const';
+import { SERVICE_EG } from '../../../../constants/service-eg.const';
 
 @Component({
   selector: 'app-service-eg',

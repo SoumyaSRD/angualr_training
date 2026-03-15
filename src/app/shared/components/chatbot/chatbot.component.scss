@@ -1,701 +1,619 @@
-// =============================================================================
-// CHATBOT ICON (Draggable)
-// =============================================================================
+// ============================================================================
+// NEXUS — Chatbot Component Styles  v2
+// Theme-compatible: every colour references a Glass UI v4 CSS custom property.
+// No hardcoded hex/rgba values for colours — theme tokens drive everything.
+// Only structural rules (position, size, keyframes) live here.
+// ============================================================================
 
-.chatbot-icon {
+// ─── Toggle Button ────────────────────────────────────────────────────────────
+.nexus-toggle {
   position: fixed;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: var(--accent-gradient);
+  bottom: var(--space-lg, 24px);
+  right: var(--space-lg, 24px);
+  z-index: var(--z-modal, 1050);
+  width: 58px;
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  z-index: 1100;
-  box-shadow: var(--shadow-glow), var(--shadow-lg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  user-select: none;
+  animation: nx-toggle-breathe 2.8s var(--ease-smooth) infinite;
+  transition: transform var(--duration-base) var(--ease-spring),
+              box-shadow  var(--duration-base) var(--ease-smooth);
 
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 32px var(--accent-primary), var(--shadow-glow);
-  }
-
-  &:active {
-    cursor: grabbing;
-    transform: scale(0.95);
-  }
-
-  &.open {
-    background: var(--glass-bg);
-    border: 2px solid var(--glass-border);
-
-    i { color: var(--text-primary); }
-  }
-
-  .icon-pulse {
-    position: absolute;
-    inset: -8px;
-    background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0.4;
-    animation: pulse 2s ease-in-out infinite;
-    pointer-events: none;
-  }
+  &:hover  { transform: scale(1.1); }
+  &:active { transform: scale(0.93); cursor: grabbing; }
+  &.dragging { opacity: 0.85; cursor: grabbing; }
 
   i {
-    font-size: 1.75rem;
-    color: white;
-    position: relative;
-    z-index: 1;
-    transition: transform 0.2s ease;
-  }
-
-  .badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    min-width: 22px;
-    height: 22px;
-    padding: 0 4px;
-    border-radius: 11px;
-    background: #ef4444;
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--glass-bg);
-    animation: bounce 0.5s ease;
+    font-size: 22px;
     line-height: 1;
+    color: var(--text-on-accent, #fff);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
   }
 }
 
-// =============================================================================
-// CHAT WINDOW
-// =============================================================================
+@keyframes nx-toggle-breathe {
+  0%, 100% { box-shadow: var(--elev-3), var(--edge-glow-sm); }
+  50%      { box-shadow: var(--elev-4), var(--edge-glow-md); }
+}
 
-.chat-window {
+// ─── Chat Panel ───────────────────────────────────────────────────────────────
+.nexus-panel {
   position: fixed;
-  width: 390px;
-  height: 540px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.8);
-  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(1.8);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 0, 0, 0.2);
-  z-index: 1099;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: slideIn 0.3s ease-out;
+  bottom: calc(var(--space-lg, 24px) + 70px);
+  right: var(--space-lg, 24px);
+  z-index: calc(var(--z-modal, 1050) - 1);
+  width: 430px;
+  height: 630px;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(
-      160deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(255, 255, 255, 0.04) 50%,
-      transparent 100%
-    );
-    pointer-events: none;
+  // Suppress glass-card hover lift — panel is static
+  &:hover { transform: none !important; }
+
+  &--expanded {
+    width: min(820px, 95vw);
+    height: min(84vh, 820px);
   }
+
+  &.dragging { opacity: 0.92; transition: none; }
 
   @media (max-width: 480px) {
-    width: calc(100vw - 40px);
-    height: 60vh;
-    left: 20px !important;
+    width: calc(100vw - 28px);
+    right: 14px;
+    bottom: calc(14px + 70px);
   }
 }
 
-// =============================================================================
-// HEADER
-// =============================================================================
-
-.chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
-  border-bottom: 1px solid var(--glass-border);
-  position: relative;
-  z-index: 1;
+// ─── Header ───────────────────────────────────────────────────────────────────
+.nexus-header {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: var(--glass-bg-deep);
+  box-shadow: var(--glass-inner-shadow);
+  cursor: grab;
   flex-shrink: 0;
+
+  &:active { cursor: grabbing; }
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.avatar {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+// Brand word-mark — driven entirely by --accent-gradient
+.nexus-brand {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Drag grip icon
+.nexus-drag-grip {
+  font-size: 20px;
+  color: var(--text-muted);
+  opacity: 0.55;
+  transition: opacity var(--duration-fast) var(--ease-smooth);
+  cursor: grab;
+
+  &:hover { opacity: 1; }
+}
+
+// ─── Status Avatar ────────────────────────────────────────────────────────────
+.nexus-avatar {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-glow);
-  flex-shrink: 0;
+  background: var(--accent-gradient);
+  box-shadow: var(--edge-glow-sm);
 
   i {
-    font-size: 1.5rem;
-    color: white;
+    font-size: 18px;
+    color: var(--text-on-accent, #fff);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
   }
 
-  .online-dot {
+  &__dot {
     position: absolute;
     bottom: 1px;
     right: 1px;
-    width: 11px;
-    height: 11px;
-    background: var(--success-color, #22c55e);
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--glass-bg);
-    animation: pulse 2s ease-in-out infinite;
+    background: var(--success);
+    border: 2px solid var(--glass-bg-deep);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: var(--success);
+      opacity: 0.45;
+      animation: nx-dot-pulse 1.8s ease-out infinite;
+    }
   }
 }
 
-.header-meta {
-  h4 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.2;
-  }
-
-  .subtitle {
-    font-size: 0.8125rem;
-    color: var(--success-color, #22c55e);
-    display: block;
-    margin-top: 2px;
-  }
+@keyframes nx-dot-pulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(1.7); opacity: 0; }
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text-secondary);
-  cursor: pointer;
+// ─── Header Icon Buttons ──────────────────────────────────────────────────────
+.nexus-hbtn {
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
 
-  i { font-size: 1rem; }
+  i {
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: color var(--duration-fast) var(--ease-smooth),
+                filter var(--duration-fast) var(--ease-smooth);
+  }
+
+  &:hover i {
+    color: var(--text-primary);
+    filter: drop-shadow(0 0 4px var(--accent-glow));
+  }
+
+  // Active state for search toggle
+  &.bg-accent i { color: var(--text-on-accent, #fff); }
+
+  // Close button: error accent on hover
+  &--close:hover {
+    background: var(--error-bg) !important;
+    border-color: color-mix(in srgb, var(--error) 35%, transparent) !important;
+
+    i {
+      color: var(--error) !important;
+      filter: drop-shadow(0 0 4px color-mix(in srgb, var(--error) 50%, transparent)) !important;
+    }
+  }
+}
+
+// ─── Search Input ─────────────────────────────────────────────────────────────
+.nexus-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  color: var(--text-primary);
+
+  &::placeholder { color: var(--text-muted); }
+}
+
+// ─── Suggestion Chips ────────────────────────────────────────────────────────
+.nexus-chip {
+  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 28%, transparent);
+  color: var(--accent-secondary, var(--accent-primary));
+  padding: 4px 12px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  cursor: pointer;
+  font-size: 11.5px;
+  transition: background var(--duration-fast) var(--ease-smooth),
+              border-color var(--duration-fast) var(--ease-smooth),
+              transform var(--duration-fast) var(--ease-spring);
 
   &:hover {
-    background: var(--glass-bg-hover, var(--glass-bg));
-    color: var(--text-primary);
+    background: color-mix(in srgb, var(--accent-primary) 22%, transparent);
+    border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+    transform: translateY(-1px);
   }
 
-  // Trash button — subtle red on hover
-  &:first-child:hover {
-    background: color-mix(in srgb, #ef4444 12%, transparent);
-    border-color: color-mix(in srgb, #ef4444 40%, transparent);
-    color: #ef4444;
-  }
-
-  // Close button — rotates on hover
-  &:last-child:hover {
-    transform: rotate(90deg);
+  &--code {
+    background: color-mix(in srgb, var(--accent-secondary) 10%, transparent);
+    border-color: color-mix(in srgb, var(--accent-secondary) 30%, transparent);
+    color: var(--accent-secondary, var(--accent-primary));
   }
 }
 
-// =============================================================================
-// ERROR BANNER
-// =============================================================================
-
-.error-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: color-mix(in srgb, #ef4444 10%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, #ef4444 25%, transparent);
-  color: #fca5a5;
-  font-size: 0.8125rem;
-  flex-shrink: 0;
-  animation: slideIn 0.3s ease-out;
-
-  i { flex-shrink: 0; }
-}
-
-// =============================================================================
-// MESSAGES
-// =============================================================================
-
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  position: relative;
-  z-index: 1;
-
-  &::-webkit-scrollbar       { width: 6px; }
+// ─── Chat Body Scrollbar ──────────────────────────────────────────────────────
+.nexus-body {
+  &::-webkit-scrollbar       { width: 4px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background: var(--glass-border);
-    border-radius: 3px;
+    background: var(--glass-border-strong);
+    border-radius: var(--radius-full);
+
+    &:hover { background: var(--accent-primary); }
   }
 }
 
-.msg-row {
-  display: flex;
-  gap: 10px;
-  max-width: 88%;
-  animation: messageIn 0.3s ease-out;
+// ─── Message Rows ─────────────────────────────────────────────────────────────
+.nexus-msg {
+  animation: nx-msg-in var(--duration-base) var(--ease-spring) both;
 
-  // User message — right-aligned
-  &.user-row {
-    margin-left: auto;
-    flex-direction: row-reverse;
-
-    .msg-avatar {
-      background: var(--glass-bg-deep, var(--glass-bg));
-      border: 1px solid var(--glass-border);
-    }
-
-    .msg-bubble {
-      background: var(--accent-gradient);
-      color: white;
-      border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
-
-      .msg-text  { color: white; }
-      .msg-time  { color: rgba(255, 255, 255, 0.65); }
-      .chip {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-        color: white;
-        &:hover {
-          background: rgba(255, 255, 255, 0.28);
-          color: white;
-        }
-      }
-    }
-  }
-
-  // Bot message — left-aligned
-  &.bot-row {
-    .msg-avatar { background: var(--accent-gradient); }
-
-    .msg-bubble {
-      background: var(--glass-bg-deep, var(--glass-bg));
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
-    }
-  }
+  &--user { flex-direction: row-reverse; }
 }
 
-.msg-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@keyframes nx-msg-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ─── Message Avatars ──────────────────────────────────────────────────────────
+.nexus-msg__avatar {
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
+  align-self: flex-end;
+  background: var(--accent-gradient);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--elev-1);
 
-  i { font-size: 1.125rem; color: white; }
-}
-
-.msg-bubble {
-  padding: 12px 16px;
-  position: relative;
-
-  .msg-text {
-    margin: 0 0 2px;
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    color: var(--text-primary);
-    word-break: break-word;
+  i {
+    font-size: 16px;
+    color: var(--text-on-accent, #fff);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
   }
 
-  .msg-time {
-    font-size: 0.6875rem;
-    color: var(--text-muted, var(--text-secondary));
-    display: block;
-    margin-top: 5px;
-    opacity: 0.7;
+  // User avatar uses accent tertiary → accent primary gradient
+  &--user {
+    background: linear-gradient(
+      135deg,
+      var(--accent-tertiary, var(--accent-secondary)),
+      var(--accent-primary)
+    );
   }
 }
 
-// =============================================================================
-// CODE BLOCK
-// =============================================================================
+// ─── Message Bubbles ──────────────────────────────────────────────────────────
+.nexus-bubble {
+  max-width: 84%;
+  line-height: 1.65;
 
-.code-block {
-  margin: 10px 0 4px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-
-  .code-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-    border-bottom: 1px solid var(--glass-border);
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
-  pre {
+  p {
     margin: 0;
-    padding: 12px 14px;
-    background: color-mix(in srgb, var(--glass-bg-deep, #000) 60%, transparent);
-    overflow-x: auto;
-
-    &::-webkit-scrollbar { height: 3px; }
-    &::-webkit-scrollbar-thumb {
-      background: var(--glass-border);
-      border-radius: 2px;
-    }
-
-    code {
-      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.8rem;
-      color: color-mix(in srgb, var(--accent-primary) 60%, #a5d6a7);
-      white-space: pre;
-      line-height: 1.6;
-    }
+    color: var(--text-secondary);
   }
 
-  .copy-btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
+  // Bot — glass surface, inherits active theme
+  &--bot {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    border-bottom-left-radius: 4px !important;
+  }
 
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-    }
+  // User — accent gradient inherits active theme
+  &--user {
+    background: var(--accent-gradient);
+    border-bottom-right-radius: 4px !important;
+    border-bottom-left-radius: var(--radius-lg) !important;
+    box-shadow: var(--edge-glow-sm);
+
+    p { color: var(--text-on-accent, #fff); }
+
+    .nexus-rich p,
+    .nexus-rich li { color: var(--text-on-accent, #fff); }
   }
 }
 
-// =============================================================================
-// SUGGESTION CHIPS
-// =============================================================================
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 10px;
-}
-
-.chip {
-  padding: 5px 12px;
-  background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  font-size: 0.8125rem;
-  color: var(--accent-primary);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: var(--accent-primary);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-primary) 40%, transparent);
-  }
-}
-
-// =============================================================================
-// TYPING INDICATOR
-// =============================================================================
-
-.typing-bubble {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 12px 16px;
-  background: var(--glass-bg-deep, var(--glass-bg));
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
-
-  span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent-primary);
-    animation: typing 1.4s ease-in-out infinite;
-
-    &:nth-child(2) { animation-delay: 0.2s; }
-    &:nth-child(3) { animation-delay: 0.4s; }
-  }
-}
-
-// =============================================================================
-// VOICE STATUS BAR
-// =============================================================================
-
-.voice-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 16px 8px;
-  padding: 7px 14px;
-  background: color-mix(in srgb, #3b82f6 10%, transparent);
-  border: 1px solid color-mix(in srgb, #3b82f6 30%, transparent);
-  border-radius: var(--radius-full);
-  font-size: 0.8125rem;
-  color: #60a5fa;
-  flex-shrink: 0;
-  animation: slideIn 0.3s ease-out;
-
-  strong { color: #93c5fd; }
-
-  .voice-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #3b82f6;
-    flex-shrink: 0;
-    animation: pulse-dot 1.5s ease-in-out infinite;
-  }
-}
-
-// =============================================================================
-// QUICK ACTIONS
-// =============================================================================
-
-.quick-btns {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px;
-  overflow-x: auto;
-  border-top: 1px solid var(--glass-border);
-  background: color-mix(in srgb, var(--glass-bg-deep, var(--glass-bg)) 50%, transparent);
-  flex-shrink: 0;
-
-  &::-webkit-scrollbar       { height: 3px; }
-  &::-webkit-scrollbar-thumb {
-    background: var(--glass-border);
-    border-radius: 2px;
-  }
-
-  .quick-btn {
-    padding: 7px 14px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      transform: translateY(-1px);
-    }
-  }
-}
-
-// =============================================================================
-// INPUT BAR
-// =============================================================================
-
-.input-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px 16px;
-  background: var(--glass-bg-deep, var(--glass-bg));
-  border-top: 1px solid var(--glass-border);
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-}
-
-.chat-input {
-  flex: 1;
-  padding: 11px 16px;
+// ─── Typing Indicator ─────────────────────────────────────────────────────────
+.nexus-typing {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  font-size: 0.9375rem;
-  color: var(--text-primary);
-  outline: none;
-  transition: all 0.2s ease;
+  border-bottom-left-radius: 4px !important;
+}
 
-  &::placeholder { color: var(--text-muted, var(--text-secondary)); opacity: 0.6; }
+.nexus-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  animation: nx-bounce 1.3s var(--ease-smooth) infinite;
+
+  &:nth-child(2) { animation-delay: 0.18s; }
+  &:nth-child(3) { animation-delay: 0.36s; }
+}
+
+@keyframes nx-bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-5px); }
+}
+
+// ─── Code Block ───────────────────────────────────────────────────────────────
+.nexus-code {
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+
+  &__head {
+    background: var(--glass-bg-deep);
+    border-bottom: 1px solid var(--glass-border-subtle);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      font-size: 15px;
+      color: var(--accent-primary);
+      filter: drop-shadow(0 0 5px var(--accent-glow));
+      flex-shrink: 0;
+    }
+  }
+
+  &__file {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 10.5px;
+    color: var(--text-muted);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__lang {
+    background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+    color: var(--accent-secondary, var(--accent-primary));
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: var(--radius-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  // Copy button lives in head — size it properly
+  .nexus-hbtn {
+    margin-left: auto;
+    i { font-size: 13px; }
+  }
+
+  // Code output — always dark for readability, uses bg-secondary token
+  &__pre {
+    margin: 0;
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--bg-secondary, #0a0f1e) 95%, black);
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 11.5px;
+    line-height: 1.8;
+    // Light code text — works on all dark themes
+    color: color-mix(in srgb, var(--accent-secondary) 40%, #c4d8f8);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+// ─── Table ────────────────────────────────────────────────────────────────────
+.nexus-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: 100%;
+
+  th {
+    background: color-mix(in srgb, var(--accent-primary) 14%, transparent);
+    color: var(--accent-secondary, var(--accent-primary));
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 6px 10px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--glass-border-subtle);
+  }
+
+  &__row:hover td {
+    background: color-mix(in srgb, var(--accent-primary) 6%, transparent);
+  }
+}
+
+// ─── Ordered List Counter ─────────────────────────────────────────────────────
+.nexus-list__ol {
+  padding: 0;
+  list-style: none;
+  counter-reset: nx-ol;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
+    counter-increment: nx-ol;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+
+    &::before {
+      content: counter(nx-ol);
+      background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+      color: var(--accent-secondary, var(--accent-primary));
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+}
+
+// ─── Quote ────────────────────────────────────────────────────────────────────
+.nexus-quote {
+  border-left: 3px solid var(--accent-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+  background: color-mix(in srgb, var(--accent-primary) 6%, transparent);
+  position: relative;
+
+  &__icon {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 22px;
+    color: var(--accent-primary);
+    opacity: 0.22;
+  }
+}
+
+// ─── Section (recursive content blocks) ──────────────────────────────────────
+.nexus-section {
+  h4 i {
+    font-size: 11px;
+    color: var(--accent-primary);
+    filter: drop-shadow(0 0 3px var(--accent-glow));
+  }
+
+  &--nested {
+    padding-left: 12px;
+    border-left: 2px solid color-mix(in srgb, var(--accent-primary) 22%, transparent);
+    margin-top: 8px;
+  }
+}
+
+// ─── Video ────────────────────────────────────────────────────────────────────
+.nexus-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+// ─── Footer Textarea ─────────────────────────────────────────────────────────
+.nexus-textarea {
+  resize: none;
+  min-height: 40px;
+  max-height: 120px;
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  color: var(--text-primary);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+              box-shadow   var(--duration-fast) var(--ease-smooth);
 
   &:focus {
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+    box-shadow: 0 0 0 3px var(--accent-glow, color-mix(in srgb, var(--accent-primary) 25%, transparent));
   }
+
+  &::placeholder { color: var(--text-muted); }
 }
 
-.voice-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text-secondary);
-  cursor: pointer;
+// ─── Footer Icon Buttons (voice + send) ─────────────────────────────────────
+.nexus-icon-btn {
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
   flex-shrink: 0;
+  transition: transform var(--duration-base) var(--ease-spring),
+              box-shadow var(--duration-base) var(--ease-smooth),
+              opacity    var(--duration-fast) var(--ease-smooth);
 
-  i { font-size: 1.125rem; }
-
-  &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-    transform: scale(1.05);
+  i {
+    font-size: 17px;
+    line-height: 1;
   }
 
-  // Active recording
-  &.listening {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: #ef4444;
-    color: #ef4444;
-    animation: pulse-recorder 1.5s ease-in-out infinite;
+  &:not(:disabled):hover  { transform: scale(1.09); }
+  &:not(:disabled):active { transform: scale(0.93); }
+  &:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
+
+  // Voice recording state — uses error var
+  &--recording {
+    background: var(--error) !important;
+    border-color: var(--error) !important;
+    box-shadow: 0 0 16px color-mix(in srgb, var(--error) 50%, transparent) !important;
+
+    i {
+      color: #fff !important;
+      font-size: 18px;
+    }
   }
 
-  // Background wake-word listening
-  &.bg-listening {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: #3b82f6;
-    color: #3b82f6;
-    animation: pulse-background 2s ease-in-out infinite;
+  // Send button — accent glow follows theme
+  &--send {
+    box-shadow: 0 4px 16px var(--accent-glow);
 
-    i { animation: pulse-blue 1.5s ease-in-out infinite; }
-  }
+    i { color: var(--text-on-accent, #fff); }
 
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+    &:not(:disabled):hover {
+      box-shadow: var(--edge-glow-md);
+    }
   }
 }
 
-.send-btn {
-  width: 44px;
-  height: 44px;
+// Recording pulse ring
+.nexus-record-ring {
+  position: absolute;
+  inset: -5px;
   border-radius: 50%;
-  background: var(--accent-gradient);
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-glow);
-  flex-shrink: 0;
-
-  i { font-size: 1.125rem; }
-
-  &:hover:not(:disabled) {
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px var(--accent-primary);
-  }
-
-  &:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
+  background: color-mix(in srgb, var(--error) 30%, transparent);
+  animation: nx-record-pulse 1.4s ease-out infinite;
+  pointer-events: none;
 }
 
-// =============================================================================
-// ANIMATIONS
-// =============================================================================
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; transform: scale(1);   }
-  50%       { opacity: 0.7; transform: scale(1.1); }
+@keyframes nx-record-pulse {
+  0%   { transform: scale(1);    opacity: 0.7; }
+  50%  { transform: scale(1.25); opacity: 0.35; }
+  100% { transform: scale(1.5);  opacity: 0; }
 }
 
-@keyframes bounce {
-  0%, 100% { transform: scale(1);   }
-  50%       { transform: scale(1.2); }
-}
+// ─── Global Bootstrap Icon size guard ────────────────────────────────────────
+// Prevents icons from inheriting container font-size and rendering incorrectly.
+// Each icon class gets an explicit size matched to its visual role.
+.nexus-panel,
+.nexus-toggle {
+  // Navigation / action icons in header
+  .bi-search,
+  .bi-trash3,
+  .bi-arrows-angle-expand,
+  .bi-arrows-angle-contract { font-size: 13px; }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
-}
+  // Close icon — slightly larger for easy tap
+  .bi-x-lg { font-size: 14px; }
 
-@keyframes messageIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
+  // Content accent icons
+  .bi-bookmark-fill,
+  .bi-chevron-right,
+  .bi-stars         { font-size: 11px; }
 
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0);     }
-  30%            { transform: translateY(-10px); }
-}
+  // External link
+  .bi-box-arrow-up-right { font-size: 11px; }
 
-@keyframes pulse-recorder {
-  0%   { box-shadow: 0 0 0 0   rgba(239, 68, 68, 0.4); }
-  50%  { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);   }
-  100% { box-shadow: 0 0 0 0   rgba(239, 68, 68, 0);   }
-}
+  // Decorative quote mark
+  .bi-quote { font-size: 22px; }
 
-@keyframes pulse-background {
-  0%   { box-shadow: 0 0 0 0  rgba(59, 130, 246, 0.3); }
-  50%  { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);  }
-  100% { box-shadow: 0 0 0 0  rgba(59, 130, 246, 0);  }
-}
+  // Tiny status dot
+  .bi-circle-fill { font-size: 7px !important; }
 
-@keyframes pulse-blue {
-  0%, 50%, 100% {
-    color: #3b82f6;
-    filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
-  }
-  25%, 75% {
-    color: #2563eb;
-    filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.8));
-  }
-}
+  // Footer hint
+  .bi-keyboard { font-size: 12px; }
 
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1;   transform: scale(1);   }
-  50%       { opacity: 0.5; transform: scale(1.3); }
+  // Code header — code-slash and clipboard
+  .bi-code-slash { font-size: 15px; }
+  .bi-clipboard,
+  .bi-check2      { font-size: 13px; }
 }

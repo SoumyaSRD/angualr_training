@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { VisibleIfDirective } from '../../../../directives/visible-if.directive';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { PIPE } from './pipe-eg.const';
+import { PIPE } from '../../../../constants/pipe-eg.const';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe, DatePipe, UpperCasePipe } from '@angular/common';
 import { CustomFilterPipe } from '../../../../pipes/custom-filter.pipe';

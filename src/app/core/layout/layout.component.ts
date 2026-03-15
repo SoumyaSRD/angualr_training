@@ -1,23 +1,23 @@
 import { CommonModule } from '@angular/common';
 import {
-    Component,
     ChangeDetectionStrategy,
-    HostListener,
-    inject,
+    Component,
+    OnInit,
     signal,
     viewChild,
-    OnInit,
+    inject,
+    afterNextRender,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { HeaderComponent } from './header.component';
-import { SidebarComponent } from './sidebar.component';
-import { FooterComponent } from './footer.component';
-import { ChatbotComponent } from '@app/shared';
+import { Login } from '../../components/auth/login/login';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
-import { Login } from '../../components/auth/login/login';
+import { FooterComponent } from './footer.component';
+import { HeaderComponent } from './header.component';
+import { SidebarComponent } from './sidebar.component';
+import { ChatbotComponent } from '@app/shared';
 
 @Component({
     selector: 'app-layout',
@@ -29,10 +29,15 @@ import { Login } from '../../components/auth/login/login';
         HeaderComponent,
         SidebarComponent,
         FooterComponent,
-        ChatbotComponent,
+        ChatbotComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrl: './layout.scss',
+    // Modern Host Listeners in Decorator
+    host: {
+        '(window:resize)': 'onResize()',
+        '(window:app:login)': 'openLogin()'
+    },
     template: `
         <div class="app-layout">
 
@@ -85,7 +90,6 @@ import { Login } from '../../components/auth/login/login';
                         [class.toast-info]="toast.type === 'info'"
                         role="alert"
                     >
-                        <!-- Icon -->
                         <div class="toast-icon">
                             @switch (toast.type) {
                                 @case ('success') { <i class="bi bi-check-circle-fill"></i> }
@@ -95,12 +99,10 @@ import { Login } from '../../components/auth/login/login';
                             }
                         </div>
 
-                        <!-- Message -->
                         <div class="toast-content">
                             <div class="toast-message">{{ toast.message }}</div>
                         </div>
 
-                        <!-- Dismiss -->
                         @if (toast.dismissible) {
                             <button
                                 class="toast-close"
@@ -116,8 +118,8 @@ import { Login } from '../../components/auth/login/login';
 
         </div>
 
-        <!-- Chatbot -->
-        <app-chatbot></app-chatbot>
+        <!-- Chatbot Component -->
+        <lib-nexus-chatbot></lib-nexus-chatbot>
     `,
 })
 export class LayoutComponent implements OnInit {
@@ -125,55 +127,55 @@ export class LayoutComponent implements OnInit {
     private readonly modalService = inject(ModalService);
     readonly toastService = inject(ToastService);
 
+    // Signal-based View Query
     readonly sidebar = viewChild<SidebarComponent>('sidebar');
 
-    // ── State ────────────────────────────────────────────────────────────────
+    // ── State Signals ────────────────────────────────────────────────────────
     readonly isSidebarCollapsed = signal(false);
-    readonly isMobile = signal(window.innerWidth < 992);
+    readonly isMobile = signal(typeof window !== 'undefined' ? window.innerWidth < 992 : false);
 
-    // ── Breadcrumb title ─────────────────────────────────────────────────────
+    // ── Breadcrumb Title Signal ──────────────────────────────────────────────
     readonly currentPageTitle = toSignal(
         this.router.events.pipe(
             filter((e): e is NavigationEnd => e instanceof NavigationEnd),
             map(() => this.resolvePageTitle()),
             startWith(this.resolvePageTitle()),
         ),
-        { initialValue: this.resolvePageTitle() },
+        { initialValue: 'Loading...' },
     );
 
-    // ── Lifecycle ────────────────────────────────────────────────────────────
-
-    ngOnInit(): void {
-        // Global login event (fired from HeaderComponent or elsewhere)
-        window.addEventListener('app:login', () => this.openLogin());
-
-        // Scroll to top on each navigation
-        this.router.events
-            .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-            .subscribe(() => {
-                document
-                    .querySelector('.content-wrapper')
-                    ?.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+    constructor() {
+        // Handle Scroll to Top on Navigation (Zoneless Safe)
+        afterNextRender(() => {
+            this.router.events
+                .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+                .subscribe(() => {
+                    document.querySelector('.content-wrapper')?.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+        });
     }
 
-    // ── Host listeners ───────────────────────────────────────────────────────
+    ngOnInit(): void {
+        // Initialization logic if needed
+    }
 
-    @HostListener('window:resize')
+    // ── Handlers ─────────────────────────────────────────────────────────────
+
     onResize(): void {
         this.isMobile.set(window.innerWidth < 992);
     }
 
-    // ── Sidebar handlers ─────────────────────────────────────────────────────
-
     onMenuToggle(): void {
-        const sidebar = this.sidebar();
-        if (!sidebar) return;
+        const sidebarComp = this.sidebar();
+        if (!sidebarComp) return;
 
         if (this.isMobile()) {
-            sidebar.openMobile();
+            sidebarComp.openMobile();
         } else {
-            sidebar.toggleCollapse();
+            sidebarComp.toggleCollapse();
         }
     }
 
@@ -187,8 +189,6 @@ export class LayoutComponent implements OnInit {
         }
     }
 
-    // ── Modal ─────────────────────────────────────────────────────────────────
-
     openLogin(): void {
         this.modalService.open(Login, {
             size: 'md',
@@ -198,11 +198,8 @@ export class LayoutComponent implements OnInit {
         });
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private resolvePageTitle(): string {
         const url = this.router.url;
-
         if (url === '/' || url === '/dashboard') return 'Dashboard';
 
         const segments = url.split('/').filter(Boolean);

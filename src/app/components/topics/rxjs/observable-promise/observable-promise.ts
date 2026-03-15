@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { OBSERVABLE_PROMISE } from "./observable-promise.const";
+import { OBSERVABLE_PROMISE } from "../../../../constants/observable-promise.const";
 import { ITopicContent } from "../../../../interfaces/topic";
 
 @Component({

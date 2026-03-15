@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { REACTIVE_FORMS_MODULE_DEEP_DIVE } from './reactive-form-eg.const';
+import { REACTIVE_FORMS_MODULE_DEEP_DIVE } from '../../../../constants/reactive-form-eg.const';
 
 @Component({
   selector: 'app-reactive-form-eg',

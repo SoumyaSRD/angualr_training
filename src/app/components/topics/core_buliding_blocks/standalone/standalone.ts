@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ITopicContent } from '../../../../interfaces/topic';
 import { TopicTemplate } from '../../../topic-template/topic-template';
-import { STANDALONE } from './standalone.const';
+import { STANDALONE } from 'src/app/constants/standalone.const';
+
 
 
 

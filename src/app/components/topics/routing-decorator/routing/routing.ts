@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ITopicContent } from "../../../../interfaces/topic";
 import { TopicTemplate } from "../../../topic-template/topic-template";
-import { ROUTING } from "./routing.const";
+import { ROUTING } from "../../../../constants/routing.const";
 
 @Component({
   selector: "app-routing",

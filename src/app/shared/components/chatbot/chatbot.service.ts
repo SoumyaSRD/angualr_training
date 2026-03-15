@@ -22,7 +22,7 @@ export interface ChatbotData {
 
 @Injectable({ providedIn: 'root' })
 export class ChatbotService {
-  private dataUrl = '/assets/data/angular21-chatbot.json';
+  private dataUrl = 'assets/data/angular21-chatbot.json';
 
   // ─── Resource ──────────────────────────────────────────────────────────────
   private chatbotResource = resource<ChatbotData, object>({

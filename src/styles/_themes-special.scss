@@ -1,6 +1,6 @@
 /* ============================================================================
    GLASS UI — SPECIAL THEMES v4.0
-   Batman · Neon Noir · Hologram · Galaxy · Sakura · Dragon Ball · Evangelion
+   Batman · Neon Noir · Hologram · Galaxy · Sakura · Dragon Ball · Evangelion · Solo Leveling
    ============================================================================ */
 
 /* ============================================================================
@@ -376,4 +376,67 @@
   --shadow-xl:    0 32px 80px rgba(0,0,0,0.92),0 0 50px rgba(255,99,20,0.32);
   --shadow-glow:  0 0 0 1px rgba(255,99,20,0.35), 0 8px 40px rgba(255,99,20,0.58), 0 0 90px rgba(50,255,80,0.12);
   --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.60);
+}
+
+/* ============================================================================
+   Solo Leveling Theme — Hunter's Shadow Realm
+   ============================================================================ */
+/* ============================================================================ */
+[data-theme="solo-leveling"],
+.theme-solo-leveling {
+  /* Backgrounds: Deepening the void and adding a subtle purple tint */
+  --bg-primary:      #000000;
+  --bg-secondary:    #050208;
+  --bg-tertiary:     #0c0414;
+  --bg-gradient:     linear-gradient(145deg, #000000 0%, #050208 35%, #0c0414 65%, #000000 100%);
+
+  /* Glass Effects: Tinted with purple shadows instead of red */
+  --glass-bg:            rgba(12, 4, 20, 0.70);
+  --glass-bg-hover:      rgba(30, 10, 50, 0.85);
+  --glass-bg-active:     rgba(45, 15, 70, 0.95);
+  --glass-bg-deep:       rgba(5, 2, 8, 0.60);
+  --glass-border:        rgba(106, 13, 173, 0.25);
+  --glass-border-strong: rgba(192, 96, 240, 0.50);
+  --glass-border-subtle: rgba(106, 13, 173, 0.10);
+  --glass-blur:          28px;
+  --glass-blur-heavy:    56px;
+  --glass-inner-shadow:  inset 0 1px 0 rgba(192, 96, 240, 0.12), inset 0 -1px 0 rgba(0,0,0,0.60);
+
+  /* Refraction & Light: Mimicking the lightning glow */
+  --glass-refract-light: rgba(192, 96, 240, 0.14);
+  --glass-refract-mid:   rgba(106, 13, 173, 0.08);
+  --light-primary:       rgba(106, 13, 173, 0.12);
+  --light-scatter:       rgba(48, 0, 80, 0.05);
+
+  --text-primary:   #f8f5ff; /* Slightly purple-tinted white */
+  --text-secondary: #e0d5f0;
+  --text-muted:     #8a7fa0;
+  --text-inverse:   #050208;
+  --text-on-accent: #ffffff;
+
+  /* Accent: Swapping Red for Monarch Purple/Violet */
+  --accent-primary:   #6a11cb; /* Main Aura Purple */
+  --accent-secondary: #c060f0; /* Neon Highlight Violet */
+  --accent-tertiary:  #e0c0ff; /* Electric Glow */
+  --accent-gradient:  linear-gradient(135deg, #250140 0%, #6a0dad 30%, #a030e0 60%, #c060f0 100%);
+  --accent-glow:      rgba(106, 13, 173, 0.55);
+
+  --success: #22c55e; --success-bg: rgba(34,197,94,0.10);
+  --warning: #f59e0b; --warning-bg: rgba(245,158,11,0.10);
+  --error:   #ef4444; --error-bg:   rgba(239,68,68,0.12);
+  --info:    #3b82f6; --info-bg:    rgba(59,130,246,0.10);
+
+  /* Edge Glows: Neon Purple Intensity */
+  --edge-glow-sm: 0 0 12px -2px rgba(106, 13, 173, 0.60);
+  --edge-glow-md: 0 0 24px -4px rgba(106, 13, 173, 0.60), 0 0 48px -8px rgba(192, 96, 240, 0.35);
+  --edge-glow-lg: 0 0 40px -6px rgba(106, 13, 173, 0.65), 0 0 80px -12px rgba(192, 96, 240, 0.40), 0 0 130px -20px rgba(48, 0, 80, 0.25);
+
+  /* Shadows: Deep Void with Purple Aura */
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.80);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.75),  0 0 6px rgba(106, 13, 173, 0.18);
+  --shadow-md:    0 8px 24px rgba(0,0,0,0.80), 0 0 16px rgba(106, 13, 173, 0.22);
+  --shadow-lg:    0 20px 48px rgba(0,0,0,0.85), 0 0 32px rgba(106, 13, 173, 0.28);
+  --shadow-xl:    0 32px 80px rgba(0,0,0,0.90), 0 0 60px rgba(106, 13, 173, 0.34);
+  --shadow-glow:  0 0 0 1px rgba(106, 13, 173, 0.40), 0 8px 40px rgba(106, 13, 173, 0.60), 0 0 100px rgba(192, 96, 240, 0.25);
+  --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.65);
 }

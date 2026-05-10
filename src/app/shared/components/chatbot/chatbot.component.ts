@@ -67,6 +67,7 @@ export class ChatbotComponent implements OnInit {
   chatBodyRef = viewChild<ElementRef<HTMLDivElement>>('chatBody');
   textareaRef = viewChild<ElementRef<HTMLTextAreaElement>>('textarea');
   searchInputRef = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+  toggleBtnRef = viewChild<ElementRef<HTMLButtonElement>>('toggleBtn');
 
   // ─── UI State Signals ──────────────────────────────────────────────────────
   messages = signal<Message[]>([]);
@@ -83,12 +84,14 @@ export class ChatbotComponent implements OnInit {
   // Drag state — chat container
   isDragging = signal(false);
   dragPosition = signal({ x: 0, y: 0 });
-  private dragOffset = { x: 0, y: 0 };
+  private dragStartPos = { x: 0, y: 0 };
+  private initialDragPos = { x: 0, y: 0 };
 
   // Drag state — toggle button
   isToggleDragging = signal(false);
   toggleDragPosition = signal({ x: 0, y: 0 });
-  private toggleDragOffset = { x: 0, y: 0 };
+  private toggleDragStartPos = { x: 0, y: 0 };
+  private initialTogglePos = { x: 0, y: 0 };
 
   // Copy-to-clipboard feedback per message id
   copiedId = signal<string | null>(null);
@@ -173,7 +176,7 @@ export class ChatbotComponent implements OnInit {
   toggleSearch(): void {
     this.showSearch.update(v => !v);
     if (this.showSearch()) {
-      setTimeout(() => this.searchInputRef()?.nativeElement?.focus(), 50);
+      setTimeout(() => this.searchInputRef()?.nativeElement?.focus({ preventScroll: true }), 50);
     } else {
       this.clearSearch();
     }
@@ -191,10 +194,40 @@ export class ChatbotComponent implements OnInit {
   // ─── Chat Controls ─────────────────────────────────────────────────────────
 
   toggleChat(): void {
-    this.isOpen.update(v => !v);
-    if (this.isOpen()) {
-      this.dragPosition.set({ x: 0, y: 0 });
-      setTimeout(() => this.textareaRef()?.nativeElement?.focus(), 100);
+    const wasOpen = this.isOpen();
+    this.isOpen.set(!wasOpen);
+    
+    if (!wasOpen) {
+      // Just opened: position above toggle
+      const toggleEl = this.toggleBtnRef()?.nativeElement;
+      if (toggleEl) {
+        const rect = toggleEl.getBoundingClientRect();
+        const panelWidth = this.expanded() ? 920 : 440;
+        const panelHeight = 660; // Expected height
+        
+        // Calculate X: center with toggle, clamp to viewport
+        let x = rect.left + (rect.width / 2) - (panelWidth / 2);
+        // Calculate Y: above toggle with gap
+        let y = rect.top - panelHeight - 20;
+
+        // Viewport boundaries
+        x = Math.max(10, Math.min(x, window.innerWidth - panelWidth - 10));
+        
+        // If Y is too small (panel off top), stick to top or move below toggle?
+        // Let's stick to top with gap
+        if (y < 10) {
+          y = 10;
+          // If it still overlaps toggle, move it left/right? 
+          // For now, simple clamp.
+        }
+
+        this.dragPosition.set({ x, y });
+      }
+
+      setTimeout(() => {
+        this.textareaRef()?.nativeElement?.focus({ preventScroll: true });
+        this.scrollToBottom();
+      }, 100);
     }
   }
 
@@ -205,7 +238,12 @@ export class ChatbotComponent implements OnInit {
 
   toggleExpand(): void {
     this.expanded.update(v => !v);
-    this.scrollToBottom();
+    // Re-check position after expansion to prevent going off-screen
+    setTimeout(() => {
+      const pos = this.dragPosition();
+      this.updateDragPosition(pos.x, pos.y);
+      this.scrollToBottom();
+    }, 50);
   }
 
   // ─── Send Message ──────────────────────────────────────────────────────────
@@ -304,67 +342,108 @@ export class ChatbotComponent implements OnInit {
     return this.copiedId() === id;
   }
 
-  // ─── Toggle Button Drag ────────────────────────────────────────────────────
+  // ─── Toggle Button Drag (Pointer Events) ──────────────────────────────────
 
-  onToggleDragStart(event: DragEvent): void {
-    event.dataTransfer?.setData('text/plain', '');
-    event.dataTransfer!.effectAllowed = 'move';
+  onTogglePointerDown(event: PointerEvent): void {
+    const button = event.currentTarget as HTMLElement;
+    const rect = button.getBoundingClientRect();
+    
+    this.toggleDragStartPos = { x: event.clientX, y: event.clientY };
+    this.initialTogglePos = { x: rect.left, y: rect.top };
+    this.isToggleDragging.set(false); // Initially false, will set to true on move
 
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    this.toggleDragOffset = {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    };
-    this.isToggleDragging.set(true);
-    this.setTransparentDragImage(event);
+    button.setPointerCapture(event.pointerId);
   }
 
-  onToggleDrag(event: DragEvent): void {
-    if (!event.clientX && !event.clientY) return;
-    this.toggleDragPosition.set({
-      x: Math.max(0, Math.min(event.clientX - this.toggleDragOffset.x, window.innerWidth - 60)),
-      y: Math.max(0, Math.min(event.clientY - this.toggleDragOffset.y, window.innerHeight - 60)),
-    });
+  onTogglePointerMove(event: PointerEvent): void {
+    if (!this.toggleDragStartPos.x) return;
+
+    const dx = event.clientX - this.toggleDragStartPos.x;
+    const dy = event.clientY - this.toggleDragStartPos.y;
+
+    // Start dragging if moved more than 5px
+    if (!this.isToggleDragging() && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      this.isToggleDragging.set(true);
+    }
+
+    if (this.isToggleDragging()) {
+      const x = Math.max(0, Math.min(this.initialTogglePos.x + dx, window.innerWidth - 65));
+      const y = Math.max(0, Math.min(this.initialTogglePos.y + dy, window.innerHeight - 65));
+      this.toggleDragPosition.set({ x, y });
+    }
   }
 
-  onToggleDragEnd(): void {
-    this.isToggleDragging.set(false);
+  onTogglePointerUp(event: PointerEvent): void {
+    this.toggleDragStartPos = { x: 0, y: 0 };
+    // We keep isToggleDragging true briefly to prevent click if moved
+    setTimeout(() => this.isToggleDragging.set(false), 50);
   }
 
   getToggleStyle(): Record<string, string> {
     const { x, y } = this.toggleDragPosition();
     if (!x && !y) return {};
-    return { position: 'fixed', left: `${x}px`, top: `${y}px`, right: 'auto', bottom: 'auto' };
+    return { 
+      position: 'fixed', 
+      left: `${x}px`, 
+      top: `${y}px`, 
+      right: 'auto', 
+      bottom: 'auto',
+      margin: '0' 
+    };
   }
 
-  // ─── Container Drag ───────────────────────────────────────────────────────
+  // ─── Container Drag (Pointer Events) ───────────────────────────────────────
 
-  onDragStart(event: DragEvent): void {
-    event.dataTransfer?.setData('text/plain', '');
-    event.dataTransfer!.effectAllowed = 'move';
+  onPointerDown(event: PointerEvent): void {
+    const target = event.target as HTMLElement;
+    // Only drag from header or empty areas, not buttons/inputs
+    if (target.closest('button') || target.closest('input')) return;
 
-    const rect = (event.currentTarget as HTMLElement).closest('.chat-container')!.getBoundingClientRect();
-    this.dragOffset = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    const panel = (event.currentTarget as HTMLElement).closest('.nexus-panel') as HTMLElement;
+    const rect = panel.getBoundingClientRect();
+    
+    this.dragStartPos = { x: event.clientX, y: event.clientY };
+    this.initialDragPos = { x: rect.left, y: rect.top };
     this.isDragging.set(true);
-    this.setTransparentDragImage(event);
+
+    panel.setPointerCapture(event.pointerId);
+    event.preventDefault();
   }
 
-  onDrag(event: DragEvent): void {
-    if (!event.clientX && !event.clientY) return;
-    this.dragPosition.set({
-      x: Math.max(0, Math.min(event.clientX - this.dragOffset.x, window.innerWidth - (this.expanded() ? 820 : 440))),
-      y: Math.max(0, Math.min(event.clientY - this.dragOffset.y, window.innerHeight - 120)),
-    });
+  onPointerMove(event: PointerEvent): void {
+    if (!this.isDragging()) return;
+
+    const dx = event.clientX - this.dragStartPos.x;
+    const dy = event.clientY - this.dragStartPos.y;
+
+    this.updateDragPosition(this.initialDragPos.x + dx, this.initialDragPos.y + dy);
   }
 
-  onDragEnd(): void {
+  onPointerUp(): void {
     this.isDragging.set(false);
+  }
+
+  private updateDragPosition(rawX: number, rawY: number): void {
+    const width = this.expanded() ? 920 : 440;
+    const height = 660; // Approximate or use actual
+    
+    const x = Math.max(0, Math.min(rawX, window.innerWidth - 40));
+    const y = Math.max(0, Math.min(rawY, window.innerHeight - 80));
+    
+    this.dragPosition.set({ x, y });
   }
 
   getContainerStyle(): Record<string, string> {
     const { x, y } = this.dragPosition();
     if (!x && !y) return {};
-    return { position: 'fixed', left: `${x}px`, top: `${y}px`, right: 'auto', bottom: 'auto' };
+    return { 
+      position: 'fixed', 
+      left: `${x}px`, 
+      top: `${y}px`, 
+      right: 'auto', 
+      bottom: 'auto',
+      margin: '0'
+    };
   }
 
   // ─── Type Guards (for template) ────────────────────────────────────────────
@@ -395,6 +474,18 @@ export class ChatbotComponent implements OnInit {
 
   trackByMsgId(_: number, msg: Message): string {
     return msg.id ?? String(_);
+  }
+
+  /** Simple markdown formatter for bot messages */
+  formatMessage(text?: string): string {
+    if (!text) return '';
+    
+    return text
+      .replace(/^## (.*$)/gm, '<h2 class="text-gradient font-bold mt-sm mb-xs">$1</h2>')
+      .replace(/^### (.*$)/gm, '<h3 class="text-accent font-bold mt-sm mb-xs">$1</h3>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>')
+      .replace(/`(.*?)`/g, '<code class="glass-deep px-xs rounded text-accent">$1</code>')
+      .replace(/\n/g, '<br>');
   }
 
   private scrollToBottom(): void {

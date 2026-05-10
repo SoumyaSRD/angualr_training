@@ -23,6 +23,7 @@
 // ▸ power-aura-pulse()      — DB-style energy aura animation
 // ▸ neon-flicker-text()     — neon-noir flicker text effect
 // ▸ eva-scanline()          — NGE CRT scanline body flicker
+// ▸ shadow-pulse()          — Solo Leveling shadow realm pulse
 // ▸ aurora-drift()          — aurora/galaxy background drift
 // ============================================================================
 
@@ -994,6 +995,10 @@
 }
 
 
+@mixin transition($props: all, $dur: var(--duration-base), $ease: var(--ease-smooth)) {
+  transition: $props $dur $ease;
+}
+
 // ============================================================================
 // v4 NEW: ANIMATION MIXINS
 // ============================================================================
@@ -1109,6 +1114,21 @@
       94%     { opacity: 1; }
       97%     { opacity: .75; }
       98%     { opacity: 1; }
+    }
+  }
+}
+
+/// Solo Leveling shadow realm pulse.
+/// Apply to .glass-pulse inside [data-theme="solo-leveling"].
+///
+/// @param {Time} $dur - Pulse cycle duration
+@mixin shadow-pulse($dur: 2.2s) {
+  animation: shadow-pulse-anim $dur var(--ease-smooth) infinite;
+
+  @at-root {
+    @keyframes shadow-pulse-anim {
+      0%, 100% { box-shadow: var(--elev-3), var(--edge-glow-sm); }
+      50%      { box-shadow: var(--elev-4), var(--edge-glow-md), 0 0 80px var(--accent-glow); }
     }
   }
 }

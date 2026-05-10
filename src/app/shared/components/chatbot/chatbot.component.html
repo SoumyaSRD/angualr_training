@@ -4,10 +4,11 @@
      ============================================================ -->
 
 <!-- ── Toggle Button ──────────────────────────────────────────── -->
-<button class="nexus-toggle glass-button-primary rounded-full lift-md z-modal" type="button" draggable="true"
+<button #toggleBtn class="nexus-toggle glass-button-primary rounded-full lift-md z-modal" type="button"
     [class.dragging]="isToggleDragging()" [style]="getToggleStyle()"
     [attr.aria-label]="isOpen() ? 'Close NEXUS' : 'Open NEXUS'" (click)="onIconClick()"
-    (dragstart)="onToggleDragStart($event)" (drag)="onToggleDrag($event)" (dragend)="onToggleDragEnd()">
+    (pointerdown)="onTogglePointerDown($event)" (pointermove)="onTogglePointerMove($event)" 
+    (pointerup)="onTogglePointerUp($event)" style="touch-action: none">
     <i [class]="isOpen() ? 'bi bi-x-lg' : 'bi bi-cpu-fill'" class="toggle-icon"></i>
 </button>
 
@@ -15,11 +16,12 @@
 @if (isOpen()) {
 <div class="nexus-panel glass-card rounded-xl d-flex flex-column overflow-hidden animate-scale-in elev-5 z-modal"
     role="dialog" [attr.aria-label]="config().title || 'NEXUS Chat'" [class.nexus-panel--expanded]="expanded()"
-    [class.dragging]="isDragging()" [style]="getContainerStyle()">
+    [class.dragging]="isDragging()" [style]="getContainerStyle()"
+    (pointermove)="onPointerMove($event)" (pointerup)="onPointerUp()" (pointerleave)="onPointerUp()">
 
     <!-- Header -->
-    <header class="nexus-header glass-sm d-flex align-center gap-sm px-md border-b select-none" draggable="true"
-        (dragstart)="onDragStart($event)" (drag)="onDrag($event)" (dragend)="onDragEnd()">
+    <header class="nexus-header glass-sm d-flex align-center gap-sm px-md border-b select-none"
+        (pointerdown)="onPointerDown($event)" style="touch-action: none">
 
         <!-- Brand -->
         <div class="d-flex align-center gap-sm flex-1">
@@ -134,15 +136,15 @@
             </div>
 
             <!-- Bubble -->
-            <div class="nexus-bubble rounded-lg p-sm px-md text-sm leading-normal"
+            <div class="nexus-bubble rounded-lg p-sm px-md text-sm leading-relaxed shadow-sm"
                 [class.nexus-bubble--user]="msg.sender === 'user'" [class.nexus-bubble--bot]="msg.sender === 'bot'">
 
                 @if (msg.text) {
-                <p class="m-0" [innerHTML]="msg.text"></p>
+                <div class="m-0 nexus-markdown" [innerHTML]="formatMessage(msg.text)"></div>
                 }
 
                 @if (msg.contents) {
-                <div class="nexus-rich d-flex flex-column gap-sm mt-xs">
+                <div class="nexus-rich d-flex flex-column gap-md mt-sm">
                     @for (block of msg.contents; track $index) {
                     <ng-container [ngTemplateOutlet]="contentTpl"
                         [ngTemplateOutletContext]="{ $implicit: block, depth: 0 }">
@@ -152,7 +154,7 @@
                 }
 
                 @if (msg.suggestions?.length) {
-                <div class="d-flex flex-wrap gap-xs mt-sm">
+                <div class="d-flex flex-wrap gap-xs mt-md">
                     @for (s of msg.suggestions!; track s.action) {
                     <button class="nexus-chip lift-sm rounded-full text-xs" type="button"
                         (click)="onSuggestionClick(s)">

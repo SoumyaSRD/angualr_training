@@ -51,7 +51,7 @@ export class HeaderComponent implements OnDestroy {
         ['neon-noir', 'hologram', 'galaxy'].includes(t.id)));
 
     readonly animeThemes = signal(this.themeService.themes.filter(t =>
-        ['sakura', 'dragonball', 'evangelion'].includes(t.id)));
+        ['sakura', 'dragonball', 'evangelion', 'solo-leveling'].includes(t.id)));
 
     // ── Offcanvas open/close ─────────────────────────────────────────────────
 

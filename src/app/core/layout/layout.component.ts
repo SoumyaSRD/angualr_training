@@ -11,7 +11,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
-import { Login } from '../../components/auth/login/login';
+import { Login } from '@app/features/auth/login/login';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { FooterComponent } from './footer.component';

@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+
+  # 🧑‍💻 DEV ENVIRONMENT (Angular live reload)
+  angular-dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: base
+    container_name: angular-dev
+    command: npm run start
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
+  # 🔵 BLUE ENVIRONMENT (current live)
+  blue:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: prod
+    container_name: blue
+    networks:
+      - app-network
+
+  # 🟢 GREEN ENVIRONMENT (new version)
+  green:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: prod
+    container_name: green
+    networks:
+      - app-network
+
+  # 🌐 NGINX PROXY (Blue-Green switch)
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx-proxy.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - blue
+      - green
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

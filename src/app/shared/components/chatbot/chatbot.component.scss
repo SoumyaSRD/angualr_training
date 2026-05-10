@@ -1,8 +1,8 @@
+@use '../../../../styles/shared' as *;
+
 // ============================================================================
-// NEXUS — Chatbot Component Styles  v2
-// Theme-compatible: every colour references a Glass UI v4 CSS custom property.
-// No hardcoded hex/rgba values for colours — theme tokens drive everything.
-// Only structural rules (position, size, keyframes) live here.
+// NEXUS — Chatbot Component Styles  v3
+// Cinematic · Spatial · Luminous · Premium
 // ============================================================================
 
 // ─── Toggle Button ────────────────────────────────────────────────────────────
@@ -11,120 +11,129 @@
   bottom: var(--space-lg, 24px);
   right: var(--space-lg, 24px);
   z-index: var(--z-modal, 1050);
-  width: 58px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 62px;
+  height: 62px;
+  @include flex-center();
   cursor: grab;
-  animation: nx-toggle-breathe 2.8s var(--ease-smooth) infinite;
-  transition: transform var(--duration-base) var(--ease-spring),
-              box-shadow  var(--duration-base) var(--ease-smooth);
+  @include power-aura-pulse(3s);
+  @include transition();
 
-  &:hover  { transform: scale(1.1); }
-  &:active { transform: scale(0.93); cursor: grabbing; }
-  &.dragging { opacity: 0.85; cursor: grabbing; }
-
-  i {
-    font-size: 22px;
-    line-height: 1;
-    color: var(--text-on-accent, #fff);
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
+  &:hover {
+    transform: scale(1.1) rotate(5deg);
+    @include edge-glow(var(--accent-glow), 'md');
   }
-}
 
-@keyframes nx-toggle-breathe {
-  0%, 100% { box-shadow: var(--elev-3), var(--edge-glow-sm); }
-  50%      { box-shadow: var(--elev-4), var(--edge-glow-md); }
+  &:active {
+    transform: scale(0.92);
+    cursor: grabbing;
+  }
+
+  &.dragging {
+    opacity: 0.85;
+    cursor: grabbing;
+    animation-play-state: paused;
+  }
+
+  .toggle-icon {
+    font-size: 24px;
+    color: var(--text-on-accent, #fff);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .3));
+  }
 }
 
 // ─── Chat Panel ───────────────────────────────────────────────────────────────
 .nexus-panel {
   position: fixed;
-  bottom: calc(var(--space-lg, 24px) + 70px);
+  bottom: calc(var(--space-lg, 24px) + 75px);
   right: var(--space-lg, 24px);
   z-index: calc(var(--z-modal, 1050) - 1);
-  width: 430px;
-  height: 630px;
+  width: 440px;
+  height: 660px;
+  @include glass-surface();
+  @include elevation(5);
+  @include transition();
 
   // Suppress glass-card hover lift — panel is static
-  &:hover { transform: none !important; }
-
-  &--expanded {
-    width: min(820px, 95vw);
-    height: min(84vh, 820px);
+  &:hover {
+    transform: none !important;
   }
 
-  &.dragging { opacity: 0.92; transition: none; }
+  &--expanded {
+    width: min(920px, 95vw);
+    height: min(88vh, 880px);
+  }
 
-  @media (max-width: 480px) {
-    width: calc(100vw - 28px);
-    right: 14px;
-    bottom: calc(14px + 70px);
+  &.dragging {
+    opacity: 0.94;
+    transition: none;
+    @include edge-glow(var(--accent-glow), 'sm');
+  }
+
+  @include media-down('sm') {
+    width: calc(100vw - 24px);
+    right: 12px;
+    bottom: calc(12px + 72px);
+    height: calc(100dvh - 100px);
   }
 }
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 .nexus-header {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  height: 64px;
   background: var(--glass-bg-deep);
-  box-shadow: var(--glass-inner-shadow);
+  @include scatter('light');
   cursor: grab;
   flex-shrink: 0;
 
-  &:active { cursor: grabbing; }
+  &:active {
+    cursor: grabbing;
+  }
 }
 
-// Brand word-mark — driven entirely by --accent-gradient
 .nexus-brand {
-  font-family: var(--font-display, 'Syne', sans-serif);
-  font-size: 13px;
+  @include spatial-label();
+  font-size: 14px;
   font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  @include text-gradient();
+  letter-spacing: 0.15em;
 }
 
-// Drag grip icon
 .nexus-drag-grip {
   font-size: 20px;
   color: var(--text-muted);
-  opacity: 0.55;
-  transition: opacity var(--duration-fast) var(--ease-smooth);
-  cursor: grab;
+  opacity: 0.4;
+  @include transition();
 
-  &:hover { opacity: 1; }
+  &:hover {
+    opacity: 1;
+    color: var(--accent-primary);
+  }
 }
 
 // ─── Status Avatar ────────────────────────────────────────────────────────────
 .nexus-avatar {
   position: relative;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center();
   background: var(--accent-gradient);
-  box-shadow: var(--edge-glow-sm);
+  @include elevation(2);
+  @include edge-glow(var(--accent-glow), 'sm');
 
   i {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--text-on-accent, #fff);
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .25));
   }
 
   &__dot {
     position: absolute;
-    bottom: 1px;
-    right: 1px;
-    width: 10px;
-    height: 10px;
+    bottom: 2px;
+    right: 2px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     background: var(--success);
     border: 2px solid var(--glass-bg-deep);
@@ -135,48 +144,56 @@
       inset: -2px;
       border-radius: 50%;
       background: var(--success);
-      opacity: 0.45;
-      animation: nx-dot-pulse 1.8s ease-out infinite;
+      opacity: 0.5;
+      animation: nx-dot-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
 }
 
 @keyframes nx-dot-pulse {
-  0%   { transform: scale(1);   opacity: 0.6; }
-  100% { transform: scale(1.7); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
 
 // ─── Header Icon Buttons ──────────────────────────────────────────────────────
 .nexus-hbtn {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 34px;
+  height: 34px;
+  @include flex-center();
+  @include transition();
 
   i {
-    font-size: 14px;
-    color: var(--text-secondary);
-    transition: color var(--duration-fast) var(--ease-smooth),
-                filter var(--duration-fast) var(--ease-smooth);
+    font-size: 15px;
+    color: var(--text-muted);
   }
 
-  &:hover i {
-    color: var(--text-primary);
-    filter: drop-shadow(0 0 4px var(--accent-glow));
+  &:hover {
+    background: var(--glass-bg-hover);
+    i {
+      color: var(--text-primary);
+      filter: drop-shadow(0 0 6px var(--accent-glow));
+    }
   }
 
-  // Active state for search toggle
-  &.bg-accent i { color: var(--text-on-accent, #fff); }
+  &.bg-accent {
+    background: var(--accent-primary);
+    i {
+      color: var(--text-on-accent, #fff);
+    }
+  }
 
-  // Close button: error accent on hover
   &--close:hover {
-    background: var(--error-bg) !important;
-    border-color: color-mix(in srgb, var(--error) 35%, transparent) !important;
-
+    background: color-mix(in srgb, var(--error) 15%, transparent) !important;
     i {
       color: var(--error) !important;
-      filter: drop-shadow(0 0 4px color-mix(in srgb, var(--error) 50%, transparent)) !important;
+      filter: drop-shadow(0 0 6px var(--error));
     }
   }
 }
@@ -186,118 +203,118 @@
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-family: var(--font-body);
   color: var(--text-primary);
+  font-size: 14px;
 
-  &::placeholder { color: var(--text-muted); }
+  &::placeholder {
+    color: var(--text-muted);
+  }
 }
 
 // ─── Suggestion Chips ────────────────────────────────────────────────────────
 .nexus-chip {
-  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-primary) 28%, transparent);
-  color: var(--accent-secondary, var(--accent-primary));
-  padding: 4px 12px;
-  font-family: var(--font-body, 'DM Sans', sans-serif);
-  cursor: pointer;
-  font-size: 11.5px;
-  transition: background var(--duration-fast) var(--ease-smooth),
-              border-color var(--duration-fast) var(--ease-smooth),
-              transform var(--duration-fast) var(--ease-spring);
+  @include glass-button();
+  padding: 6px 14px;
+  font-size: 12px;
+  height: auto;
+  min-height: 0;
 
   &:hover {
-    background: color-mix(in srgb, var(--accent-primary) 22%, transparent);
-    border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
-    transform: translateY(-1px);
+    @include aura(var(--accent-primary), 'subtle');
   }
 
   &--code {
-    background: color-mix(in srgb, var(--accent-secondary) 10%, transparent);
-    border-color: color-mix(in srgb, var(--accent-secondary) 30%, transparent);
-    color: var(--accent-secondary, var(--accent-primary));
+    border-color: var(--accent-secondary);
+    color: var(--accent-secondary);
+    &:hover { @include aura(var(--accent-secondary), 'subtle'); }
   }
 }
 
 // ─── Chat Body Scrollbar ──────────────────────────────────────────────────────
 .nexus-body {
-  &::-webkit-scrollbar       { width: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb {
-    background: var(--glass-border-strong);
-    border-radius: var(--radius-full);
-
-    &:hover { background: var(--accent-primary); }
-  }
+  @include custom-scrollbar(4px);
 }
 
 // ─── Message Rows ─────────────────────────────────────────────────────────────
 .nexus-msg {
-  animation: nx-msg-in var(--duration-base) var(--ease-spring) both;
+  @include cinema-entrance(0.4s, 12px, 4px);
 
-  &--user { flex-direction: row-reverse; }
-}
-
-@keyframes nx-msg-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  &--user {
+    flex-direction: row-reverse;
+  }
 }
 
 // ─── Message Avatars ──────────────────────────────────────────────────────────
 .nexus-msg__avatar {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   align-self: flex-end;
   background: var(--accent-gradient);
   border: 1px solid var(--glass-border-strong);
-  box-shadow: var(--elev-1);
+  @include elevation(1);
 
   i {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-on-accent, #fff);
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
   }
 
-  // User avatar uses accent tertiary → accent primary gradient
   &--user {
-    background: linear-gradient(
-      135deg,
-      var(--accent-tertiary, var(--accent-secondary)),
-      var(--accent-primary)
-    );
+    background: linear-gradient(135deg,
+        var(--accent-tertiary, var(--accent-secondary)),
+        var(--accent-primary));
   }
 }
 
 // ─── Message Bubbles ──────────────────────────────────────────────────────────
 .nexus-bubble {
-  max-width: 84%;
-  line-height: 1.65;
+  max-width: 86%;
+  position: relative;
+  @include transition();
 
   p {
     margin: 0;
     color: var(--text-secondary);
   }
 
-  // Bot — glass surface, inherits active theme
+  h2, h3, h4 {
+    margin: 0 0 8px;
+    @include text-gradient();
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  h2 { font-size: 1.1rem; }
+  h3 { font-size: 1rem; }
+
+  // Bot — glass surface
   &--bot {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8);
+    box-shadow: var(--glass-inner-shadow);
     border-bottom-left-radius: 4px !important;
+    @include cinema-entrance(0.5s, 8px, 4px);
   }
 
-  // User — accent gradient inherits active theme
+  // User — accent gradient
   &--user {
     background: var(--accent-gradient);
     border-bottom-right-radius: 4px !important;
     border-bottom-left-radius: var(--radius-lg) !important;
-    box-shadow: var(--edge-glow-sm);
+    @include edge-glow(var(--accent-glow), 'sm');
 
-    p { color: var(--text-on-accent, #fff); }
+    p, li, .text-secondary {
+      color: var(--text-on-accent, #fff) !important;
+    }
 
-    .nexus-rich p,
-    .nexus-rich li { color: var(--text-on-accent, #fff); }
+    .nexus-rich h2, .nexus-rich h3 {
+      background: none;
+      -webkit-text-fill-color: white;
+      color: white;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
   }
 }
 
@@ -309,311 +326,133 @@
 }
 
 .nexus-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent-primary);
-  animation: nx-bounce 1.3s var(--ease-smooth) infinite;
+  animation: nx-bounce 1.4s var(--ease-smooth) infinite;
 
-  &:nth-child(2) { animation-delay: 0.18s; }
-  &:nth-child(3) { animation-delay: 0.36s; }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
 }
 
 @keyframes nx-bounce {
   0%, 60%, 100% { transform: translateY(0); }
-  30%           { transform: translateY(-5px); }
+  30%           { transform: translateY(-6px); }
 }
 
 // ─── Code Block ───────────────────────────────────────────────────────────────
 .nexus-code {
-  border: 1px solid var(--glass-border-subtle);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  @include glass-card-deep();
+  border-radius: var(--radius-md);
+  margin-top: 8px;
 
   &__head {
     background: var(--glass-bg-deep);
     border-bottom: 1px solid var(--glass-border-subtle);
-    padding: 6px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    i {
-      font-size: 15px;
-      color: var(--accent-primary);
-      filter: drop-shadow(0 0 5px var(--accent-glow));
-      flex-shrink: 0;
-    }
-  }
-
-  &__file {
-    font-family: var(--font-mono, 'JetBrains Mono', monospace);
-    font-size: 10.5px;
-    color: var(--text-muted);
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    padding: 8px 12px;
   }
 
   &__lang {
-    background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
-    color: var(--accent-secondary, var(--accent-primary));
-    font-size: 9.5px;
-    font-weight: 700;
-    padding: 2px 7px;
+    @include spatial-label();
+    font-size: 10px;
+    padding: 2px 8px;
+    background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+    color: var(--accent-primary);
     border-radius: var(--radius-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
   }
 
-  // Copy button lives in head — size it properly
-  .nexus-hbtn {
-    margin-left: auto;
-    i { font-size: 13px; }
-  }
-
-  // Code output — always dark for readability, uses bg-secondary token
   &__pre {
-    margin: 0;
-    padding: 12px 14px;
-    background: color-mix(in srgb, var(--bg-secondary, #0a0f1e) 95%, black);
-    font-family: var(--font-mono, 'JetBrains Mono', monospace);
-    font-size: 11.5px;
-    line-height: 1.8;
-    // Light code text — works on all dark themes
-    color: color-mix(in srgb, var(--accent-secondary) 40%, #c4d8f8);
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
+    padding: 16px;
+    background: color-mix(in srgb, var(--bg-deep, #050811) 98%, black);
+    font-size: 12px;
+    line-height: 1.7;
+    color: #e2e8f0;
+    @include custom-scrollbar(4px);
   }
 }
 
 // ─── Table ────────────────────────────────────────────────────────────────────
 .nexus-table {
-  border-collapse: collapse;
-  font-size: 12px;
-  width: 100%;
+  @include transition();
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--glass-border-subtle);
 
   th {
-    background: color-mix(in srgb, var(--accent-primary) 14%, transparent);
-    color: var(--accent-secondary, var(--accent-primary));
-    padding: 7px 10px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
+    background: var(--glass-bg-deep);
+    @include spatial-label();
+    padding: 10px 12px;
+    font-size: 10px;
   }
 
   td {
-    padding: 6px 10px;
-    color: var(--text-secondary);
+    padding: 8px 12px;
     border-top: 1px solid var(--glass-border-subtle);
   }
 
   &__row:hover td {
-    background: color-mix(in srgb, var(--accent-primary) 6%, transparent);
-  }
-}
-
-// ─── Ordered List Counter ─────────────────────────────────────────────────────
-.nexus-list__ol {
-  padding: 0;
-  list-style: none;
-  counter-reset: nx-ol;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  li {
-    counter-increment: nx-ol;
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-
-    &::before {
-      content: counter(nx-ol);
-      background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
-      color: var(--accent-secondary, var(--accent-primary));
-      font-size: 10px;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
+    background: var(--glass-bg-hover);
   }
 }
 
 // ─── Quote ────────────────────────────────────────────────────────────────────
 .nexus-quote {
-  border-left: 3px solid var(--accent-primary);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+  @include left-accent-bar(3px);
   background: color-mix(in srgb, var(--accent-primary) 6%, transparent);
-  position: relative;
+  padding: 12px 16px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 
   &__icon {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    font-size: 22px;
-    color: var(--accent-primary);
-    opacity: 0.22;
-  }
-}
-
-// ─── Section (recursive content blocks) ──────────────────────────────────────
-.nexus-section {
-  h4 i {
-    font-size: 11px;
-    color: var(--accent-primary);
-    filter: drop-shadow(0 0 3px var(--accent-glow));
-  }
-
-  &--nested {
-    padding-left: 12px;
-    border-left: 2px solid color-mix(in srgb, var(--accent-primary) 22%, transparent);
-    margin-top: 8px;
-  }
-}
-
-// ─── Video ────────────────────────────────────────────────────────────────────
-.nexus-video {
-  position: relative;
-  padding-bottom: 56.25%;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-
-  iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
+    font-size: 28px;
+    opacity: 0.15;
   }
 }
 
 // ─── Footer Textarea ─────────────────────────────────────────────────────────
 .nexus-textarea {
-  resize: none;
-  min-height: 40px;
-  max-height: 120px;
-  background: var(--glass-bg);
-  border: 1.5px solid var(--glass-border);
-  color: var(--text-primary);
-  font-family: var(--font-body, 'DM Sans', sans-serif);
-  outline: none;
-  transition: border-color var(--duration-fast) var(--ease-smooth),
-              box-shadow   var(--duration-fast) var(--ease-smooth);
+  @include glass-input();
+  min-height: 44px;
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
 
   &:focus {
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px var(--accent-glow, color-mix(in srgb, var(--accent-primary) 25%, transparent));
+    @include edge-glow(var(--accent-glow), 'sm');
   }
-
-  &::placeholder { color: var(--text-muted); }
 }
 
-// ─── Footer Icon Buttons (voice + send) ─────────────────────────────────────
+// ─── Footer Icon Buttons ─────────────────────────────────────────────────────
 .nexus-icon-btn {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform var(--duration-base) var(--ease-spring),
-              box-shadow var(--duration-base) var(--ease-smooth),
-              opacity    var(--duration-fast) var(--ease-smooth);
+  width: 44px;
+  height: 44px;
+  @include flex-center();
+  @include transition();
 
-  i {
-    font-size: 17px;
-    line-height: 1;
-  }
-
-  &:not(:disabled):hover  { transform: scale(1.09); }
-  &:not(:disabled):active { transform: scale(0.93); }
-  &:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
-
-  // Voice recording state — uses error var
   &--recording {
     background: var(--error) !important;
-    border-color: var(--error) !important;
-    box-shadow: 0 0 16px color-mix(in srgb, var(--error) 50%, transparent) !important;
-
-    i {
-      color: #fff !important;
-      font-size: 18px;
-    }
+    @include edge-glow(var(--error), 'md');
+    i { color: #fff !important; }
   }
 
-  // Send button — accent glow follows theme
   &--send {
-    box-shadow: 0 4px 16px var(--accent-glow);
-
+    @include aura(var(--accent-primary), 'normal');
     i { color: var(--text-on-accent, #fff); }
 
     &:not(:disabled):hover {
-      box-shadow: var(--edge-glow-md);
+      @include aura(var(--accent-primary), 'intense');
     }
   }
 }
 
-// Recording pulse ring
-.nexus-record-ring {
-  position: absolute;
-  inset: -5px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--error) 30%, transparent);
-  animation: nx-record-pulse 1.4s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes nx-record-pulse {
-  0%   { transform: scale(1);    opacity: 0.7; }
-  50%  { transform: scale(1.25); opacity: 0.35; }
-  100% { transform: scale(1.5);  opacity: 0; }
-}
-
-// ─── Global Bootstrap Icon size guard ────────────────────────────────────────
-// Prevents icons from inheriting container font-size and rendering incorrectly.
-// Each icon class gets an explicit size matched to its visual role.
+// ─── Global Icon Scaling ────────────────────────────────────────────────────
 .nexus-panel,
 .nexus-toggle {
-  // Navigation / action icons in header
-  .bi-search,
-  .bi-trash3,
-  .bi-arrows-angle-expand,
-  .bi-arrows-angle-contract { font-size: 13px; }
-
-  // Close icon — slightly larger for easy tap
-  .bi-x-lg { font-size: 14px; }
-
-  // Content accent icons
-  .bi-bookmark-fill,
-  .bi-chevron-right,
-  .bi-stars         { font-size: 11px; }
-
-  // External link
-  .bi-box-arrow-up-right { font-size: 11px; }
-
-  // Decorative quote mark
-  .bi-quote { font-size: 22px; }
-
-  // Tiny status dot
-  .bi-circle-fill { font-size: 7px !important; }
-
-  // Footer hint
-  .bi-keyboard { font-size: 12px; }
-
-  // Code header — code-slash and clipboard
-  .bi-code-slash { font-size: 15px; }
-  .bi-clipboard,
-  .bi-check2      { font-size: 13px; }
+  i[class^="bi-"] {
+    display: inline-block;
+    vertical-align: middle;
+  }
 }

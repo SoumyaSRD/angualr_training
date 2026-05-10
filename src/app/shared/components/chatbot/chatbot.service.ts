@@ -5,11 +5,14 @@
 
 import { Injectable, computed, resource, signal } from '@angular/core';
 import {
+  CodeLanguage,
   ContentBlock,
   Message,
   SearchResult,
   Suggestion,
 } from './chatbot';
+import { ALL_TOPIC_CONSTANTS } from '@app/features/topics/constants/registry';
+import { ITopicContent } from '@app/shared';
 
 export interface ChatbotData {
   meta: {
@@ -40,10 +43,14 @@ export class ChatbotService {
 
   // ─── Computed Signals ───────────────────────────────────────────────────────
 
-  /** All messages loaded from JSON */
-  readonly allMessages = computed<Message[]>(
-    () => this.chatbotResource.value()?.messages ?? []
-  );
+  /** All messages loaded from JSON + Constants */
+  readonly allMessages = computed<Message[]>(() => {
+    const jsonMsgs = this.chatbotResource.value()?.messages ?? [];
+    const constantMsgs = ALL_TOPIC_CONSTANTS.map((topic, index) => 
+      this.mapTopicToMessage(topic, `const-${index}`)
+    );
+    return [...jsonMsgs, ...constantMsgs];
+  });
 
   /** Resource loading state */
   readonly isLoading = computed(() => this.chatbotResource.isLoading());
@@ -51,7 +58,6 @@ export class ChatbotService {
 
   /**
    * Partial-match search results, sorted by relevance score.
-   * Matches if any part of query appears anywhere in keyword (or vice versa).
    */
   readonly searchResults = computed<SearchResult[]>(() => {
     const query = this.searchQuery().toLowerCase().trim();
@@ -122,12 +128,82 @@ export class ChatbotService {
     return suggestions;
   });
 
+  // ─── Mapping Logic ─────────────────────────────────────────────────────────
+
+  private mapTopicToMessage(topic: ITopicContent, id: string): Message {
+    const contents: ContentBlock[] = [];
+
+    // Add paragraphs
+    if (topic.paragraphs?.length) {
+      contents.push({ type: 'text', text: topic.paragraphs.join(' ') });
+    }
+
+    // Add sections
+    if (topic.sections?.length) {
+      topic.sections.forEach(s => {
+        const sectionContents: ContentBlock[] = [];
+        if (s.content) sectionContents.push({ type: 'text', text: s.content });
+        if (s.list?.length) sectionContents.push({ type: 'list', items: s.list, ordered: false });
+        if (s.additionalExplanation) sectionContents.push({ type: 'quote', text: s.additionalExplanation });
+        
+        contents.push({
+          type: 'section',
+          title: s.heading || 'Details',
+          contents: sectionContents
+        });
+      });
+    }
+
+    // Add code examples
+    if (topic.codeExamples?.length) {
+      topic.codeExamples.forEach(ce => {
+        contents.push({
+          type: 'section',
+          title: `Example: ${ce.title}`,
+          contents: [
+            { type: 'text', text: ce.description || '' },
+            { type: 'code', code: ce.code, language: (ce.language?.toLowerCase() as CodeLanguage) || 'typescript', filename: ce.title }
+          ]
+        });
+      });
+    }
+
+    // Add best practices
+    if (topic.bestPractices?.length) {
+      contents.push({
+        type: 'section',
+        title: 'Best Practices',
+        contents: [{ type: 'list', items: topic.bestPractices, ordered: false }]
+      });
+    }
+
+    // Extract all keywords including from sections
+    const keywords = new Set<string>([
+      ...(topic.title ? [topic.title] : []),
+      ...(topic.tags || [])
+    ]);
+    
+    topic.sections?.forEach(s => {
+      if (s.heading) keywords.add(s.heading);
+    });
+
+    return {
+      id,
+      sender: 'bot',
+      timestamp: new Date(),
+      text: `## ${topic.title}\n\n${topic.paragraphs?.[0] || ''}`,
+      keywords: Array.from(keywords),
+      contents
+    };
+  }
+
   // ─── Public Methods ─────────────────────────────────────────────────────────
 
   /** Trigger a keyword search */
   search(query: string): void {
-    this.searchQuery.set(query);
-    this.isSearching.set(query.trim().length >= 2);
+    const q = query.trim();
+    this.searchQuery.set(q);
+    this.isSearching.set(q.length >= 2);
   }
 
   /** Clear search state */
@@ -142,15 +218,20 @@ export class ChatbotService {
     this.activeSuggestion.set(suggestion);
 
     switch (suggestion.type) {
-      case 'code': this.filterByCode(); break;
-      case 'example': this.showExamples(); break;
+      case 'code': this.searchQuery.set('code'); break;
+      case 'example': this.searchQuery.set('example'); break;
       case 'practice': this.launchPracticeMode(); break;
       case 'related':
         if (suggestion.action.startsWith('search_')) {
           this.search(suggestion.action.replace('search_', '').replace(/_/g, ' '));
         }
         break;
-      case 'read_more': this.showMoreDetails(suggestion.messageId); break;
+      case 'read_more': 
+        if (suggestion.messageId) {
+          const msg = this.getMessageById(suggestion.messageId);
+          if (msg) this.searchQuery.set(msg.keywords?.[0] || msg.text || '');
+        }
+        break;
     }
   }
 
@@ -172,7 +253,7 @@ export class ChatbotService {
       id: 'welcome',
       sender: 'bot',
       timestamp: new Date(),
-      text: "👋 Hi! I'm NEXUS — your Angular 21 intelligence assistant. I understand partial queries, so typing \"sig\" finds Signals, \"comp\" finds Components, and so on!",
+      text: "👋 Hi! I'm NEXUS — your Angular 21 intelligence assistant.\n\nI can now search through all the **training modules** dynamically! Try searching for things like:\n- **Signals**\n- **Forms**\n- **RxJS**\n- **Standalone Components**",
       suggestions: [
         { type: 'example', label: '⚡ Signals', action: 'search_signals' },
         { type: 'example', label: '🧩 Components', action: 'search_components' },
@@ -192,19 +273,10 @@ export class ChatbotService {
 
   /**
    * Score a message against a query using layered partial matching.
-   *
-   * Priority (highest → lowest):
-   *  20 — exact keyword match
-   *  14 — keyword starts with query
-   *  10 — keyword contains query
-   *   8 — query starts with keyword (abbreviation)
-   *   6 — query contains keyword (multi-word)
-   *   Per token: same rules at lower weights
-   *   +2 — query appears anywhere in serialised content JSON
-   *   +1 — each token that appears in content
    */
   private scoreMessage(message: Message, query: string): number {
-    const tokens = query.split(/\s+/).filter(t => t.length >= 2);
+    const q = query.toLowerCase().trim();
+    const tokens = q.split(/\s+/).filter(t => t.length >= 2);
     let score = 0;
 
     for (const kw of (message.keywords ?? [])) {
@@ -212,44 +284,42 @@ export class ChatbotService {
       let kwScore = 0;
 
       // Whole-query vs keyword
-      if (k === query) kwScore = Math.max(kwScore, 20);
-      else if (k.startsWith(query)) kwScore = Math.max(kwScore, 14);
-      else if (k.includes(query)) kwScore = Math.max(kwScore, 10);
-      else if (query.startsWith(k) && k.length >= 3) kwScore = Math.max(kwScore, 8);
-      else if (query.includes(k) && k.length >= 3) kwScore = Math.max(kwScore, 6);
+      if (k === q) kwScore = Math.max(kwScore, 30); // Higher weight for exact keyword
+      else if (k.startsWith(q)) kwScore = Math.max(kwScore, 20);
+      else if (k.includes(q)) kwScore = Math.max(kwScore, 15);
+      else if (q.startsWith(k) && k.length >= 3) kwScore = Math.max(kwScore, 10);
 
       // Per-token matching
       for (const t of tokens) {
-        if (k === t) kwScore = Math.max(kwScore, 13);
-        else if (k.startsWith(t)) kwScore = Math.max(kwScore, 9);
-        else if (k.includes(t)) kwScore = Math.max(kwScore, 6);
-        else if (t.startsWith(k) && k.length >= 3) kwScore = Math.max(kwScore, 5);
-        else if (t.includes(k) && k.length >= 3) kwScore = Math.max(kwScore, 3);
+        if (k === t) kwScore = Math.max(kwScore, 20);
+        else if (k.startsWith(t)) kwScore = Math.max(kwScore, 12);
+        else if (k.includes(t)) kwScore = Math.max(kwScore, 8);
       }
 
       score += kwScore;
     }
 
     // Text field matching
-    if (message.text?.toLowerCase().includes(query)) score += 2;
+    if (message.text?.toLowerCase().includes(q)) score += 5;
 
     // Deep content JSON matching
     const json = JSON.stringify(message.contents ?? []).toLowerCase();
-    if (json.includes(query)) score += 2;
+    if (json.includes(q)) score += 10;
     for (const t of tokens) {
-      if (json.includes(t) && t.length >= 3) score += 1;
+      if (json.includes(t) && t.length >= 3) score += 4;
     }
 
     return score;
   }
 
   private getMatchedKeywords(message: Message, query: string): string[] {
-    const tokens = query.split(/\s+/).filter(t => t.length >= 2);
+    const q = query.toLowerCase();
+    const tokens = q.split(/\s+/).filter(t => t.length >= 2);
     return (message.keywords ?? []).filter(kw => {
       const k = kw.toLowerCase();
       return (
-        k.includes(query) ||
-        query.includes(k) ||
+        k.includes(q) ||
+        q.includes(k) ||
         tokens.some(t => k.includes(t) || t.includes(k))
       );
     });
@@ -264,59 +334,28 @@ export class ChatbotService {
 
   private getRelatedTopics(message: Message, allMessages: Message[]): string[] {
     const related: string[] = [];
-    const own = new Set(message.keywords ?? []);
+    const own = new Set((message.keywords ?? []).map(k => k.toLowerCase()));
 
     for (const other of allMessages) {
       if (other.id === message.id) continue;
       for (const kw of (other.keywords ?? [])) {
-        if (own.has(kw) && !related.includes(kw)) {
+        const kl = kw.toLowerCase();
+        if (own.has(kl) && !related.includes(kw)) {
           related.push(kw);
-          if (related.length >= 3) return related;
+          if (related.length >= 4) return related;
         }
       }
     }
     return related;
   }
 
-  private contentMatchesQuery(content: ContentBlock, query: string): boolean {
-    switch (content.type) {
-      case 'text': return content.text?.toLowerCase().includes(query) ?? false;
-      case 'code': return (content.code?.toLowerCase().includes(query) || content.filename?.toLowerCase().includes(query)) ?? false;
-      case 'table': return (content.headers?.some(h => h.toLowerCase().includes(query)) || content.rows?.some(r => r.some(c => String(c).toLowerCase().includes(query)))) ?? false;
-      case 'list': return content.items?.some(i => i.toLowerCase().includes(query)) ?? false;
-      case 'quote': return (content.text?.toLowerCase().includes(query) || content.author?.toLowerCase().includes(query)) ?? false;
-      case 'section': return (content.title?.toLowerCase().includes(query) || content.contents?.some(c => this.contentMatchesQuery(c, query))) ?? false;
-      case 'link': return content.text?.toLowerCase().includes(query) ?? false;
-      case 'image': return content.alt?.toLowerCase().includes(query) ?? false;
-      default: return false;
-    }
-  }
-
   // ─── Private Action Handlers ────────────────────────────────────────────────
-
-  private filterByCode(): void {
-    // Signal update triggers searchResults computed to re-run
-    this.searchQuery.set('code');
-  }
-
-  private showExamples(): void {
-    const ex = this.allMessages().find(m =>
-      m.keywords?.includes('example') || m.keywords?.includes('demo')
-    );
-    if (ex) this.search(ex.text ?? 'examples');
-  }
 
   private launchPracticeMode(): void {
     const pm = this.allMessages().find(m =>
-      m.keywords?.includes('practice') || m.keywords?.includes('exercise')
+      m.keywords?.some(k => k.toLowerCase().includes('practice') || k.toLowerCase().includes('exercise'))
     );
-    if (pm) this.search(pm.text ?? 'practice');
-  }
-
-  private showMoreDetails(messageId?: string): void {
-    if (!messageId) return;
-    // Expose the message id for component to consume via activeSuggestion
-    const msg = this.getMessageById(messageId);
-    if (msg) this.searchQuery.set(msg.text ?? '');
+    if (pm) this.search(pm.keywords?.[0] || 'practice');
+    else this.search('practice');
   }
 }

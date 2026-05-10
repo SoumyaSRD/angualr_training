@@ -2,7 +2,7 @@ import { CanActivateFn, Router, ActivatedRouteSnapshot, RouterStateSnapshot } fr
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ModalService } from '../services/modal.service';
-import { Login } from '../../components/auth/login/login';
+import { Login } from '@app/features/auth/login/login';
 
 /**
  * Route data interface for role-based access

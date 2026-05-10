@@ -23,7 +23,8 @@ export type Theme =
   // Anime
   | 'sakura'
   | 'dragonball'
-  | 'evangelion';
+  | 'evangelion'
+  | 'solo-leveling';
 
 export interface ThemeConfig {
   id: Theme;
@@ -170,6 +171,14 @@ export class ThemeService {
       description: 'NERV clinical dark with impact orange and scan-line flicker',
       gradient: 'linear-gradient(135deg, #060608, #100e18, #1a1020)',
     },
+    {
+      id: 'solo-leveling',
+      name: 'Solo Leveling Monarch',
+      icon: 'bi-lightning-fill',
+      description: 'Hunter\'s shadow realm — deep void with neon purple and a crimson plume.',
+      // Gradients from deep black, through shadow core purple, to neon highlights
+      gradient: 'linear-gradient(135deg, #000000 0%, #300050 40%, #c060f0 100%)',
+    },
   ];
 
   // -------------------------
@@ -301,6 +310,7 @@ export class ThemeService {
       sakura: '#fff1f5',
       dragonball: '#0e0800',
       evangelion: '#060608',
+      'solo-leveling': '#0a0b14'
     };
 
     metaThemeColor.setAttribute('content', colors[theme]);
@@ -311,7 +321,7 @@ export class ThemeService {
   // -------------------------
 
   private loadTheme(): Theme {
-    if (typeof window === 'undefined') return 'arctic';
+    if (typeof window === 'undefined') return 'solo-leveling';
 
     try {
       // First check if inline script already set the theme
@@ -331,8 +341,8 @@ export class ThemeService {
       console.error('[ThemeService] Error loading theme:', e);
     }
 
-    console.log('[ThemeService] Using default theme: arctic');
-    return 'arctic';
+    console.log('[ThemeService] Using default theme: solo-leveling');
+    return 'solo-leveling';
   }
 
   private saveTheme(theme: Theme): void {

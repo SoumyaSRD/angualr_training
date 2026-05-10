@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="arctic">
+<html lang="en" data-theme="solo-leveling">
 
 <head>
   <!-- Basic -->
@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Theme color (Android / Chrome) - will be updated by ThemeService -->
-  <meta name="theme-color" content="#6366f1" />
+  <meta name="theme-color" content="#0a0b14" />
 
   <!-- Description (SEO) -->
   <meta name="description" content="Angular Academy - Master Angular 21 with comprehensive training" />
@@ -37,12 +37,12 @@
   <script>
     (function () {
       try {
-        const validThemes = ['arctic', 'sunset', 'emerald', 'midnight', 'aurora', 'cyber'];
+        const validThemes = ['arctic', 'sunset', 'emerald', 'midnight', 'aurora', 'cyber', 'solo-leveling'];
         const stored = localStorage.getItem('glass-ui-theme');
-        const theme = validThemes.includes(stored) ? stored : 'arctic';
+        const theme = validThemes.includes(stored) ? stored : 'solo-leveling';
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
-        // localStorage not available, default arctic already set on html
+        // localStorage not available, default solo-leveling already set on html
       }
     })();
   </script>

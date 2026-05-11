@@ -3,7 +3,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@app/core": ["src/app/core/index.ts"],
       "@app/core/*": ["src/app/core/*"],

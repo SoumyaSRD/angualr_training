@@ -1,0 +1,1 @@
+import{g as t}from"./chunk-QXA3BHRF.js";import"./chunk-6J7NVHL7.js";import"./chunk-LWJ6XB4K.js";var e=[{path:"",canActivate:[t],loadComponent:()=>import("./chunk-MPNE7OBQ.js").then(o=>o.SettingsComponent)}];export{e as settingsRoutes};

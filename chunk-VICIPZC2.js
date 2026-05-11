@@ -1,0 +1,1 @@
+import{g as o}from"./chunk-QXA3BHRF.js";import"./chunk-6J7NVHL7.js";import"./chunk-LWJ6XB4K.js";var n=[{path:"",canActivate:[o],loadComponent:()=>import("./chunk-4XILKV5S.js").then(t=>t.UsersComponent)},{path:":id",canActivate:[o],loadComponent:()=>import("./chunk-TX2YRJFZ.js").then(t=>t.UserDetailComponent)}];export{n as usersRoutes};

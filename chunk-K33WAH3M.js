@@ -1,0 +1,1 @@
+import{g as o}from"./chunk-QXA3BHRF.js";import"./chunk-6J7NVHL7.js";import"./chunk-LWJ6XB4K.js";var r=[{path:"",canActivate:[o],loadComponent:()=>import("./chunk-WEJ2DSRB.js").then(t=>t.Dashboard)}];export{r as dashboardRoutes};
